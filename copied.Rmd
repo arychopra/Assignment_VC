@@ -432,6 +432,10 @@ df.emp <- df.emp %>%
   unite(FullName, FirstName, LastName, sep=" ", remove=FALSE)
 ```
 
+
+
+
+
 ## 4 Building the Visuals
 
 The following libraries will be loaded:

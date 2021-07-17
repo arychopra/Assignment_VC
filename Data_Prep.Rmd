@@ -6,7 +6,10 @@ author:
   - name: Aryah U. Chopra
     url: https://www.linkedin.com/in/aryahuc/
 date: "`r Sys.Date()`"
-output: distill::distill_article
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
 ---
 
 <style>
@@ -364,6 +367,7 @@ Once all the files have been rectified, re run the [first code chunk](#first_chu
 df.news <- df.news %>% 
             mutate(LOCATION = str_to_upper(LOCATION))
 ```
+
 
 ```{r}
 df.news <- df.news %>% mutate(Text = str_replace_all(TEXT, "[[:punct:]]", " "))

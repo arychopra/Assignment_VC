@@ -6,7 +6,10 @@ author:
   - name: Aryah U. Chopra
     url: https://www.linkedin.com/in/aryahuc/
 date: "`r Sys.Date()`"
-output: distill::distill_article
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
 ---
 
 <style>
@@ -78,11 +81,84 @@ script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"
   });
 ```
 
-
-```{r, echo=FALSE}
-knitr::opts_chunk$set(tidy.opts=list(blank=FALSE, width.cutoff = 30))
+```{r, message=FALSE, echo=F}
+library(tidyverse)
+library(lubridate)
+library(DT)
 ```
 
+```{r, echo=FALSE, message=FALSE, warning=F}
+df.news <- read_csv('data/df_news.csv',locale = locale(encoding = "UTF-8")) %>% 
+           select(-c(X1,caseno))
+```
+
+
+```{r}
+df.news <- df.news %>%
+            mutate(PUBLISHED = parse_date_time(PUBLISHED, orders = c("%y%m%d", "%d%m%y")))
+```
+
+
+```{r}
+df.news %>% 
+  distinct(AUTHOR)
+```
+
+Hence, we will remove all prefixes.
+
+```{r}
+df.news <- df.news %>% 
+            mutate(AUTHOR = str_remove(AUTHOR, "By "))
+df.news %>% distinct(AUTHOR)
+```
+
+```{r}
+df.news <- df.news %>% 
+            mutate(LOCATION = str_to_upper(LOCATION))
+```
+
+
+```{r}
+df.news <- df.news %>% mutate(Text = str_replace_all(TEXT, "[[:punct:]]", " "))
+
+```
+
+```{r, message=FALSE, echo=FALSE}
+df.emails <- read_csv('data/email headers.csv')
+```
+
+
+```{r, echo=FALSE}
+df.emails <- df.emails %>% 
+              mutate(To = str_remove_all(To,"@gastech.com.kronos|@gastech.com.tethys")) %>%
+              mutate(From = str_remove_all(From,"@gastech.com.kronos|@gastech.com.tethys")) %>%
+              mutate(To = str_replace_all(To,"[.]"," ")) %>%
+              mutate(From = str_replace_all(From,"[.]"," ")) %>% 
+              mutate(Date = parse_date_time(x = Date, orders =c("%m%d%y %H%M","%m%d%y")))  
+```
+
+
+```{r, echo=FALSE}
+df.emails <- df.emails %>% 
+              mutate(Date.Date =  date(Date)) %>% 
+              mutate(Date.Time =  hms::as_hms(Date))
+```
+
+```{r, echo=FALSE}
+df.emails <- df.emails %>% mutate(nTo = lengths(str_split(To,pattern=","))) %>% filter(nTo<=12)
+
+```
+
+
+```{r, message=FALSE, echo=FALSE}
+df.emp <- readxl::read_xlsx('data/EmployeeRecords.xlsx')
+```
+
+
+```{r, echo=FALSE}
+df.emp <- df.emp %>% 
+  unite(FullName, FirstName, LastName, sep=" ", remove=FALSE)
+```
 
 
 ## 4 Building the Visuals

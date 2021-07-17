@@ -85,9 +85,11 @@ script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"
 knitr::opts_chunk$set(tidy.opts=list(blank=FALSE, width.cutoff = 30))
 ```
 
+
+## Question 1
+
 Characterising News Sources <br> 
 
-Using the `TextNet` package, the news sources have be clustered as shown below based on the shared words. 
 
 The news sources  "Tethys News", "Centrum Sentinel" and "Modern Rubicon" have been excluded from this as they largely only reported in 2014(kidnappings) and might skew the data. 
 

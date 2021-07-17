@@ -86,7 +86,7 @@ script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"
 knitr::opts_chunk$set(tidy.opts=list(blank=FALSE, width.cutoff = 30))
 ```
 
-## 3 Data Preparation
+## Data Format
 
 The MC1 has the following data/documents:
 
@@ -100,7 +100,7 @@ The MC1 has the following data/documents:
 * GAStech Kronos Organization Chart (PDF Image) 
 * Map of Krono (Image)
 
-### 3.1 News Article Data
+## News Article Data
 
 First, we will load the following libraries for the data clean:
 
@@ -110,7 +110,7 @@ library(lubridate)
 library(DT)
 ```
 
-#### 3.1.1 Merging the New Articles
+### Merging the New Articles
 The MC1 folder contains a folder `News Articles`. Within it are subfolders containing the 29 different news sources, within which are articles in a text format. 
 
 We will merge all of the new article's contents into a tidy format for text processing later, this means that each row will represent one observation and each column, one variable. 
@@ -234,7 +234,7 @@ df.news <- df.news %>%
             select(-caseno)
 ```
 
-#### 3.1.2 Editing the PUBLISHED column
+### Editing the PUBLISHED column
 
 The `PUBLISHED` column is not on in a date-time format. In addition to that, we can see that the `PUBLISHED` column has some odd entries. 
 
@@ -309,7 +309,7 @@ df.news <- df.news %>%
 
 All of the `PUBLISHED` column is in date-time format `yyyy-mm-dd`.
 
-#### 3.1.3 Editing the AUTHOR column
+### Editing the AUTHOR column
 
 Running the following code chunk, we can see that `By Haneson Ngohebo` is separated due to the "by".
 
@@ -326,7 +326,7 @@ df.news <- df.news %>%
 df.news %>% distinct(AUTHOR)
 ```
 
-#### 3.1.4 Editing the LOCATION column
+### Editing the LOCATION column
 
 The `LOCATION` columns also contain a few errors that are due to the tag error. 
 
@@ -377,7 +377,7 @@ df.news <- df.news %>% mutate(Text = str_replace_all(TEXT, "[[:punct:]]", " "))
 
 
 
-### 3.2 Employee Emails
+## Employee Emails
 
 We will save the email conversation CSV as `df.emails` dataframe using the `readr` package
 
@@ -409,7 +409,7 @@ df.emails <- df.emails %>% mutate(nTo = lengths(str_split(To,pattern=","))) %>% 
 
 ```
 
-### 3.3 Employee Bio-data
+## Employee Bio-data
 
 We will save the email conversation XLSX as `df.emp` dataframe using the `readxl` package
 

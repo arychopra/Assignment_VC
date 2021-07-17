@@ -61,6 +61,7 @@ d-article pre{
 body {line-height: 1;}
 ```
 
+
 ```{css zoom-lib-src, echo = FALSE}
 script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"
 ```
@@ -81,11 +82,13 @@ script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"
   });
 ```
 
+
 ```{r, message=FALSE, echo=F}
 library(tidyverse)
 library(lubridate)
 library(DT)
 ```
+
 
 ```{r, echo=FALSE, message=FALSE, warning=F}
 df.news <- read_csv('data/df_news.csv',locale = locale(encoding = "UTF-8")) %>% 
@@ -93,35 +96,36 @@ df.news <- read_csv('data/df_news.csv',locale = locale(encoding = "UTF-8")) %>%
 ```
 
 
-```{r}
+```{r, echo=FALSE}
 df.news <- df.news %>%
             mutate(PUBLISHED = parse_date_time(PUBLISHED, orders = c("%y%m%d", "%d%m%y")))
 ```
 
 
-```{r}
+```{r, echo=FALSE}
 df.news %>% 
   distinct(AUTHOR)
 ```
 
-Hence, we will remove all prefixes.
 
-```{r}
+```{r, echo=FALSE}
 df.news <- df.news %>% 
             mutate(AUTHOR = str_remove(AUTHOR, "By "))
 df.news %>% distinct(AUTHOR)
 ```
 
-```{r}
+
+```{r, echo=FALSE}
 df.news <- df.news %>% 
             mutate(LOCATION = str_to_upper(LOCATION))
 ```
 
 
-```{r}
+```{r, echo=FALSE}
 df.news <- df.news %>% mutate(Text = str_replace_all(TEXT, "[[:punct:]]", " "))
 
 ```
+
 
 ```{r, message=FALSE, echo=FALSE}
 df.emails <- read_csv('data/email headers.csv')
@@ -144,6 +148,7 @@ df.emails <- df.emails %>%
               mutate(Date.Time =  hms::as_hms(Date))
 ```
 
+
 ```{r, echo=FALSE}
 df.emails <- df.emails %>% mutate(nTo = lengths(str_split(To,pattern=","))) %>% filter(nTo<=12)
 
@@ -160,8 +165,7 @@ df.emp <- df.emp %>%
   unite(FullName, FirstName, LastName, sep=" ", remove=FALSE)
 ```
 
-
-## 4 Building the Visuals
+## Loading the Libraries
 
 The following libraries will be loaded:
 
@@ -529,11 +533,13 @@ news_before <- PrepText(text_grouped,
 text_network_before <- CreateTextnet(news_before)
 ```
 
+
 ```{r vis_ntwk_bf,messsage=F}
 set.seed(390)
 VisTextNet_e(text_network_before, label_degree_cut = 0, betweenness = T) 
 VisTextNet_e(text_network_before)
 ```
+
 
 ```{r txt_ntwk_2014,message=F, warning=F}
 text_grouped2 <- clean_news_2014 %>% group_by(SOURCE)
@@ -739,6 +745,7 @@ visNetwork(data$nodes,data$edges) %>% visEdges(arrows = "middle")
 
 ```
 
+
 ```{r author_links,message=F, warning=F}
 
 author_links <- df.news %>% 
@@ -772,6 +779,7 @@ visNetwork(data_author$nodes, data_author$edges) %>%
   visNodes(font = list(size =18))
 
 ```
+
 
 ```{r location_links}
 
@@ -871,6 +879,7 @@ p <- com_tf_idf %>%
         plot.title = element_text(size=16, margin=margin(0,0,5,0), hjust=0.5)
         )
 
+
 ```
 
 
@@ -942,6 +951,7 @@ g_before_ngrams2 <- df.news %>%
                              "group"="SOURCE")
 
 ```
+
 
 ```{r,eval=F,message=F, warning=F}
 

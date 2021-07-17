@@ -1,0 +1,1343 @@
+---
+title: "Building the Charts"
+description: |
+  A new article created using the Distill format.
+author:
+  - name: Aryah U. Chopra
+    url: https://www.linkedin.com/in/aryahuc/
+date: "`r Sys.Date()`"
+output: distill::distill_article
+---
+
+<style>
+
+d-article div.sourceCode {
+    background-color: rgba(247, 230, 230, 0.05);
+    border-color: blue;
+    border: 1px solid rgba(249, 83, 85, 0.2);
+    border-radius: 1px;
+    overflow-x: auto !important;
+    max-width: 704px;
+
+}
+
+d-article pre{
+    background-color: rgba(217, 217, 217, 0.05);
+    #border: 1px solid rgba(217, 217, 217, 0.2);
+    border-radius: 1px;
+    overflow-x: auto !important;
+    max-width: 704px;
+}
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+  background-color: white;
+  border-color: coral;
+}
+
+.tooltip .tooltiptext {
+  visibility: visible;
+  width: auto;
+  background-color: white;
+  color: #000000;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 150%;
+  left: 50%;
+  margin-left: -60px;
+}
+
+</style>
+
+
+```{css echo = FALSE}
+body {line-height: 1;}
+```
+
+```{css zoom-lib-src, echo = FALSE}
+script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"
+```
+
+
+```{js zoom-jquery, echo = FALSE}
+ $(document).ready(function() {
+    $('body').prepend('<div class=\"zoomDiv\"><img src=\"\" class=\"zoomImg\"></div>');
+    // onClick function for all plots (img's)
+    $('img:not(.zoomImg)').click(function() {
+      $('.zoomImg').attr('src', $(this).attr('src')).css({width: '100%'});
+      $('.zoomDiv').css({opacity: '1', width: 'auto', border: '1px solid white', borderRadius: '5px', position: 'fixed', top: '50%', left: '50%', marginRight: '-50%', transform: 'translate(-50%, -50%)', boxShadow: '0px 0px 50px #888888', zIndex: '50', overflow: 'auto', maxHeight: '100%'});
+    });
+    // onClick function for zoomImg
+    $('img.zoomImg').click(function() {
+      $('.zoomDiv').css({opacity: '0', width: '0%'}); 
+    });
+  });
+```
+
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(tidy.opts=list(blank=FALSE, width.cutoff = 30))
+```
+
+
+
+## 4 Building the Visuals
+
+The following libraries will be loaded:
+
+```{r libraries, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(plotly)
+library(textnets)
+library(ggwordcloud)
+library(tidytext)
+library(visNetwork)
+library(textdata)
+library(igraph)
+library(ggraph)
+library(tidygraph)
+library(corporaexplorer)
+library(topicmodels)
+library(widyr)
+```
+
+Corpora Explorer -  To Analyse the Texts by Source
+
+```{r corpora_explorer, eval=FALSE, message=FALSE}
+
+all_news_data <- df.news %>% 
+                  rename("Date"="PUBLISHED")
+
+all_news_data$Text <- paste(all_news_data$Date, "\n", 
+                            all_news_data$AUTHOR, "\n",
+                            all_news_data$NOTE, "\n", 
+                            all_news_data$Text)
+all_news_data <- all_news_data %>% select(-Date)
+
+news_corpus <- prepare_data(
+                dataset = all_news_data,
+                date_based_corpus = F,
+                grouping_variable = "SOURCE")
+
+explore(news_corpus)
+
+```
+
+
+Corpora Explorer -  To Analyse the Texts by Date
+
+```{r corpora_explorer_date, eval=FALSE, message=FALSE}
+
+all_news_data_2 <- df.news %>% 
+                   rename("Date"="PUBLISHED") %>% 
+                   mutate(Date = date(Date))
+
+all_news_data_2$Text <- paste(all_news_data_2$SOURCE,": \n", all_news_data_2$AUTHOR, "\n", all_news_data_2$Text)
+
+news_corpus_date <- prepare_data(
+                    dataset = all_news_data_2,
+                    date_based_corpus = T,
+                    grouping_variable = "SOURCE")
+
+explore(news_corpus_date)
+
+```
+
+
+Re-making the functions for building text visuals:
+
+
+```{r VisTextChanged, message=F, warning=F}
+VisTextNet_e <- function(text_network, alpha = .25, label_degree_cut=0, betweenness=FALSE){
+  
+  if (igraph::has.multiple(text_network))
+    stop("textnets does not yet support multiple edges")
+  if (is.null(V(text_network)$name)){
+    text_network <- set_vertex_attr(text_network, "name", value = as.character(1:vcount(text_network)))
+  }
+  
+  #create network backbone 
+  
+  e <- cbind(igraph::as_data_frame(text_network)[, 1:2 ], 
+             weight =   E(text_network)$weight)
+  
+  # in
+  w_in <- graph.strength(text_network, mode = "in")
+  w_in <- data.frame(to = names(w_in), w_in, stringsAsFactors = FALSE)
+  k_in <- degree(text_network, mode = "in")
+  k_in <- data.frame(to = names(k_in), k_in, stringsAsFactors = FALSE)
+  
+  e_in <- e %>%
+    left_join(w_in, by = "to") %>%
+    left_join(k_in, by = "to") %>%
+    mutate(alpha_in = (1-(weight/w_in))^(k_in-1))
+  
+  # out
+  
+  w_out <- graph.strength(text_network, mode = "out")
+  w_out <- data.frame(from = names(w_out), w_out, stringsAsFactors = FALSE)
+  k_out <- degree(text_network, mode = "out")
+  k_out <- data.frame(from = names(k_out), k_out, stringsAsFactors = FALSE)
+  
+  e_out <- e %>%
+    left_join(w_out, by = "from") %>%
+    left_join(k_out, by = "from") %>%
+    mutate(alpha_out = (1-(weight/w_out))^(k_out-1))
+  
+  e_full <- left_join(e_in, e_out, by = c("from", "to", "weight"))
+  
+  e_full <- e_full %>%
+    mutate(alpha = ifelse(alpha_in < alpha_out, alpha_in, alpha_out)) %>%
+    select(from, to, alpha)
+  
+  E(text_network)$alpha <- e_full$alpha
+  
+  pruned <- delete.edges(text_network, which(E(text_network)$alpha >= alpha))
+  pruned <- delete.vertices(pruned, which(degree(pruned) == 0))
+  
+  
+  # make degree for labelling most popular nodes
+  V(pruned)$degree <- degree(pruned)
+  
+  # remove isolates
+  isolates <- V(pruned)[degree(pruned)==0]
+  pruned <- delete.vertices(pruned, isolates)
+  
+  # calculate modularity for coloring
+  communities <- cluster_louvain(pruned)
+  #V(pruned)$modularity <- communities$membership
+  #print(communities$membership)
+  
+  #calculate betweenness for sizing nodes
+  size <- 25 #default 25
+  
+  if(betweenness){
+    size <- betweenness(pruned) 
+    
+    size <- size/0.95
+  }
+  
+  V(pruned)$community <- communities$membership
+  
+  V(pruned)$degree <- degree(pruned)
+  
+  nodes <- data.frame(id = V(pruned)$name, 
+                      title = paste0("Degree of Node: <br>",
+                                     V(pruned)$degree),
+                      group = V(pruned)$community,
+                      size =  size
+                      )
+  
+  nodes <- nodes[order(nodes$id, decreasing = F),]
+  nodes$shadow <- TRUE
+  #nodes$title <- "black"
+  nodes <- nodes %>% mutate(font.size = 20, font.weight= 900)
+  nodes$color.highlight.background <- "brown"
+
+  edges <- get.data.frame(pruned, what="edges")[1:2]
+  edges$value <- E(pruned)$weight
+  nodes$color.highlight.background <- "brown"
+
+  visNetwork(nodes, edges) %>%
+    visLayout(randomSeed = 123) %>% 
+    visOptions(highlightNearest = TRUE, 
+               nodesIdSelection = TRUE, 
+               selectedBy = "group") %>% 
+    visNodes(labelHighlightBold = T) %>%
+    #visEdges(color=list(color = 'black', highlight = "brown")) %>%
+    visIgraphLayout(layout = 'layout.davidson.harel') %>%
+    visInteraction(multiselect = TRUE)
+}
+```
+
+
+```{r TextCommChanged, message=F, warning=F}
+TextComm_e <- function(text_network, alpha = .25, label_degree_cut=0, betweenness=FALSE){
+  
+  if (igraph::has.multiple(text_network))
+    stop("textnets does not yet support multiple edges")
+  if (is.null(V(text_network)$name)){
+    text_network <- set_vertex_attr(text_network, "name", value = as.character(1:vcount(text_network)))
+  }
+  
+  #create network backbone 
+  
+  e <- cbind(igraph::as_data_frame(text_network)[, 1:2 ], 
+             weight =   E(text_network)$weight)
+  
+  # in
+  w_in <- graph.strength(text_network, mode = "in")
+  w_in <- data.frame(to = names(w_in), w_in, stringsAsFactors = FALSE)
+  k_in <- degree(text_network, mode = "in")
+  k_in <- data.frame(to = names(k_in), k_in, stringsAsFactors = FALSE)
+  
+  e_in <- e %>%
+    left_join(w_in, by = "to") %>%
+    left_join(k_in, by = "to") %>%
+    mutate(alpha_in = (1-(weight/w_in))^(k_in-1))
+  
+  # out
+  
+  w_out <- graph.strength(text_network, mode = "out")
+  w_out <- data.frame(from = names(w_out), w_out, stringsAsFactors = FALSE)
+  k_out <- degree(text_network, mode = "out")
+  k_out <- data.frame(from = names(k_out), k_out, stringsAsFactors = FALSE)
+  
+  e_out <- e %>%
+    left_join(w_out, by = "from") %>%
+    left_join(k_out, by = "from") %>%
+    mutate(alpha_out = (1-(weight/w_out))^(k_out-1))
+  
+  e_full <- left_join(e_in, e_out, by = c("from", "to", "weight"))
+  
+  e_full <- e_full %>%
+    mutate(alpha = ifelse(alpha_in < alpha_out, alpha_in, alpha_out)) %>%
+    select(from, to, alpha)
+  
+  E(text_network)$alpha <- e_full$alpha
+  
+  pruned <- delete.edges(text_network, which(E(text_network)$alpha >= alpha))
+  pruned <- delete.vertices(pruned, which(degree(pruned) == 0))
+  
+  
+  # make degree for labelling most popular nodes
+  V(pruned)$degree <- degree(pruned)
+  
+  # remove isolates
+  isolates <- V(pruned)[degree(pruned)==0]
+  pruned <- delete.vertices(pruned, isolates)
+  
+  # calculate modularity for coloring
+  communities <- cluster_louvain(pruned)
+  #V(pruned)$modularity <- communities$membership
+  #print(communities$membership)
+  
+  #calculate betweenness for sizing nodes
+  size <- 25 #default 25
+  
+  if(betweenness){
+    size <- betweenness(pruned) 
+    
+    size <- size/0.95
+  }
+  
+  V(pruned)$community <- communities$membership
+  
+  output <- data.frame(cbind(communities$names, communities$membership))
+  names(output)<-c("SOURCE","Membership")
+  return(output)
+
+}
+```
+
+
+### 4.1  Building the Visuals for Question 1
+
+```{r, message=F}
+
+common_words <- df.news %>% 
+                  unnest_tokens(word,Text) %>% 
+                  anti_join(stop_words) %>% 
+                  count(word) %>% 
+                  filter(n>200) %>% 
+                  mutate(lexicon = "CUSTOM")
+
+stop_words2 <- stop_words %>% 
+                bind_rows(common_words)
+
+
+clean_news_before <- df.news %>% 
+                      filter(1998 <= year(PUBLISHED),
+                             year(PUBLISHED)<2014) %>%
+                      select(SOURCE, Text) %>% 
+                      mutate(Text = gsub("\\d+", " ", Text)) %>%
+                      mutate(Text = str_to_lower(Text)) %>%
+                      unnest_tokens(word, Text) %>%
+                      anti_join(stop_words2) %>%
+                      group_by(SOURCE) %>% 
+                      summarise(word = paste(word, collapse = ","))
+
+clean_news_2014 <- df.news %>% 
+                    filter(year(PUBLISHED)==2014) %>%
+                    select(SOURCE, Text) %>% 
+                    mutate(Text = gsub("\\d+", " ", Text)) %>%
+                    mutate(Text = str_to_lower(Text)) %>%
+                    unnest_tokens(word, Text) %>%
+                    anti_join(stop_words2) %>%
+                    group_by(SOURCE) %>% 
+                    summarise(word = paste(word, collapse = ","))
+
+```
+
+Correlation Plot
+
+```{r corrplot1, message=F, warning=F}
+clean_news_before_count <- df.news %>% 
+                            filter(1998 <= year(PUBLISHED),
+                                   year(PUBLISHED)<2014) %>%
+                            select(SOURCE, Text) %>% 
+                            mutate(Text = gsub("\\d+", " ", Text)) %>%
+                            mutate(Text = str_to_lower(Text)) %>%
+                            unnest_tokens(word, Text) %>%
+                            anti_join(stop_words2) %>%
+                            group_by(SOURCE, word) %>% 
+                            summarise(count = n())
+
+newsgroup_cors <- clean_news_before_count %>%
+                  pairwise_cor(SOURCE, 
+                               word, 
+                               count, 
+                               sort = TRUE)
+
+corr_plot_before <- ggplot(newsgroup_cors) +
+                      geom_tile(aes(x=item1, y=item2, fill=correlation)) +
+                      theme(axis.text.x = element_text(angle = 90, 
+                                                       vjust = 0.5,
+                                                       hjust=1)) + 
+                      paletteer::scale_fill_paletteer_c("viridis::plasma") +
+                      labs(x = "",
+                           y=" ", 
+                           title = "Correlations of New Sources from 1998 to 2014")
+
+```
+
+
+```{r corrplot2, message=F, warning=F}
+clean_news_2014_count      <- df.news %>% 
+                            filter(year(PUBLISHED) == 2014, month(PUBLISHED)==1) %>%
+                            select(SOURCE, Text) %>% 
+                            mutate(Text = gsub("\\d+", " ", Text)) %>%
+                            mutate(Text = str_to_lower(Text)) %>%
+                            unnest_tokens(word, Text) %>%
+                            anti_join(stop_words2) %>%
+                            group_by(SOURCE, word) %>% 
+                            summarise(count = n())
+
+newsgroup_cors_2014 <- clean_news_2014_count %>%
+                        pairwise_cor(SOURCE, 
+                                     word, 
+                                     count, 
+                                     sort = TRUE)
+
+corr_plot_2014 <- ggplot(newsgroup_cors_2014) +
+                  geom_tile(aes(x=item1, y=item2, fill=correlation)) +
+                  theme(axis.text.x = element_text(angle = 90, 
+                                                   vjust = 0.5,
+                                                   hjust=1)) +
+                  paletteer::scale_fill_paletteer_c("viridis::plasma") +
+                  labs(x = "",
+                       y=" ", 
+                       title = "Correlations of New Sources in 2014")
+
+```
+
+
+```{r txt_ntwk_bf, messsage=F}
+
+text_grouped <- clean_news_before %>% 
+                group_by(SOURCE)
+
+news_before <- PrepText(text_grouped, 
+                         groupvar = "SOURCE", 
+                         textvar = "word", 
+                         node_type = "groups", 
+                         tokenizer = "words", 
+                         pos = "nouns", 
+                         remove_stop_words = TRUE, 
+                         compound_nouns = TRUE)
+
+text_network_before <- CreateTextnet(news_before)
+```
+
+```{r vis_ntwk_bf,messsage=F}
+set.seed(390)
+VisTextNet_e(text_network_before, label_degree_cut = 0, betweenness = T) 
+VisTextNet_e(text_network_before)
+```
+
+```{r txt_ntwk_2014,message=F, warning=F}
+text_grouped2 <- clean_news_2014 %>% group_by(SOURCE)
+
+new_2014 <- PrepText(text_grouped2, 
+                         groupvar = "SOURCE", 
+                         textvar = "word", 
+                         node_type = "groups", 
+                         tokenizer = "words", 
+                         pos = "nouns", 
+                         remove_stop_words = TRUE, 
+                         compound_nouns = TRUE)
+
+text_network_2014 <- CreateTextnet(new_2014)
+```
+
+```{r vis_ntwk_2014,message=F, warning=F}
+set.seed(99)
+VisTextNet_e(text_network_2014, label_degree_cut = 0) 
+VisTextNet_e(text_network_2014,label_degree_cut = 0,betweenness = T) 
+```
+
+N Grams
+
+```{r ngram_bf, warning=F, message=F}
+wc_comms <- TextComm_e(text_network = text_network_before)
+
+g_before_ngrams <- df.news %>% 
+                      filter(1998 <= year(PUBLISHED),
+                             year(PUBLISHED)<2014) %>%
+                      select(SOURCE, Text) %>% 
+                      mutate(Text = gsub("\\d+", " ", Text)) %>%
+                      mutate(Text = str_to_lower(Text)) %>%
+                      unnest_tokens(word, Text) %>%
+                      anti_join(stop_words2) %>%
+  
+                      group_by(SOURCE) %>%
+                      summarise(word = paste(word, collapse = ",")) %>% 
+                      ungroup() %>%
+  
+                      unnest_tokens(word, word, token="ngrams", n=2) %>%
+                      filter(word != 'NA') %>%
+                      separate(word, c("word1", "word2"), sep = " ") %>%
+  
+                      group_by(SOURCE, word1, word2) %>%
+                      summarise(n=n()) %>%
+                      ungroup() %>%
+  
+                      group_by(SOURCE) %>%
+                      top_n(n=8, wt=n) %>%
+                      relocate(SOURCE, .after = last_col()) %>%
+                      rename("from"="word1",
+                             "to"="word2",
+                             "value"="n",
+                             "group"="SOURCE")
+  
+  
+                      
+add <- g_before_ngrams %>% 
+    inner_join(wc_comms, by=c("group" = "SOURCE"))                
+```
+
+
+```{r vis_ngram_bf_group, eval=F}
+
+data_1 <- add %>% 
+  filter(Membership ==1) %>% 
+  graph_from_data_frame() %>%
+  toVisNetworkData() 
+
+visNetwork(data_1$nodes,data_1$edges)  %>% 
+  visEdges(arrows = "middle") %>%
+  visIgraphLayout() %>% 
+  visNodes(font = list(size =30))
+
+
+data_2 <- add %>% 
+  filter(Membership ==2) %>% 
+  graph_from_data_frame() %>%
+  simplify() %>%
+  toVisNetworkData() 
+
+visNetwork(data_2$nodes,data_2$edges)  %>% 
+  visEdges(arrows = "middle") %>%
+  visIgraphLayout() %>% 
+  visNodes(font = list(size =30))
+
+
+data_3 <- add %>% 
+  filter(Membership ==3) %>% 
+  graph_from_data_frame() %>%
+  toVisNetworkData() 
+
+visNetwork(data_3$nodes,data_3$edges)  %>% 
+  visEdges(arrows = "middle") %>%
+  visIgraphLayout() %>% 
+  visNodes(font = list(size =30))
+
+
+data_4 <- add %>% 
+  filter(Membership ==4) %>% 
+  graph_from_data_frame() %>%
+  toVisNetworkData() 
+
+visNetwork(data_4$nodes,data_4$edges)  %>% 
+  visEdges(arrows = "middle") %>%
+  visIgraphLayout()%>% 
+  visNodes(font = list(size =30))
+
+
+data_5 <- add %>% 
+  filter(Membership ==5) %>% 
+  graph_from_data_frame() %>%
+  toVisNetworkData()
+
+visNetwork(data_5$nodes,data_5$edges) %>% 
+  visEdges(arrows = "middle") %>%
+  visIgraphLayout() %>% 
+  visNodes(font = list(size =30))
+
+```
+
+```{r ngram_2014, warning=F, message=F}
+wc_comms_2 <- TextComm_e(text_network = text_network_2014)
+
+g_2014_ngrams <- df.news %>% 
+                      filter(year(PUBLISHED)==2014) %>%
+                      select(SOURCE, Text) %>% 
+                      mutate(Text = gsub("\\d+", " ", Text)) %>%
+                      mutate(Text = str_to_lower(Text)) %>%
+                      unnest_tokens(word, Text) %>%
+                      anti_join(stop_words2) %>%
+  
+                      group_by(SOURCE) %>%
+                      summarise(word = paste(word, collapse = ",")) %>% 
+                      ungroup() %>%
+  
+                      unnest_tokens(word, word, token="ngrams", n=2) %>%
+                      filter(word != 'NA') %>%
+                      separate(word, c("word1", "word2"), sep = " ") %>%
+  
+                      group_by(SOURCE, word1, word2) %>%
+                      summarise(n=n()) %>%
+                      ungroup() %>%
+  
+                      group_by(SOURCE) %>%
+                      top_n(n=2, wt=n) %>%
+                      relocate(SOURCE, .after = last_col()) %>%
+                      rename("from"="word1",
+                             "to"="word2",
+                             "value"="n",
+                             "group"="SOURCE")
+  
+  
+                      
+add2 <- g_2014_ngrams %>% 
+    inner_join(wc_comms_2, by=c("group" = "SOURCE"))                
+```
+
+
+```{r vis_ngram_2014, eval=F}
+
+data<- add2 %>% 
+  filter(Membership ==1) %>% 
+  graph_from_data_frame() %>%
+  toVisNetworkData() 
+
+visNetwork(data$nodes,data$edges)  %>% visEdges(arrows = "middle")
+
+
+data<- add2 %>% 
+  filter(Membership ==2) %>% 
+  graph_from_data_frame() %>%
+  simplify() %>%
+  toVisNetworkData() 
+
+visNetwork(data$nodes,data$edges)  %>% visEdges(arrows = "middle")
+
+
+data<- add2 %>% 
+  filter(Membership ==3) %>% 
+  graph_from_data_frame() %>%
+  toVisNetworkData() 
+#data$nodes$color <- "yellow"
+
+visNetwork(data$nodes,data$edges)  %>% visEdges(arrows = "middle")
+
+
+data<- add2 %>% 
+  filter(Membership ==4) %>% 
+  graph_from_data_frame() %>%
+  toVisNetworkData() 
+
+visNetwork(data$nodes,data$edges)  %>% visEdges(arrows = "middle")
+
+
+data<- add2 %>% 
+  filter(Membership ==5) %>% 
+  graph_from_data_frame() %>%
+  toVisNetworkData() 
+
+visNetwork(data$nodes,data$edges) %>% visEdges(arrows = "middle")
+
+```
+
+```{r author_links,message=F, warning=F}
+
+author_links <- df.news %>% 
+                group_by(SOURCE,AUTHOR) %>% 
+                summarise(Count = n()) %>% 
+                inner_join(wc_comms, by=c("SOURCE")) %>%
+                drop_na(AUTHOR) %>%
+                rename("from" = "AUTHOR",
+                       "to"="SOURCE",
+                       "value"="Count")
+
+g_author <- graph_from_data_frame(author_links, directed=F)
+
+data_author <- toVisNetworkData(g_author) 
+
+
+data_author$nodes$color <- ifelse(data_author$nodes$id %in% c("The Explainer", 
+                                                              "Athena Speaks", 
+                                                              "News Desk",
+                                                              "The Abila Post",
+                                                              "Kronos Star",
+                                                              "News Online Today",
+                                                              "Homeland Illumination",
+                                                              "All News Today"), 
+                                  "#e88bc3", 
+                                  "#b7e697")
+
+data_author$edges$color = "grey"
+visNetwork(data_author$nodes, data_author$edges) %>% 
+  visIgraphLayout() %>% 
+  visNodes(font = list(size =18))
+
+```
+
+```{r location_links}
+
+location_links <- df.news %>% 
+                  group_by(SOURCE,LOCATION) %>% 
+                  summarise(Count = n()) %>% 
+                  rename("from" = "LOCATION",
+                         "to"="SOURCE",
+                         "value"="Count")
+
+g_loc <- graph_from_data_frame(location_links, directed=F)
+
+data_loc <- toVisNetworkData(g_loc) 
+
+
+data_loc$nodes$color <- ifelse(data_loc$nodes$id %in% c("NA", 
+                                                        "ABILA, KRONOS", 
+                                                        "ELODIS, KRONOS",
+                                                        "DAVOS,SWITZERLAND",
+                                                        "CENTRUM, TETHYS"
+                                                        ), 
+                                  "#e88bc3", 
+                                  "#b7e697")
+
+data_loc$edges$color = "grey"
+visNetwork(data_loc$nodes, data_loc$edges) %>% 
+  visIgraphLayout("layout.davidson.harel") %>% 
+  visNodes(font = list(size =18, weight=3)) %>%
+  visOptions(nodesIdSelection = T, highlightNearest = list(enabled = T, degree = 0))
+
+
+```
+
+
+```{r reorder_func}
+reorder_within <- function(x, by, within, fun = mean, sep = "___", ...) {
+  new_x <- paste(x, within, sep = sep)
+  stats::reorder(new_x, by, FUN = fun)
+}
+
+
+scale_x_reordered <- function(..., sep = "___") {
+  reg <- paste0(sep, ".+$")
+  ggplot2::scale_x_discrete(labels = function(x) gsub(reg, "", x), ...)
+}
+
+scale_y_reordered <- function(..., sep = "___") {
+  reg <- paste0(sep, ".+$")
+  ggplot2::scale_y_discrete(labels = function(x) gsub(reg, "", x), ...)
+}
+
+```
+
+
+```{r tf-idf,message=F, warning=F}
+
+
+tf_idf <- df.news %>% 
+          filter(1998 <= year(PUBLISHED),
+                 year(PUBLISHED)<2014) %>% 
+          mutate(Text = gsub("\\d+", " ", Text)) %>%
+          mutate(Text = str_to_lower(Text)) %>%
+          unnest_tokens(word, Text) %>%
+          anti_join(stop_words2) %>%
+          group_by(SOURCE, word) %>%
+          count() %>%
+          ungroup() %>%
+          bind_tf_idf(word, SOURCE, n) %>%
+          group_by(SOURCE) %>%
+          top_n(7,wt=tf_idf) 
+
+com_tf_idf <- inner_join(tf_idf, 
+                         wc_comms, 
+                         by=c("SOURCE"))
+
+p <- com_tf_idf %>% 
+  ggplot(aes(reorder_within(word, 
+                            tf_idf, 
+                            SOURCE),
+             tf_idf,
+             fill = Membership)) +
+  geom_bar(stat = 'identity',color='black', size=0.1) +
+  scale_x_reordered() +
+  coord_flip() + 
+  facet_wrap(~SOURCE, scales = "free_y", ncol = 7) + 
+  scale_fill_manual(values=c("1"='#97c2fc',
+                              "2"="#7be141",
+                              "3"="#ffff00",
+                              "4"='#fb7e81',
+                              "5"='#eb7df4')) +
+  labs(x='',y='', title = "TF-IDF") +
+  theme(axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        panel.background = element_rect(fill="white"),
+        strip.background =element_rect(fill="white"),
+        plot.title = element_text(size=16, margin=margin(0,0,5,0), hjust=0.5)
+        )
+
+```
+
+
+
+```{r words,message=F, warning=F}
+
+df.news %>% 
+  filter(1998 <= year(PUBLISHED), year(PUBLISHED)<2014) %>%
+  unnest_tokens(word,Text) %>%
+  filter(!(SOURCE %in% c("Tethys News", "Centrum Sentinel", "Modern Rubicon"))) %>%
+  group_by(SOURCE) %>% 
+  count(FILE, SOURCE) %>%
+  summarise(avg_word = mean(n)) %>%
+  ungroup() %>%
+  left_join(wc_comms) %>%
+  arrange(Membership, desc(avg_word)) %>%
+  mutate(SOURCE2 = factor(SOURCE, levels=SOURCE)) %>%
+  ggplot(aes(avg_word,SOURCE2,fill=Membership)) +
+  geom_col(color='black', size=0.5) + 
+  scale_fill_manual(values=c("1"='#97c2fc',
+                              "2"="#7be141",
+                              "3"="#ffff00",
+                              "4"='#fb7e81',
+                              "5"='#eb7df4')) +
+  labs(x = "Average No. of Words",
+       y = element_blank(),
+       title = "Average No. of Words in each News Source") +
+  theme(panel.background = element_rect(fill="white"),
+        panel.grid.major.x = element_line("#d6d6d6"),
+        axis.text = element_text(size = 10, color="black"),
+        plot.title = element_text(size=15, margin=margin(0,0,30,0))
+        ) +
+  ggsave('images/5-1-2.png')
+
+```
+
+
+### 4.2 Building the Visuals for Question 2
+
+```{r,message=F, warning=F}
+g_before_ngrams2 <- df.news %>% 
+                      filter(1998 <= year(PUBLISHED),
+                             year(PUBLISHED)<2014) %>%
+                      select(SOURCE, Text) %>% 
+                      mutate(Text = gsub("\\d+", " ", Text)) %>%
+                      mutate(Text = str_to_lower(Text)) %>%
+                      unnest_tokens(word, Text) %>%
+                      anti_join(stop_words) %>%
+  
+                      group_by(SOURCE) %>%
+                      summarise(word = paste(word, collapse = ",")) %>% 
+                      ungroup() %>%
+  
+                      unnest_tokens(word, word, token="ngrams", n=2) %>%
+                      filter(word != 'NA') %>%
+                      separate(word, c("word1", "word2"), sep = " ") %>%
+  
+                      group_by(SOURCE, word1, word2) %>%
+                      summarise(n=n()) %>%
+                      ungroup() %>%
+  
+  
+                      group_by(SOURCE) %>%
+                      top_n(n=50, wt=n) %>%
+                      relocate(SOURCE, .after = last_col()) %>%
+                      rename("from"="word1",
+                             "to"="word2",
+                             "value"="n",
+                             "group"="SOURCE")
+
+```
+
+```{r,eval=F,message=F, warning=F}
+
+n <- g_before_ngrams2 %>% 
+      ungroup() %>%
+      select(from, to, group) %>% 
+      pivot_longer(cols=c("from","to")) %>% 
+      left_join(get_sentiments("bing"), by=c("value"="word")) %>%
+      replace_na(replace = list(sentiment = "none")) %>%
+      mutate(color = ifelse(sentiment=="negative", "blue", 
+                            ifelse(sentiment=="none", "grey",
+                                   "red"))) %>%
+      select(value, color) %>%
+      rename("id" = "value") %>%
+      group_by(id,color) %>%
+      summarise(n=n())
+```
+
+
+
+```{r all, message=F, warning=F, eval=F}
+
+for (i in unique(g_before_ngrams2$group)){
+  
+      e <- g_before_ngrams2 %>% 
+            filter(group ==i)
+      
+      n <- e %>% 
+            ungroup() %>%
+            select(from, to, group) %>% 
+            pivot_longer(cols=c("from","to")) %>% 
+            left_join(get_sentiments("bing"), by=c("value"="word")) %>%
+            replace_na(replace = list(sentiment = "none")) %>%
+            mutate(color = ifelse(sentiment=="negative", "blue", 
+                                ifelse(sentiment=="none", "grey",
+                                       "red"))) %>%
+            select(value, color) %>%
+            rename("id" = "value") %>%
+            group_by(id,color) %>%
+            summarise(n=n())
+
+      n$label <- n$id
+
+      p<-visNetwork(n=n, 
+                    edges = e, 
+                    main = list(text = paste("News Source: ",i),
+                                       style = "font-family:Verdana;font-weight:600;color:#000000;font-size:20px;text-align:center;")
+                    )  %>% 
+          visEdges(arrows = "middle") %>%
+          visNodes(font = list(size =34, style="font-weight:600")) %>%
+          visIgraphLayout(physics = F) %>%
+          visOptions(highlightNearest = T, 
+                     nodesIdSelection = T) %>%
+          visInteraction(multiselect = TRUE)
+
+      show(p)
+      
+      
+      
+    
+}
+
+```
+
+
+
+
+```{r specific, eval=F}
+
+g_before_ngrams2 <- df.news %>% 
+                      filter(1998 <= year(PUBLISHED),
+                             year(PUBLISHED)<2014) %>%
+                      select(SOURCE, Text) %>% 
+                      mutate(Text = gsub("\\d+", " ", Text)) %>%
+                      mutate(Text = str_to_lower(Text)) %>%
+                      unnest_tokens(word, Text) %>%
+                      anti_join(stop_words) %>%
+  
+                      group_by(SOURCE) %>%
+                      summarise(word = paste(word, collapse = ",")) %>% 
+                      ungroup() %>%
+  
+                      unnest_tokens(word, word, token="ngrams", n=2) %>%
+                      filter(word != 'NA') %>%
+                      separate(word, c("word1", "word2"), sep = " ") %>%
+  
+                      group_by(SOURCE, word1, word2) %>%
+                      summarise(n=n()) %>%
+                      ungroup() %>%
+  
+  
+                      group_by(SOURCE) %>%
+                      #top_n(n=30, wt=n) %>%
+                      relocate(SOURCE, .after = last_col()) %>%
+                      rename("from"="word1",
+                             "to"="word2",
+                             "value"="n",
+                             "group"="SOURCE")
+
+g_before_ngrams_specific <- g_before_ngrams2 %>% 
+                            filter(group=="International Times")%>%
+                            #filter(from %in% c("pok","elodis","police","government")|to %in% c("pok","elodis","police","government"))
+                            filter(from %in% c("gastech","international", "kronos","sanjorge","pok","elodis","protector")| to %in% c("gastech","international","kronos", "sanjorge","pok","elodis","protector")) 
+                            #filter(from %in% c("people","kronos","pok")|to %in% c("people","kronos", "pok"))
+          
+      e <- g_before_ngrams_specific #%>% 
+            #filter(group=="Homeland Illumination")
+      
+      n <- e %>% 
+            ungroup() %>%
+            select(from, to, group) %>% 
+            pivot_longer(cols=c("from","to")) %>% 
+            left_join(get_sentiments("bing"), by=c("value"="word")) %>%
+            replace_na(replace = list(sentiment = "none")) %>%
+            mutate(color.background = ifelse(sentiment=="negative", "blue", 
+                                ifelse(sentiment=="none", "grey",
+                                       "red"))) %>%
+            select(value, color.background) %>%
+            rename("id" = "value") %>%
+            group_by(id,color.background) %>%
+            summarise(n=n())
+
+      n$label <- n$id
+      n$color.highlight.background <- "brown"
+      n$color.border <- "black"
+      e$color <- "gray" 
+      
+
+      p<-visNetwork(n = n, 
+                    edges = e, 
+                    main = list(text = paste("News Source: ",unique(e$group)),
+                                       style = "font-family:Verdana;font-weight:600;color:#000000;font-size:20px;text-align:center;")
+                    )  %>% 
+          visEdges(arrows = "middle", color = list(highlight = "brown")) %>%
+          visNodes(font = list(size =34, style="font-weight:600")) %>%
+          visIgraphLayout(physics = F, layout = "layout_nicely") %>%
+          visOptions(highlightNearest = list(enabled = T, 
+                                             algorithm = "all",
+                                             degree = 0), 
+                     nodesIdSelection = T
+                    ) %>%
+          visInteraction(multiselect = TRUE)
+      
+      
+```
+
+
+```{r,eval=FALSE}
+  g <- graph_from_data_frame(d = e,
+                             directed = T,
+                             vertices = n)
+  g <- simplify(g)
+  size <- betweenness(g)
+  size <- size/700
+
+  nodes_p <- data.frame(id = V(g)$name, 
+                        size =  size,
+                        label=V(g)$name)
+  e_p <- get.data.frame(g, what="edges")
+  
+  
+  visNetwork(nodes = nodes_p, 
+             edges = e_p) %>% visIgraphLayout()#layout = 'layout_nicely')
+  
+```
+
+
+
+```{r,eval=FALSE}
+set.seed(390)
+p
+
+```
+
+
+```{r, eval=F}
+
+for (i in unique(g_before_ngrams2$group)){
+  
+  data <- g_before_ngrams2 %>% 
+          filter(group ==i) %>% 
+          graph_from_data_frame() %>%
+          simplify() %>%
+          toVisNetworkData() 
+
+  p <- visNetwork(data$nodes,
+                  data$edges, main=i
+                  )%>% 
+          visEdges(arrows = "middle") %>%
+          visNodes(size = 30,font = list(size =30) ) %>%
+          visIgraphLayout()
+
+          
+  show(p)
+
+}
+
+```
+
+
+```{r,message=F, warning=F}
+
+dtm_corpus <- df.news %>% 
+              filter(1998 <= year(PUBLISHED),
+                     year(PUBLISHED)<2014) %>%
+              select(SOURCE, Text) %>% 
+              mutate(Text = gsub("\\d+", " ", Text)) %>%
+              mutate(Text = str_to_lower(Text)) %>%
+              unnest_tokens(word, Text) %>%
+              anti_join(stop_words2) %>%
+              group_by(SOURCE, word) %>% 
+              summarise(count = n()) %>% 
+              inner_join(wc_comms) 
+  
+  
+for (i in unique(dtm_corpus$Membership)){
+  
+  dtm_model <- dtm_corpus %>% 
+               filter(Membership==i) %>%
+               cast_dtm(SOURCE, word, count)
+
+  lda_topics <- LDA(dtm_model,
+                     k=2, 
+                     method="Gibbs",
+                     control = list(seed=333)) %>%
+                  tidy(matrix = "beta")
+  
+  sources <- wc_comms %>% 
+             filter(Membership==i) %>%
+             select(SOURCE)
+  
+    
+  word_probs <- lda_topics %>% 
+                  group_by(topic) %>%
+                  top_n(10, beta) %>%
+                  ungroup() %>%
+                  mutate(term2 = fct_reorder(term, beta)) # %>%
+                  #ggplot(aes(term2, beta, fill = as.factor(topic))) +
+                  #geom_col(show.legend=F) +
+                  #labs(x="",
+                  #     y="Sources",
+                  #     title=paste(unlist(sources), collapse = ', '))+
+                  #facet_wrap(~topic, scales = "free_y") +
+                  #coord_flip() +
+                  #theme(
+                  #  panel.background = element_rect(fill="white"),
+                  #  panel.grid.major.x = element_line("#d6d6d6"),
+                  #  axis.text.x = element_text(color='black'),
+                  #  plot.title = element_text(size=12, margin=margin(0,0,30,0)),
+                  #  strip.background = element_rect(fill="white",colour = "black")
+      
+                  #)
+  
+  p <- ggwordcloud(word_probs$term, 
+                   freq = word_probs$beta, 
+                   colors = word_probs$topic) +
+       labs(title = paste("Wordcloud for Cluster: ", i),
+            subtitle = paste(unlist(sources), collapse = ', ')) +
+       theme(plot.title = element_text(hjust = 0.5, size=14),
+             plot.subtitle = element_text(hjust = 0.5, size=12))
+  show(p)
+  #ggsave(paste('images/5-1-6-',i,".png",sep = ''))
+
+}
+
+```
+
+
+
+
+### 4.3  Building the Visuals for Question 3
+
+
+```{r}
+links <- df.emails %>% 
+          mutate(To = str_split(To,pattern=',')) %>% 
+          unnest_longer(To) %>% 
+          mutate(To = str_trim(To),
+                 From = str_trim(From)) %>%
+          filter(!(From==To)) %>%
+          group_by(From, To) %>%
+          summarise(count=n()) %>%
+          rename(weight = count)
+
+nodes_df <- data.frame(id = unique(c(links$From, links$To))) %>%
+            left_join(df.emp, by = c("id"="FullName")) %>% 
+            select(c(id, 
+                     CurrentEmploymentTitle, 
+                     CurrentEmploymentType)) %>%
+            rename(title = CurrentEmploymentTitle, 
+                   department = CurrentEmploymentType) %>%
+            replace_na(list(department = "Executive", 
+                            title = "CEO"))
+```
+
+
+Department Network: 
+
+```{r, warning=F, message=F}
+
+email_network <- graph_from_data_frame(d = links, 
+                                       vertices = nodes_df, 
+                                       directed = T
+                                       )
+
+nodes <- data.frame(id = V(email_network)$name, 
+                    title = V(email_network)$name, 
+                    group = V(email_network)$department)
+
+
+edges <- get.data.frame(email_network, what="edges")[1:2]
+edges$value <- links$weight
+
+nodes$color.highlight.background <- "brown"
+
+  p <- visNetwork(nodes, edges) %>%
+      visOptions(highlightNearest = list(enabled = T, degree = 1), 
+                 nodesIdSelection = T,
+                 selectedBy = "group"
+                 ) %>% 
+      visEdges(arrows = "middle",width = 0.5) %>% 
+      visLayout(randomSeed = 123) %>%
+      #visPhysics(stabilization = 5,
+      #           barnesHut = list(springLength =230), 
+      #           forceAtlas2Based = list(gravitaionalConstant = -100,
+      #                                   centralGravity = 0.5))
+      visIgraphLayout(layout = 'layout.davidson.harel')
+
+p
+```
+
+
+Centrality Based Networks
+
+Sizing by Betweeness Centrality
+
+```{r, warning=F, message=F}
+email_network3 <- graph_from_data_frame(d = links, 
+                                        vertices = nodes_df, 
+                                        directed = F)
+
+size <- betweenness(email_network3)
+email_network3 <- simplify(email_network3)
+
+
+nodes2 <- data.frame(id = V(email_network3)$name, 
+                     title = V(email_network3)$title, 
+                     group = factor(V(email_network3)$department),
+                     size = size/3)
+
+edges2 <- get.data.frame(email_network3, what="edges")[1:2]
+
+nodes2$color.highlight.background <- "brown"
+
+q<-visNetwork(nodes2, edges2) %>%
+    visOptions(highlightNearest = list(enabled = T, degree=0), 
+               nodesIdSelection = T,
+               selectedBy = "group"
+               ) %>% 
+    visLayout(randomSeed = 123) %>%
+    visIgraphLayout(layout = 'layout.davidson.harel')
+q
+```
+
+
+Sizing by Eigenvalue Centrality
+
+```{r, warning=F, message=F}
+email_network4 <- graph_from_data_frame(d = links, 
+                                        vertices = nodes_df, 
+                                        directed = T)
+
+size <- (eigen_centrality(email_network4)$vector) * 50
+
+nodes3 <- data.frame(id = V(email_network4)$name, 
+                     title = V(email_network4)$title, 
+                     group = factor(V(email_network4)$department),
+                     size = size)
+
+edges3 <- get.data.frame(email_network4, what="edges")[1:2]
+
+visNetwork(nodes3, edges3) %>%
+  visOptions(highlightNearest = TRUE, 
+             nodesIdSelection = T,
+             selectedBy = "group"
+             ) %>% 
+  visEdges(arrows = "middle") %>% 
+  visLayout(randomSeed = 123) %>% 
+  visIgraphLayout(layout = 'layout.davidson.harel') %>%
+  visLegend(enabled = T)
+```
+
+
+Seeing Closeness
+
+```{r, eval=FALSE, warning=F, message=F}
+email_network4 <- graph_from_data_frame(d = links, 
+                                        vertices = nodes_df, 
+                                        directed = FALSE)
+
+#email_network4 <- simplify(email_network4)
+E(email_network4)$width <- closeness(email_network4) * 1000
+
+nodes3 <- data.frame(id = V(email_network4)$name, 
+                     title = V(email_network4)$title, 
+                     group = factor(V(email_network4)$department),
+                     size = size)
+
+#nodes <- nodes[order(nodes$id, decreasing = F),]
+#nodes2$color.highlight.background <- "brown"
+
+edges3 <- get.data.frame(email_network4, what="edges")[1:2]
+
+
+visNetwork(nodes3, edges3) %>%
+  visOptions(highlightNearest = TRUE, 
+             nodesIdSelection = T,
+             selectedBy = "group"
+             ) %>% 
+  visEdges(arrows = "middle") %>% 
+  visLayout(randomSeed = 123) %>% 
+  visIgraphLayout(layout = 'layout.davidson.harel') %>%
+  visLegend(enabled = T)
+
+```
+
+Communities based on Weights
+
+```{r, warning=F, message=F}
+email_network4 <- graph_from_data_frame(d = links, 
+                                        vertices = nodes_df, 
+                                        directed = T)
+
+w_comm <- edge.betweenness.community(email_network4, weights = E(email_network4)$weight)
+
+nodes3 <- data.frame(id = V(email_network4)$name, 
+                     title = V(email_network4)$title, 
+                     group = factor(w_comm$membership))
+
+edges3 <- get.data.frame(email_network4, what="edges")[1:2]
+
+
+visNetwork(nodes3, edges3) %>%
+  visOptions(highlightNearest = TRUE, 
+             nodesIdSelection = T,
+             selectedBy = "group"
+             ) %>% 
+  visEdges(arrows = "middle") %>% 
+  visIgraphLayout(layout = 'layout.davidson.harel')
+```
+
+
+```{r, warning=F, message=F}
+g <- graph_from_data_frame(links,vertices = nodes_df, directed = T)
+
+
+dat_vis <- toVisNetworkData(g)
+dat_vis$edges$value <- dat_vis$edges$weight
+dat_vis$nodes$group <- dat_vis$nodes$department
+
+visNetwork(nodes = dat_vis$nodes, edges = dat_vis$edges) %>% 
+  visIgraphLayout(layout = 'layout.davidson.harel') %>%
+  visEdges(arrows = "middle")
+
+```
+
+
+
+
+
+
+
+
+
+

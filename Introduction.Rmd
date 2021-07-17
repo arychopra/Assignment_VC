@@ -1,0 +1,97 @@
+---
+title: "Introduction"
+description: |
+  The Vast Challenge: MC1
+author:
+  - name: Aryah U. Chopra
+    url: https://www.linkedin.com/in/aryahuc/
+date: "`r Sys.Date()`"
+output: distill::distill_article
+---
+
+<style>
+
+d-article div.sourceCode {
+    background-color: rgba(247, 230, 230, 0.05);
+    border-color: blue;
+    border: 1px solid rgba(249, 83, 85, 0.2);
+    border-radius: 1px;
+    overflow-x: auto !important;
+    max-width: 704px;
+
+}
+
+d-article pre{
+    background-color: rgba(217, 217, 217, 0.05);
+    #border: 1px solid rgba(217, 217, 217, 0.2);
+    border-radius: 1px;
+    overflow-x: auto !important;
+    max-width: 704px;
+}
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+  background-color: white;
+  border-color: coral;
+}
+
+.tooltip .tooltiptext {
+  visibility: visible;
+  width: auto;
+  background-color: white;
+  color: #000000;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 150%;
+  left: 50%;
+  margin-left: -60px;
+}
+
+</style>
+
+
+```{css echo = FALSE}
+body {line-height: 1;}
+```
+
+```{css zoom-lib-src, echo = FALSE}
+script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"
+```
+
+
+```{js zoom-jquery, echo = FALSE}
+ $(document).ready(function() {
+    $('body').prepend('<div class=\"zoomDiv\"><img src=\"\" class=\"zoomImg\"></div>');
+    // onClick function for all plots (img's)
+    $('img:not(.zoomImg)').click(function() {
+      $('.zoomImg').attr('src', $(this).attr('src')).css({width: '100%'});
+      $('.zoomDiv').css({opacity: '1', width: 'auto', border: '1px solid white', borderRadius: '5px', position: 'fixed', top: '50%', left: '50%', marginRight: '-50%', transform: 'translate(-50%, -50%)', boxShadow: '0px 0px 50px #888888', zIndex: '50', overflow: 'auto', maxHeight: '100%'});
+    });
+    // onClick function for zoomImg
+    $('img.zoomImg').click(function() {
+      $('.zoomDiv').css({opacity: '0', width: '0%'}); 
+    });
+  });
+```
+
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(tidy.opts=list(blank=FALSE, width.cutoff = 30))
+```
+
+
+
+## 1 Introduction
+
+
+
+## 2 Literature Review
+
+
+
+
+

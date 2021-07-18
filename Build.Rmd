@@ -415,7 +415,7 @@ TextComm_e <- function(text_network, alpha = .25, label_degree_cut=0, betweennes
 ```
 
 
-### 4.1  Building the Visuals for Question 1
+### Building the Visuals for Question 1
 
 ```{r, message=F}
 
@@ -1419,11 +1419,76 @@ visNetwork(nodes = dat_vis$nodes, edges = dat_vis$edges) %>%
 ```
 
 
+```{r}
+emails_grouped<- df.emails %>% 
+                  mutate(To = str_split(To,pattern=',')) %>% 
+                  unnest_longer(To) %>% 
+                  mutate(To = str_trim(To),
+                         From = str_trim(From)) %>%
+                  filter(!(From==To)) %>%
+                  unnest_tokens(word, Subject) %>%
+                  anti_join(stop_words) %>% 
+                  group_by(From,To) %>%
+                  count(word) %>%
+                  summarise(word = paste(word, collapse = ",")) %>%
+                  ungroup() %>%
+                  group_by(From) %>%
+                  left_join(df.emp, by=c("From"="FullName")) %>%
+                  select(c(From, To, word, CurrentEmploymentType)) %>%
+                  rename(group = CurrentEmploymentType) %>%
+                  replace_na(replace=list(From_dep = "Executive"))
+
+
+```
+
+
+```{r}
+
+
+x <- PrepText(emails_grouped, 
+                  groupvar = "From", 
+                  textvar = "word", 
+                  node_type = "groups", 
+                  tokenizer = "words", 
+                  compound_nouns = TRUE)
+
+x_c <- CreateTextnet(x)
+
+```
+
+
+```{r}
+VisTextNet_e(x_c)
+```
+
+
+
+```{r}
+
+emails_grouped %>% 
+      left_join(df.emp, by=c("From"="FullName")) %>%
+      select(c(From, To, word, CurrentEmploymentType)) %>%
+      rename(From_dep = CurrentEmploymentType) %>%
+      left_join(df.emp, by=c("To"="FullName")) %>%
+      select(c(From, To, word, From_dep, CurrentEmploymentType)) %>%
+      rename(To_dep = CurrentEmploymentType)
+  
+  
+```
+
+```{r}
+link_s <- df.emails %>% 
+          mutate(To = str_split(To,pattern=',')) %>% 
+          unnest_longer(To) %>% 
+          mutate(To = str_trim(To),
+                 From = str_trim(From)) %>%
+          filter(!(From==To)) %>%
+          count(From, To) %>%
+          rename(value=n)
+
+node_s <- data.frame(name = unique(c(link_s$From, link_s$To)))
 
 
 
 
-
-
-
-
+```

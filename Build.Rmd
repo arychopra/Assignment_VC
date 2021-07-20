@@ -230,7 +230,6 @@ explore(news_corpus_date)
 
 Re-making the functions for building text visuals:
 
-
 ```{r VisTextChanged, message=F, warning=F}
 VisTextNet_e <- function(text_network, alpha = .25, label_degree_cut=0, betweenness=FALSE){
   
@@ -534,11 +533,13 @@ text_network_before <- CreateTextnet(news_before)
 ```
 
 
+
 ```{r vis_ntwk_bf,messsage=F}
 set.seed(390)
 VisTextNet_e(text_network_before, label_degree_cut = 0, betweenness = T) 
 VisTextNet_e(text_network_before)
 ```
+
 
 
 ```{r txt_ntwk_2014,message=F, warning=F}
@@ -917,7 +918,7 @@ df.news %>%
 ```
 
 
-### 4.2 Building the Visuals for Question 2
+### Building the Visuals for Question 2
 
 ```{r,message=F, warning=F}
 g_before_ngrams2 <- df.news %>% 
@@ -1222,7 +1223,7 @@ for (i in unique(dtm_corpus$Membership)){
 
 
 
-### 4.3  Building the Visuals for Question 3
+### Building the Visuals for Question 3
 
 
 ```{r}
@@ -1253,10 +1254,9 @@ Department Network:
 ```{r, warning=F, message=F}
 
 email_network <- graph_from_data_frame(d = links, 
-                                       vertices = nodes_df, 
-                                       directed = T
+                                       vertices = nodes_df
                                        )
-
+email_network <- simplify(email_network)
 nodes <- data.frame(id = V(email_network)$name, 
                     title = V(email_network)$name, 
                     group = V(email_network)$department)
@@ -1266,22 +1266,44 @@ edges <- get.data.frame(email_network, what="edges")[1:2]
 edges$value <- links$weight
 
 nodes$color.highlight.background <- "brown"
+nodes <- nodes %>% mutate(font.size = 25, font.weight= 1000)
 
   p <- visNetwork(nodes, edges) %>%
       visOptions(highlightNearest = list(enabled = T, degree = 1), 
                  nodesIdSelection = T,
                  selectedBy = "group"
+                 
                  ) %>% 
-      visEdges(arrows = "middle",width = 0.5) %>% 
+      visEdges(width = 0.2) %>% 
       visLayout(randomSeed = 123) %>%
       #visPhysics(stabilization = 5,
-      #           barnesHut = list(springLength =230), 
+      #           barnesHut = list(springLength =230, avoidOverlap=0.2), 
       #           forceAtlas2Based = list(gravitaionalConstant = -100,
-      #                                   centralGravity = 0.5))
-      visIgraphLayout(layout = 'layout.davidson.harel')
+      #                                   centralGravity = 0.5)) %>%
+      visIgraphLayout(layout = "layout_nicely") %>%
+      visInteraction(multiselect = TRUE) %>%
+      visLegend(enabled = T)
+  
+```
 
+
+```{r}
+set.seed(309)
 p
 ```
+
+
+```{r, eval=F}
+adjacencyData <- with(links, table(From, To))
+ 
+# Charge the circlize library
+library(circlize)
+ 
+# Make the circular plot
+chordDiagram(adjacencyData, transparency = 0.5)
+
+```
+
 
 
 Centrality Based Networks
@@ -1392,34 +1414,22 @@ nodes3 <- data.frame(id = V(email_network4)$name,
                      group = factor(w_comm$membership))
 
 edges3 <- get.data.frame(email_network4, what="edges")[1:2]
-
+nodes3$color.highlight.background <- "brown"
+nodes3 <- nodes3 %>% mutate(font.size = 25, font.weight= 1000)
 
 visNetwork(nodes3, edges3) %>%
   visOptions(highlightNearest = TRUE, 
              nodesIdSelection = T,
              selectedBy = "group"
              ) %>% 
-  visEdges(arrows = "middle") %>% 
-  visIgraphLayout(layout = 'layout.davidson.harel')
+  visEdges(width = 0.2) %>% 
+  visIgraphLayout(layout = 'layout_nicely') %>%
+  visInteraction(multiselect = T)
 ```
 
 
-```{r, warning=F, message=F}
-g <- graph_from_data_frame(links,vertices = nodes_df, directed = T)
 
-
-dat_vis <- toVisNetworkData(g)
-dat_vis$edges$value <- dat_vis$edges$weight
-dat_vis$nodes$group <- dat_vis$nodes$department
-
-visNetwork(nodes = dat_vis$nodes, edges = dat_vis$edges) %>% 
-  visIgraphLayout(layout = 'layout.davidson.harel') %>%
-  visEdges(arrows = "middle")
-
-```
-
-
-```{r}
+```{r,warning=F, message=F}
 emails_grouped<- df.emails %>% 
                   mutate(To = str_split(To,pattern=',')) %>% 
                   unnest_longer(To) %>% 
@@ -1442,7 +1452,7 @@ emails_grouped<- df.emails %>%
 ```
 
 
-```{r}
+```{r,warning=F, message=F}
 
 
 x <- PrepText(emails_grouped, 
@@ -1457,13 +1467,13 @@ x_c <- CreateTextnet(x)
 ```
 
 
-```{r}
+```{r,warning=F, message=F}
 set.seed(390)
 VisTextNet_e(x_c)
 ```
 
 
-```{r}
+```{r,warning=F, message=F}
 x<- df.emails %>% 
           mutate(To = str_split(To,pattern=',')) %>% 
           unnest_longer(To) %>% 
@@ -1486,41 +1496,211 @@ x_full <- df.emails %>%
           filter(!(From==To)) %>%
           mutate(Subject2 = str_replace_all(Subject, "[[:punct:]]", " ")) %>%
           left_join(select(df.emp, FullName, CurrentEmploymentType, CurrentEmploymentTitle), by=c("From"="FullName")) %>%
-          replace_na(list(CurrentEmploymentType = "Executive", CurrentEmploymentTitle="CEO"))
+          replace_na(list(CurrentEmploymentType = "Executive", CurrentEmploymentTitle="CEO")) %>%
+          rename(From_title = CurrentEmploymentTitle, From_dep =  CurrentEmploymentType) %>% 
+          left_join(select(df.emp, FullName, CurrentEmploymentTitle, CurrentEmploymentType), by = c("To"="FullName")) %>%
+          rename(To_title = CurrentEmploymentTitle, To_dep =  CurrentEmploymentType)
+  
 ```
 
 
 
-```{r, eval=F}
+```{r, eval=F,warning=F, message=F}
 
-for (i in unique(c(x_full$From, x_full$To))){
+
+for (i in sort(unique(c(x_full$From, x_full$To)))){
   
     
   
     dat <- x_full %>%
-        left_join(select(df.emp, FullName, CurrentEmploymentTitle, CurrentEmploymentType), by = c("From"="FullName")) %>%
-        rename(From_title = CurrentEmploymentTitle, From_dep =  CurrentEmploymentType) %>% 
-        left_join(select(df.emp, FullName, CurrentEmploymentTitle, CurrentEmploymentType), by = c("To"="FullName")) %>%
-        rename(To_title = CurrentEmploymentTitle, To_dep =  CurrentEmploymentType) %>%
-        filter(From==i)
+           filter(From==i)
     
-    details<- dat %>% 
+    details<- x_full %>% 
               filter(From == i) %>% 
               select(From_dep, From_title)
 
     g<-ggplot(dat, aes(y=To, x=Date.Time))+ 
-        geom_point(position="jitter", 
-                   size=3,alpha = 0.5, 
-                   aes(text = sprintf("Text: %s<br>Date: %s<br>To_Title:%s<br>To_Dep:%s<br>", Subject2, Date.Date, To_title, To_dep))) +
-        labs(y="",x="",title = paste(i,paste(unique(details), collapse = ',')))
-    
-    gg <- ggplotly(g) 
+        geom_point(position="dodge",
+                   size=2,alpha = 0.5, shape=21,color="black", stroke=0.5, 
+                   aes(text = sprintf("Sub: %s<br>Date: %s<br>To: %s<br>To_Title: %s<br>To_Dep: %s<br>Time Sent: %s<br>", 
+                                      Subject2, 
+                                      Date.Date, 
+                                      To,
+                                      To_title, 
+                                      To_dep,
+                                      Date.Time))
+                   ) +
+      
+        geom_line(aes(group = Subject2, color=Subject2), size=0.2) +
+        #scale_color_manual(values = palette) +
+        labs(y="",x="Time",title = paste(i,paste(unique(details), collapse = ',')), group="", color="") +
+        theme(legend.text = element_text(size = 8),
+              panel.background = element_rect(fill="white"),
+              panel.grid.major.y = element_line(color="#f0f0f0"),
+              plot.title = element_text(size=14)
+              )
+
+    gg <- ggplotly(g, tooltip = c("text")) 
 
     show(gg)
+    #break
     
     
 }
 ```
+
+```{r,warning=F, message=F}
+df.emp <-df.emp %>% 
+          mutate(Approx_age = 2014 - year(BirthDate))
+
+```
+
+```{r,warning=F, message=F}
+age_link <- df.emp %>%
+              select(FullName, Approx_age) %>%
+              rename(From = FullName,
+                     To =  Approx_age) #%>%
+              #mutate(To = as.character(To))
+
+age_nodes <- data.frame(id = unique(c(age_link$From, age_link$To)))
+age_nodes <- age_nodes %>% 
+                left_join(select(df.emp, FullName, CurrentEmploymentType), by = c("id"="FullName")) %>%
+                rename(group =  CurrentEmploymentType) %>%
+                replace_na(list(group="None"))
+
+age_nodes$title <- age_nodes$id
+#age_nodes$color <- ifelse(str_length(age_nodes$id)<=2,"blue","black")
+age_nodes$font.size <- 25
+age_nodes$font.weight <- 1000
+
+
+
+age_g <- graph_from_data_frame(d = age_link, 
+                      vertices = age_nodes, 
+                      directed = T)
+data_age <- toVisNetworkData(age_g)
+
+visNetwork(nodes = data_age$nodes, 
+           edges = data_age$edges) %>%
+  visNodes(size=15) %>%
+  visLegend()
+
+
+```
+
+
+```{r,warning=F, message=F}
+citi_link <- df.emp %>%
+              select(FullName, CitizenshipCountry, CurrentEmploymentType ) %>%
+              rename(From = FullName,
+                     To =  CitizenshipCountry,
+                     group = CurrentEmploymentType)
+              
+
+citi_nodes <- data.frame(id = unique(c(citi_link$From, citi_link$To)))
+citi_nodes <- citi_nodes %>% 
+                left_join(select(df.emp, FullName, CurrentEmploymentType), by = c("id"="FullName")) %>%
+                rename(group =  CurrentEmploymentType) %>%
+                replace_na(list(group="Place"))
+
+citi_nodes$title <- citi_nodes$id
+#citi_nodes$color <- ifelse(str_length(citi_nodes$id)==6,"blue","black")
+citi_nodes$font.size <- 25
+citi_nodes$font.weight <- 1000
+
+
+
+citi_g <- graph_from_data_frame(d = citi_link, 
+                      vertices = citi_nodes, 
+                      directed = T)
+data_citi <- toVisNetworkData(citi_g)
+
+visNetwork(nodes = data_citi$nodes, 
+           edges = data_citi$edges) %>%
+  visNodes(size=15) %>%
+  visIgraphLayout() %>%
+  visLegend(T)
+
+
+```
+
+
+```{r,warning=F, message=F}
+df.emp <- df.emp %>% 
+          mutate(army_year = year(MilitaryDischargeDate)) %>%
+          mutate(disch = paste(MilitaryServiceBranch, army_year)) %>%
+          mutate(MilitaryStartYear = year(MilitaryDischargeDate)-2) %>%
+          mutate(MilitaryDischargeYear = year(MilitaryDischargeDate))
+          
+```
+
+```{r,warning=F, message=F}
+mil_data<-df.emp %>%
+          filter(!is.na(MilitaryDischargeYear)) %>%
+          mutate(ArmyLoc =  ifelse(str_detect(MilitaryServiceBranch,"Kronos"),"Kronos","Tethys"))
+
+mil_data %>%
+ggplot(aes(y = FullName, x = MilitaryStartYear)) + 
+  geom_point(size=3, color="#81b879") +
+  geom_point(aes(MilitaryDischargeYear), color="#769ab5", size=3) +
+  geom_segment(aes(x=MilitaryStartYear, xend=MilitaryDischargeYear, y=FullName,yend=FullName), size=0.8, alpha=0.7) +
+  scale_x_continuous(breaks = seq(min(mil_data$MilitaryStartYear), max(mil_data$MilitaryDischargeYear), by=2))+
+  facet_wrap(~ArmyLoc, scales = "free") +
+  labs(x = "Year",y ="", title="Time Served in the Military")+
+  theme(panel.background = element_rect(fill ="white"),
+        panel.grid.major.y = element_line(colour = "grey",linetype = 3),
+        panel.grid.major.x = element_blank(),
+        panel.border = element_rect(color="grey", fill=NA),
+        axis.ticks.x  = element_blank(),
+        axis.ticks.y  = element_blank())
+
+
+```
+
+
+
+```{r,warning=F, message=F}
+df.emp <- df.emp %>% 
+          mutate(army_year = year(MilitaryDischargeDate))
+  
+  
+army_link <- df.emp %>%
+              select(FullName, MilitaryServiceBranch, CurrentEmploymentType ) %>%
+              rename(From = FullName,
+                     To =  MilitaryServiceBranch)
+              
+
+army_nodes <- data.frame(id = unique(c(army_link$From, army_link$To)))
+army_nodes <- army_nodes %>% 
+                left_join(select(df.emp, FullName, CurrentEmploymentType), by = c("id"="FullName")) %>%
+                rename(group =  CurrentEmploymentType) %>%
+                replace_na(list(group="None"))
+
+army_nodes$title <- army_nodes$id
+#citi_nodes$color <- ifelse(str_length(citi_nodes$id)==6,"blue","black")
+army_nodes$font.size <- 25
+army_nodes$font.weight <- 1000
+
+
+
+army_g <- graph_from_data_frame(d = army_link, 
+                      vertices = army_nodes, 
+                      directed = T)
+data_army <- toVisNetworkData(army_g)
+
+visNetwork(nodes = data_army$nodes, 
+           edges = data_army$edges) %>%
+  visNodes(size=15) %>%
+  visIgraphLayout() %>%
+  visLegend(T)
+
+
+```
+
+
+
+
+### Extras
 
 
 ```{r, eval=F}
@@ -1558,7 +1738,6 @@ for (i in unique(x$CurrentEmploymentType)){
 }
 
 ```
-
 
 
 

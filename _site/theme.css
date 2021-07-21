@@ -169,7 +169,7 @@ d-title h1{
 }
 
 ::-webkit-scrollbar{
-    width: 30px;
+    width: 15px;
     height: 5px;
 }
 ::-webkit-scrollbar-track{

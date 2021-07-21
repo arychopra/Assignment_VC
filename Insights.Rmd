@@ -295,6 +295,35 @@ knitr::include_graphics('images/5-1-13A.png')
 
 ### 5.3 Question 3
 
+Department Network
+
+```{r}
+knitr::include_graphics('images/5-3-1.png')
+```
+
+
+```{r}
+knitr::include_graphics('images/5-3-4.png')
+```
+
+
+```{r}
+knitr::include_graphics('images/5-3-5.png')
+```
+
+
+```{r}
+knitr::include_graphics('images/5-3-2.png')
+```
+
+
+```{r}
+knitr::include_graphics('images/5-3-3.png')
+```
+
+```{r}
+knitr::include_graphics('images/5-3-6.png')
+```
 
 
 ### 5.4 Question 4

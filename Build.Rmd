@@ -1515,7 +1515,8 @@ visNetwork(nodes3, edges3) %>%
                                  background = "#EB7DF4", 
                                  highlight = list(border = "#E129F0", background = "#EB7DF4"),
                                  hover = list(background = "#E129F0", border = "#EB7DF4")
-                                 ))
+                                 )) %>%
+     visLegend()
 
 ```
 
@@ -1621,20 +1622,24 @@ for (i in sort(unique(c(x_full$From, x_full$To)))){
               select(From_dep, From_title)
 
     g<-ggplot(dat, aes(y=To, x=Date.Time))+ 
-        geom_point(position="dodge",
-                   size=2,alpha = 0.5, shape=21,color="black", stroke=0.5, 
+        geom_point(#position=position_dodge(width=1),
+                   size=2, alpha = 0.6, stroke=0.5, 
                    aes(text = sprintf("Sub: %s<br>Date: %s<br>To: %s<br>To_Title: %s<br>To_Dep: %s<br>Time Sent: %s<br>", 
                                       Subject2, 
                                       Date.Date, 
                                       To,
                                       To_title, 
                                       To_dep,
-                                      Date.Time))
+                                      Date.Time),
+                       shape = factor(Date.Date)
+                       )
                    ) +
       
         geom_line(aes(group = Subject2, color=Subject2), size=0.2) +
         #scale_color_manual(values = palette) +
-        labs(y="",x="Time",title = paste(i,paste(unique(details), collapse = ',')), group="", color="") +
+        labs(y="",x="Time",title = paste(i,paste(unique(details), collapse = ',')), 
+             group="", 
+             color="") +
         theme(legend.text = element_text(size = 8),
               panel.background = element_rect(fill="white"),
               panel.grid.major.y = element_line(color="#f0f0f0"),
@@ -1661,7 +1666,7 @@ df.emp <-df.emp %>%
 ```
 
 
-```{r,warning=F, message=F}
+```{r,warning=F, message=F, echo=F, eval=F}
 age_link <- df.emp %>%
               select(FullName, Approx_age) %>%
               rename(From = FullName,
@@ -1823,6 +1828,56 @@ ggplot(aes(y = FullName, x = MilitaryStartYear)) +
 ```
 
 
+```{r}
+
+df.emp %>% 
+    select(FullName, CurrentEmploymentStartDate, CurrentEmploymentType) %>% 
+    mutate(FullName2 = fct_reorder(FullName,CurrentEmploymentType)) %>%
+    mutate(Year  = year(CurrentEmploymentStartDate )) %>% 
+    mutate(hjust = ifelse(FullName2 =="Sten Sanjorge Jr.", -0.1, 1.05)) %>%
+    ggplot(aes(x = Year, y= FullName2)) +
+    geom_point(aes(color = CurrentEmploymentType), size=5)  +
+    geom_text(aes(label=FullName2, hjust =  hjust), size=3) +
+    scale_x_continuous(breaks = seq(min(year(df.emp$CurrentEmploymentStartDate)), 
+                                    max(year(df.emp$CurrentEmploymentStartDate)), 
+                                    by=2))+
+    labs(y="",x="Time",title = "Year Employee of GasTech Joined", color="Department") +
+    theme(legend.text = element_text(size = 8),
+          panel.background = element_rect(fill="white"),
+          panel.grid.major.x = element_line(color="#c9c9c9", linetype = 3),
+          panel.border = element_rect(color="grey", fill=NA),
+          plot.title = element_text(size=14),
+          axis.text.y = element_blank(),
+          axis.ticks.x  = element_blank(),
+          axis.ticks.y  = element_blank()
+          )
+```
+
+
+```{r}
+
+df.emp %>% 
+    select(FullName, Approx_age, CurrentEmploymentType) %>% 
+    mutate(FullName2 = fct_reorder(FullName,CurrentEmploymentType)) %>%
+    #mutate(hjust = ifelse(FullName2 =="Sten Sanjorge Jr.", -0.1, 1.05)) %>%
+    ggplot(aes(x = Approx_age, y= FullName2)) +
+    geom_point(aes(color = CurrentEmploymentType), size=5)  +
+    geom_text(aes(label=FullName2), size=3, vjust=0.1, hjust = 1.05)+#, hjust =  hjust), size=3) +
+    scale_x_continuous(breaks = c(20,30,40,50,60))+
+    labs(y="",x="Time",title = "Approximate Ages of GasTech Employees", color="Department") +
+    theme(legend.text = element_text(size = 8),
+          panel.background = element_rect(fill="white"),
+          panel.grid.major.x = element_line(color="#c9c9c9", linetype = 3),
+          panel.border = element_rect(color="grey", fill=NA),
+          plot.title = element_text(size=14),
+          axis.text.y = element_blank(),
+          axis.ticks.x  = element_blank(),
+          axis.ticks.y  = element_blank()
+          )
+
+```
+
+
 
 ```{r,warning=F, message=F}
 df.emp <- df.emp %>% 
@@ -1875,13 +1930,81 @@ p2
 ```
 
 
+```{r}
+email_edges <- x_full %>% 
+                select(From, To, s) %>%
+                rename(title = s) 
+
+email_nodes <- data.frame(id = unique(c(x_full$From, x_full$To))) %>%
+               left_join(select(df.emp, FullName, CurrentEmploymentType), by=c("id"="FullName")) %>%
+               rename(group = CurrentEmploymentType)
+email_nodes$font.size = 25
+
+email_gg <- graph_from_data_frame(d = email_edges,
+                                  vertices = email_nodes,
+                                  directed = T)
+data <- toVisNetworkData(email_gg)
+
+visNetwork(nodes = data$nodes, 
+           edges = data$edges) %>% 
+        visIgraphLayout() %>%
+        visEdges(arrows = "middle", width = 0.01,length = 5, scaling = list(min=0.1,max=3)) %>%
+        visOptions(nodesIdSelection = T, highlightNearest = T) %>%
+      visGroups(groupname = "Executive", 
+                # Red
+                color = list(border = "#FA0A10", 
+                             background = "#FB7E81", 
+                             highlight = list(border = "#FA0A10", background = "#FB7E81"),
+                             hover = list(background = "#FA0A10", border = "#FB7E81")
+                             )) %>%
+      visGroups(groupname = "Facilities", 
+                # Green
+                color = list(border = "#41A906", 
+                             background = "#7BE141", 
+                             highlight = list(border = "#41A906", background = "#7BE141"),
+                             hover = list(background = "#41A906", border = "#7BE141")
+                             )) %>%
+      visGroups(groupname = "Engineering", 
+                # Yellow
+                    color = list(border = "#FFA500", 
+                                 background = "#FFFF00", 
+                                 highlight = list(border = "#FFA500", background = "#FFFF00"),
+                                 hover = list(background = "#FFA500", border = "#FFFF00")
+                                 )) %>%
+      visGroups(groupname = "Administration", 
+                # Blue
+                    color = list(border = "#2B7CE9", 
+                                 background = "#97C2FC", 
+                                 highlight = list(border = "#2B7CE9", background = "#97C2FC"),
+                                 hover = list(background = "#2B7CE9", border = "#97C2FC")
+                                 )) %>%
+      visGroups(groupname = "Security", 
+                # Purple
+                    color = list(border = "#7C29F0", 
+                                 background = "#AD85E4", 
+                                 highlight = list(border = "#7C29F0", background = "#AD85E4"),
+                                 hover = list(background = "#7C29F0", border = "#AD85E4")
+                                 )) %>%
+      visGroups(groupname = "Information Technology", 
+                # Magenta
+                    color = list(border = "#E129F0", 
+                                 background = "#EB7DF4", 
+                                 highlight = list(border = "#E129F0", background = "#EB7DF4"),
+                                 hover = list(background = "#E129F0", border = "#EB7DF4")
+                                 ))
+
+
+```
 
 
 
-### Extras
 
 
-```{r, eval=F}
+
+
+
+
+```{r, eval=F, echo=FALSE}
   
 for (i in unique(x$CurrentEmploymentType)){
   
@@ -1919,7 +2042,7 @@ for (i in unique(x$CurrentEmploymentType)){
 
 
 
-```{r, eval=F}
+```{r, eval=F, echo=FALSE}
 library(crosstalk)
 shared_Data <- SharedData$new(x)
 
@@ -1946,7 +2069,7 @@ bscols(widths = c(2,10),
 ```
 
 
-```{r, eval=F}
+```{r, eval=F, echo=FALSE}
 library(crosstalk)
 
 #x_full <- df.emails %>% 
@@ -1983,7 +2106,7 @@ bscols(widths = c(2,10),
 ```
 
 
-```{r, eval=F}
+```{r, eval=F, echo=FALSE}
 library(crosstalk)
 
 
@@ -2009,6 +2132,10 @@ bscols(widths = c(2,10),
 
 
 ```
+
+
+
+
 
 
 

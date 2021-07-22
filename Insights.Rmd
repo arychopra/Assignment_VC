@@ -321,6 +321,7 @@ knitr::include_graphics('images/5-3-2.png')
 knitr::include_graphics('images/5-3-3.png')
 ```
 
+
 ```{r}
 knitr::include_graphics('images/5-3-6.png')
 ```

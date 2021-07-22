@@ -32,6 +32,26 @@ d-article pre{
     max-width: 704px;
 }
 
+::ng-deep div.vis-tooltip {
+  position: absolute;
+  visibility: visible;
+  padding: 5px;
+  white-space: nowrap;
+  color: #000000;
+  background-color: #f5f4ed;
+
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  border: 1px solid #808074;
+
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+
+  z-index: 5;
+}
+
+
 
 </style>
 
@@ -515,7 +535,7 @@ text_network_before <- CreateTextnet(news_before)
 
 ```{r vis_ntwk_bf,messsage=F}
 set.seed(390)
-VisTextNet_e(text_network_before, label_degree_cut = 0, betweenness = T) 
+#VisTextNet_e(text_network_before, label_degree_cut = 0, betweenness = T) 
 VisTextNet_e(text_network_before)
 ```
 
@@ -535,6 +555,7 @@ new_2014 <- PrepText(text_grouped2,
 
 text_network_2014 <- CreateTextnet(new_2014)
 ```
+
 
 ```{r vis_ntwk_2014,message=F, warning=F}
 set.seed(99)
@@ -1201,7 +1222,6 @@ for (i in unique(dtm_corpus$Membership)){
 
 
 
-
 ### Building the Visuals for Question 3
 
 
@@ -1250,6 +1270,26 @@ edges$value <- links$weight
 
 nodes$color.highlight.background <- "brown"
 nodes <- nodes %>% mutate(font.size = 25, font.weight= 1000)
+
+
+lnodes <- data.frame(shape = rep('square',6),
+                     label = c("Executive",
+                               "Facilities",
+                               "Engineering",
+                               "Administration",
+                               "Security",
+                               "Information Technology"),
+                     color.background = c("#FB7E81",
+                                          "#7BE141",
+                                          "#FFFF00",
+                                          "#97C2FC",
+                                          "#AD85E4",
+                                          "#EB7DF4"),
+                     color.border = rep('black',6),
+                     font.align =  rep("center",6),
+                     font.size = rep(20,6)
+                     )
+
 
   p <- visNetwork(nodes = nodes, 
                   edges = edges) %>%
@@ -1309,10 +1349,11 @@ nodes <- nodes %>% mutate(font.size = 25, font.weight= 1000)
                                  background = "#EB7DF4", 
                                  highlight = list(border = "#E129F0", background = "#EB7DF4"),
                                  hover = list(background = "#E129F0", border = "#EB7DF4")
-                                 ))
+                                 )) %>%
+      visLegend(zoom = T, addNodes = lnodes, useGroups = F)
+    
       
 ```
-
 
 
 ```{r}
@@ -1321,24 +1362,14 @@ p
 ```
 
 
-```{r, eval=F}
-adjacencyData <- with(links, table(From, To))
- 
-# Charge the circlize library
-library(circlize)
- 
-# Make the circular plot
-chordDiagram(adjacencyData, transparency = 0.5)
-
-```
-
-
 
 Centrality Based Networks
 
+
 Sizing by Betweeness Centrality
 
-```{r, warning=F, message=F}
+
+```{r, warning=F, message=F, echo=F}
 email_network3 <- graph_from_data_frame(d = links, 
                                         vertices = nodes_df, 
                                         directed = F)
@@ -1369,7 +1400,8 @@ q
 
 Sizing by Eigenvalue Centrality
 
-```{r, warning=F, message=F}
+
+```{r, warning=F, message=F, echo=F}
 email_network4 <- graph_from_data_frame(d = links, 
                                         vertices = nodes_df, 
                                         directed = T)
@@ -1397,7 +1429,8 @@ visNetwork(nodes3, edges3) %>%
 
 Seeing Closeness
 
-```{r, eval=FALSE, warning=F, message=F}
+
+```{r, eval=FALSE, warning=F, message=F, echo=F}
 email_network4 <- graph_from_data_frame(d = links, 
                                         vertices = nodes_df, 
                                         directed = FALSE)
@@ -1428,7 +1461,9 @@ visNetwork(nodes3, edges3) %>%
 
 ```
 
+
 Communities based on Weights
+
 
 ```{r, warning=F, message=F}
 email_network4 <- graph_from_data_frame(d = links, 
@@ -1499,7 +1534,7 @@ visNetwork(nodes3, edges3) %>%
 
 ```
 
-
+Communities based on Conversation
 
 ```{r,warning=F, message=F}
 emails_grouped<- df.emails %>% 
@@ -1538,10 +1573,160 @@ x_c <- CreateTextnet(x)
 
 ```
 
+```{r VisTextChanged_email, message=F, warning=F}
+VisTextNet_e_2 <- function(text_network, alpha = .25, label_degree_cut=0, df){
+  
+  if (igraph::has.multiple(text_network))
+    stop("textnets does not yet support multiple edges")
+  if (is.null(V(text_network)$name)){
+    text_network <- set_vertex_attr(text_network, "name", value = as.character(1:vcount(text_network)))
+  }
+  
+  #create network backbone 
+  
+  e <- cbind(igraph::as_data_frame(text_network)[, 1:2 ], 
+             weight =   E(text_network)$weight)
+  
+  # in
+  w_in <- graph.strength(text_network, mode = "in")
+  w_in <- data.frame(to = names(w_in), w_in, stringsAsFactors = FALSE)
+  k_in <- degree(text_network, mode = "in")
+  k_in <- data.frame(to = names(k_in), k_in, stringsAsFactors = FALSE)
+  
+  e_in <- e %>%
+    left_join(w_in, by = "to") %>%
+    left_join(k_in, by = "to") %>%
+    mutate(alpha_in = (1-(weight/w_in))^(k_in-1))
+  
+  # out
+  
+  w_out <- graph.strength(text_network, mode = "out")
+  w_out <- data.frame(from = names(w_out), w_out, stringsAsFactors = FALSE)
+  k_out <- degree(text_network, mode = "out")
+  k_out <- data.frame(from = names(k_out), k_out, stringsAsFactors = FALSE)
+  
+  e_out <- e %>%
+    left_join(w_out, by = "from") %>%
+    left_join(k_out, by = "from") %>%
+    mutate(alpha_out = (1-(weight/w_out))^(k_out-1))
+  
+  e_full <- left_join(e_in, e_out, by = c("from", "to", "weight"))
+  
+  e_full <- e_full %>%
+    mutate(alpha = ifelse(alpha_in < alpha_out, alpha_in, alpha_out)) %>%
+    select(from, to, alpha)
+  
+  E(text_network)$alpha <- e_full$alpha
+  
+  pruned <- delete.edges(text_network, which(E(text_network)$alpha >= alpha))
+  pruned <- delete.vertices(pruned, which(degree(pruned) == 0))
+  
+  size <- 25
+  
+  isolates <- V(pruned)[degree(pruned)==0]
+  pruned <- delete.vertices(pruned, isolates)
+ 
+  
+  nodes <- data.frame(id = V(pruned)$name, 
+                      title = paste0("Degree of Node: <br>",
+                                     V(pruned)$degree),
+                      size =  size
+                      )
+  
+  nodes<-nodes %>% 
+    left_join(select(df, FullName,CurrentEmploymentType), by= c("id"="FullName")) %>% 
+    rename(group= CurrentEmploymentType) %>%
+    replace_na(list(group="Executive"))
+  
+  nodes <- nodes[order(nodes$id, decreasing = F),]
+  nodes$shadow <- TRUE
+  nodes <- nodes %>% mutate(font.size = 20, font.weight= 900)
+  nodes$color.highlight.background <- "brown"
+
+  edges <- get.data.frame(pruned, what="edges")[1:2]
+  edges$value <- E(pruned)$weight
+  nodes$color.highlight.background <- "brown"
+  
+  lnodes <- data.frame(shape = rep('square',6),
+                     label = c("Executive",
+                               "Facilities",
+                               "Engineering",
+                               "Administration",
+                               "Security",
+                               "Information Technology"),
+                     color.background = c("#FB7E81",
+                                          "#7BE141",
+                                          "#FFFF00",
+                                          "#97C2FC",
+                                          "#AD85E4",
+                                          "#EB7DF4"),
+                     color.border = rep('black',6),
+                     font.align =  rep("center",6),
+                     font.size = rep(20,6)
+                     )
+
+  visNetwork(nodes, edges) %>%
+    visLayout(randomSeed = 123) %>% 
+    visOptions(highlightNearest = TRUE, 
+               nodesIdSelection = TRUE, 
+               selectedBy = "group") %>% 
+    visNodes(labelHighlightBold = T, size=20) %>%
+    visEdges(width = 0.01,length = 10, scaling = list(min=0.1,max=3)) %>%
+    visIgraphLayout(layout = 'layout.davidson.harel') %>%
+    visInteraction(multiselect = TRUE) %>%
+      visLegend(zoom = T, addNodes = lnodes, useGroups = F)  %>%
+      visGroups(groupname = "Executive", 
+                # Red
+                color = list(border = "#FA0A10", 
+                             background = "#FB7E81", 
+                             highlight = list(border = "#FA0A10", background = "#FB7E81"),
+                             hover = list(background = "#FA0A10", border = "#FB7E81")
+                             )) %>%
+      visGroups(groupname = "Facilities", 
+                # Green
+                color = list(border = "#41A906", 
+                             background = "#7BE141", 
+                             highlight = list(border = "#41A906", background = "#7BE141"),
+                             hover = list(background = "#41A906", border = "#7BE141")
+                             )) %>%
+      visGroups(groupname = "Engineering", 
+                # Yellow
+                    color = list(border = "#FFA500", 
+                                 background = "#FFFF00", 
+                                 highlight = list(border = "#FFA500", background = "#FFFF00"),
+                                 hover = list(background = "#FFA500", border = "#FFFF00")
+                                 )) %>%
+      visGroups(groupname = "Administration", 
+                # Blue
+                    color = list(border = "#2B7CE9", 
+                                 background = "#97C2FC", 
+                                 highlight = list(border = "#2B7CE9", background = "#97C2FC"),
+                                 hover = list(background = "#2B7CE9", border = "#97C2FC")
+                                 )) %>%
+      visGroups(groupname = "Security", 
+                # Purple
+                    color = list(border = "#7C29F0", 
+                                 background = "#AD85E4", 
+                                 highlight = list(border = "#7C29F0", background = "#AD85E4"),
+                                 hover = list(background = "#7C29F0", border = "#AD85E4")
+                                 )) %>%
+      visGroups(groupname = "Information Technology", 
+                # Magenta
+                    color = list(border = "#E129F0", 
+                                 background = "#EB7DF4", 
+                                 highlight = list(border = "#E129F0", background = "#EB7DF4"),
+                                 hover = list(background = "#E129F0", border = "#EB7DF4")
+                                 )) %>%
+      visLegend(zoom = T, addNodes = lnodes, useGroups = F)
+    
+}
+```
+
 
 ```{r,warning=F, message=F}
 set.seed(390)
-VisTextNet_e(x_c)
+
+VisTextNet_e_2(x_c, df=df.emp)
 ```
 
 
@@ -1603,7 +1788,7 @@ for (i in sort(unique(c(x_full$From, x_full$To)))){
 
     g <- ggplot(dat, aes(y=To, x=Date.Time))+ 
         geom_point(#position=position_dodge(width=1),
-                   size=2, alpha = 0.6, stroke=0.5,
+                   size=2, alpha = 0.6, stroke=0.5, shape=21,
                    aes(text = sprintf("Sub: %s<br>Date: %s<br>To: %s<br>To_Title: %s<br>To_Dep: %s<br>Time Sent: %s<br>", 
                                       Subject2, 
                                       Date.Date, 
@@ -1643,7 +1828,7 @@ df.emp <-df.emp %>%
 ```
 
 
-```{r,warning=F, message=F, echo=F, eval=F}
+```{r age_vis,warning=F, message=F, echo=F, eval=F}
 age_link <- df.emp %>%
               select(FullName, Approx_age) %>%
               rename(From = FullName,
@@ -1729,7 +1914,7 @@ visNetwork(nodes = data_age$nodes,
 ```
 
 
-```{r,warning=F, message=F}
+```{r city_vis,warning=F, message=F}
 citi_link <- df.emp %>%
               select(FullName, CitizenshipCountry, CurrentEmploymentType ) %>%
               rename(From = FullName,
@@ -1755,6 +1940,24 @@ citi_g <- graph_from_data_frame(d = citi_link,
                       directed = T)
 data_citi <- toVisNetworkData(citi_g)
 
+lnodes <- data.frame(shape = rep('square',6),
+                     label = c("Executive",
+                               "Facilities",
+                               "Engineering",
+                               "Administration",
+                               "Security",
+                               "Information Technology"),
+                     color.background = c("#FB7E81",
+                                          "#7BE141",
+                                          "#FFFF00",
+                                          "#97C2FC",
+                                          "#AD85E4",
+                                          "#EB7DF4"),
+                     color.border = rep('black',6),
+                     font.align =  rep("center",6),
+                     font.size = rep(20,6)
+                     )
+
 visNetwork(nodes = data_citi$nodes, 
            edges = data_citi$edges) %>%
   visNodes(size=15) %>%
@@ -1763,7 +1966,7 @@ visNetwork(nodes = data_citi$nodes,
              selectedBy = "group"
              ) %>% 
   visIgraphLayout(layout = "layout_as_star") %>%
-  visLegend(T)
+  visLegend(zoom = T, addNodes = lnodes, useGroups = F) 
 
 
 ```
@@ -1779,11 +1982,11 @@ df.emp <- df.emp %>%
 ```
 
 
-```{r,warning=F, message=F}
+```{r army_gg,warning=F, message=F}
 mil_data<-df.emp %>%
           filter(!is.na(MilitaryDischargeYear)) %>%
           mutate(ArmyLoc =  ifelse(str_detect(MilitaryServiceBranch,"Kronos"),"Kronos","Tethys")) %>%
-          filter(ArmyLoc == "Tethys")
+          filter(ArmyLoc == "Kronos")
 
 mil_data %>%
 ggplot(aes(y = FullName, x = MilitaryStartYear)) + 
@@ -1792,20 +1995,23 @@ ggplot(aes(y = FullName, x = MilitaryStartYear)) +
   geom_segment(aes(x=MilitaryStartYear, xend=MilitaryDischargeYear, y=FullName,yend=FullName), size=0.5, alpha=0.7) +
   scale_x_continuous(breaks = seq(min(mil_data$MilitaryStartYear), max(mil_data$MilitaryDischargeYear), by=2))+
   #facet_wrap(~ArmyLoc, scales = "free") +
-  labs(x = "Year",y ="", title="Time Served in the Military in Tethys")+
+  labs(x = "Year",y ="", title="Time Served in the Military in Kronos")+
   theme(panel.background = element_rect(fill ="white"),
         panel.grid.major.y = element_line(colour = "grey",linetype = 3),
         panel.grid.major.x = element_line(colour = "grey",linetype = 3),
         panel.border = element_rect(color="grey", fill=NA),
         axis.ticks.x  = element_blank(),
-        axis.ticks.y  = element_blank()) +
-  ggsave('images/5-3-3.png')
+        axis.ticks.y  = element_blank()) #+ 
+    #ggsave('images/5-3-2.png',width = 30, units = "cm")
 
 
 ```
 
 
-```{r}
+```{r join_gg}
+year_labels <- unique(substr(sort(year(df.emp$CurrentEmploymentStartDate)),3,4))
+year_labels[1] <- "1990"
+year_labels[20] <- "2013"
 
 df.emp %>% 
     select(FullName, CurrentEmploymentStartDate, CurrentEmploymentType) %>% 
@@ -1813,13 +2019,14 @@ df.emp %>%
     mutate(Year  = year(CurrentEmploymentStartDate )) %>% 
     mutate(hjust = ifelse(FullName2 =="Sten Sanjorge Jr.", -0.1, 1.05)) %>%
     ggplot(aes(x = Year, y= FullName2)) +
-    geom_point(aes(color = CurrentEmploymentType), size=5)  +
+    geom_point(aes(color = CurrentEmploymentType), size=2)  +
     geom_text(aes(label=FullName2, hjust =  hjust), size=3) +
-    scale_x_continuous(breaks = seq(min(year(df.emp$CurrentEmploymentStartDate)), 
-                                    max(year(df.emp$CurrentEmploymentStartDate)), 
-                                    by=2))+
-    labs(y="",x="Time",title = "Year Employee of GasTech Joined", color="Department") +
-    theme(legend.text = element_text(size = 8),
+    #scale_x_continuous(breaks = seq(min(year(df.emp$CurrentEmploymentStartDate)), 
+    #                                max(year(df.emp$CurrentEmploymentStartDate)), 
+    #                                by=2))+
+    scale_x_continuous(breaks = sort(unique(year(df.emp$CurrentEmploymentStartDate))), labels = year_labels) +
+    labs(y="",x="Year",title = "Year Employee of GasTech Joined", color="Department") +
+    theme(legend.text = element_text(size = 5),
           panel.background = element_rect(fill="white"),
           panel.grid.major.x = element_line(color="#c9c9c9", linetype = 3),
           panel.border = element_rect(color="grey", fill=NA),
@@ -1827,7 +2034,9 @@ df.emp %>%
           axis.text.y = element_blank(),
           axis.ticks.x  = element_blank(),
           axis.ticks.y  = element_blank()
-          )
+          ) + 
+    ggsave('images/5-3-7.png',width = 30, units = "cm")
+
 ```
 
 
@@ -1900,6 +2109,7 @@ p2<-visNetwork(nodes = data_army$nodes,
 
 ```
 
+
 ```{r}
 set.seed(309)
 p2
@@ -1907,7 +2117,7 @@ p2
 ```
 
 
-```{r}
+```{r, echo=FALSE, eval=FALSE}
 email_edges <- x_full %>% 
                 select(From, To, s) %>%
                 rename(title = s) 
@@ -1972,9 +2182,6 @@ visNetwork(nodes = data$nodes,
 
 
 ```
-
-
-
 
 
 
@@ -2109,11 +2316,6 @@ bscols(widths = c(2,10),
 
 
 ```
-
-
-
-
-
 
 
 

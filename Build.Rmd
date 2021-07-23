@@ -10,6 +10,7 @@ output:
   distill::distill_article:
     self_contained: false
     toc: true
+    toc_float: true
 ---
 
 <style>
@@ -215,7 +216,7 @@ explore(news_corpus_source)
 
 Snapshot of Corpus by Source
 
-```{r}
+```{r, out.width=400, echo=F}
 knitr::include_graphics('images/5-Corpus.png')
 ```
 
@@ -246,7 +247,7 @@ explore(news_corpus_date)
 
 Snapshot of Corpus by Date
 
-```{r, echo=F}
+```{r, echo=F, out.width=400}
 knitr::include_graphics('images/5-Corpus2.png')
 ```
 
@@ -973,7 +974,7 @@ tf_idf <- df.news %>%
           group_by(SOURCE) %>%
           top_n(7,wt=tf_idf) 
 
-knitr::kable(sample_n(tf_idf,5)) %>%
+knitr::kable(sample_n(tf_idf %>% ungroup(),5)) %>%
   kableExtra:: kable_paper("hover", 
                            full_width = F,
                            html_font = "helvetica")
@@ -1345,7 +1346,7 @@ for (i in unique(dtm_corpus$Membership)){
 
 ## Building the Visuals for Question 3
 
-### Email Network (Communities by Department)
+### Email Network (Communities by Dept)
 
 This network will show an overview of the employees and conversations within their departments. 
 

@@ -112,7 +112,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Building the Charts"]},{"type":"character","attributes":{},"value":["A new article created using the Distill format.\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Aryah U. Chopra"]},{"type":"character","attributes":{},"value":["https://www.linkedin.com/in/aryahuc/"]}]}]},{"type":"character","attributes":{},"value":["2021-07-23"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","toc"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"logical","attributes":{},"value":[true]}]}]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Building the Charts"]},{"type":"character","attributes":{},"value":["A new article created using the Distill format.\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Aryah U. Chopra"]},{"type":"character","attributes":{},"value":["https://www.linkedin.com/in/aryahuc/"]}]}]},{"type":"character","attributes":{},"value":["2021-07-23"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","toc","toc_float"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"logical","attributes":{},"value":[true]},{"type":"logical","attributes":{},"value":[true]}]}]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -2541,7 +2541,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <li><a href="#word-cloud-by-communities">Word Cloud by Communities</a></li>
 </ul></li>
 <li><a href="#building-the-visuals-for-question-3">Building the Visuals for Question 3</a><ul>
-<li><a href="#email-network-communities-by-department">Email Network (Communities by Department)</a></li>
+<li><a href="#email-network-communities-by-dept">Email Network (Communities by Dept)</a></li>
 <li><a href="#email-network-communities-by-weight">Email Network (Communities by Weight)</a></li>
 <li><a href="#email-network-communities-by-text">Email Network (Communities by Text)</a></li>
 <li><a href="#creating-the-email-conversation-plot">Creating the Email Conversation Plot</a></li>
@@ -2707,11 +2707,7 @@ script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"
 </div>
 <p>Snapshot of Corpus by Source</p>
 <div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/include_graphics.html'>include_graphics</a></span><span class='op'>(</span><span class='st'>'images/5-Corpus.png'</span><span class='op'>)</span>
-</code></pre>
-</div>
-<p><img src="images/5-Corpus.png" width="455" /></p>
+<p><img src="images/5-Corpus.png" width="400" /></p>
 </div>
 <p>By Date:</p>
 <div class="layout-chunk" data-layout="l-body">
@@ -2738,7 +2734,7 @@ script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"
 </div>
 <p>Snapshot of Corpus by Date</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="images/5-Corpus2.png" width="426" /></p>
+<p><img src="images/5-Corpus2.png" width="400" /></p>
 </div>
 <h2 id="building-the-visuals-for-question-1">Building the Visuals for Question 1</h2>
 <p>For building the text network, the visTextNet function was used.</p>
@@ -3456,7 +3452,7 @@ Cato Rossini
           <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>SOURCE</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
           <span class='fu'><a href='https://dplyr.tidyverse.org/reference/top_n.html'>top_n</a></span><span class='op'>(</span><span class='fl'>7</span>,wt<span class='op'>=</span><span class='va'>tf_idf</span><span class='op'>)</span> 
 
-<span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/sample_n.html'>sample_n</a></span><span class='op'>(</span><span class='va'>tf_idf</span>,<span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+<span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/sample_n.html'>sample_n</a></span><span class='op'>(</span><span class='va'>tf_idf</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>ungroup</a></span><span class='op'>(</span><span class='op'>)</span>,<span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'>kableExtra</span><span class='fu'>::</span> <span class='fu'><a href='https://rdrr.io/pkg/kableExtra/man/kable_classic.html'>kable_paper</a></span><span class='op'>(</span><span class='st'>"hover"</span>, 
                            full_width <span class='op'>=</span> <span class='cn'>F</span>,
                            html_font <span class='op'>=</span> <span class='st'>"helvetica"</span><span class='op'>)</span>
@@ -3488,302 +3484,22 @@ tf_idf
 <tbody>
 <tr>
 <td style="text-align:left;">
-All News Today
+The General Post
 </td>
 <td style="text-align:left;">
-protectors
-</td>
-<td style="text-align:right;">
-15
-</td>
-<td style="text-align:right;">
-0.0145490
-</td>
-<td style="text-align:right;">
-0.4855078
-</td>
-<td style="text-align:right;">
-0.0070636
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-All News Today
-</td>
-<td style="text-align:left;">
-didn
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-0.0029098
-</td>
-<td style="text-align:right;">
-2.1594842
-</td>
-<td style="text-align:right;">
-0.0062837
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-All News Today
-</td>
-<td style="text-align:left;">
-henk
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-0.0038797
-</td>
-<td style="text-align:right;">
-1.4663371
-</td>
-<td style="text-align:right;">
-0.0056890
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-All News Today
-</td>
-<td style="text-align:left;">
-community
-</td>
-<td style="text-align:right;">
-8
-</td>
-<td style="text-align:right;">
-0.0077595
-</td>
-<td style="text-align:right;">
-0.9555114
-</td>
-<td style="text-align:right;">
-0.0074142
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-All News Today
-</td>
-<td style="text-align:left;">
-series
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-0.0038797
-</td>
-<td style="text-align:right;">
-1.6486586
-</td>
-<td style="text-align:right;">
-0.0063963
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Athena Speaks
-</td>
-<td style="text-align:left;">
-flight
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-0.0035398
-</td>
-<td style="text-align:right;">
-3.2580965
-</td>
-<td style="text-align:right;">
-0.0115331
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Athena Speaks
-</td>
-<td style="text-align:left;">
-temps
-</td>
-<td style="text-align:right;">
-12
-</td>
-<td style="text-align:right;">
-0.0106195
-</td>
-<td style="text-align:right;">
-3.2580965
-</td>
-<td style="text-align:right;">
-0.0345993
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Athena Speaks
-</td>
-<td style="text-align:left;">
-elan
-</td>
-<td style="text-align:right;">
-6
-</td>
-<td style="text-align:right;">
-0.0053097
-</td>
-<td style="text-align:right;">
-3.2580965
-</td>
-<td style="text-align:right;">
-0.0172996
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Athena Speaks
-</td>
-<td style="text-align:left;">
-shown
-</td>
-<td style="text-align:right;">
-12
-</td>
-<td style="text-align:right;">
-0.0106195
-</td>
-<td style="text-align:right;">
-2.1594842
-</td>
-<td style="text-align:right;">
-0.0229326
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Athena Speaks
-</td>
-<td style="text-align:left;">
-dob
-</td>
-<td style="text-align:right;">
-11
-</td>
-<td style="text-align:right;">
-0.0097345
-</td>
-<td style="text-align:right;">
-1.4663371
-</td>
-<td style="text-align:right;">
-0.0142741
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Central Bulletin
-</td>
-<td style="text-align:left;">
-theft
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-0.0051216
-</td>
-<td style="text-align:right;">
-1.8718022
-</td>
-<td style="text-align:right;">
-0.0095867
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Central Bulletin
-</td>
-<td style="text-align:left;">
-hrs
-</td>
-<td style="text-align:right;">
-10
-</td>
-<td style="text-align:right;">
-0.0128041
-</td>
-<td style="text-align:right;">
-2.1594842
-</td>
-<td style="text-align:right;">
-0.0276502
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Central Bulletin
-</td>
-<td style="text-align:left;">
-accused
-</td>
-<td style="text-align:right;">
-10
-</td>
-<td style="text-align:right;">
-0.0128041
-</td>
-<td style="text-align:right;">
-1.0608720
-</td>
-<td style="text-align:right;">
-0.0135835
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Central Bulletin
-</td>
-<td style="text-align:left;">
-dob
-</td>
-<td style="text-align:right;">
-10
-</td>
-<td style="text-align:right;">
-0.0128041
-</td>
-<td style="text-align:right;">
-1.4663371
-</td>
-<td style="text-align:right;">
-0.0187751
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Central Bulletin
-</td>
-<td style="text-align:left;">
-party
+arranged
 </td>
 <td style="text-align:right;">
 5
 </td>
 <td style="text-align:right;">
-0.0064020
+0.0086957
 </td>
 <td style="text-align:right;">
-1.3121864
+2.564949
 </td>
 <td style="text-align:right;">
-0.0084007
+0.0223039
 </td>
 </tr>
 <tr>
@@ -3791,67 +3507,7 @@ party
 Daily Pegasus
 </td>
 <td style="text-align:left;">
-perforated
-</td>
-<td style="text-align:right;">
-6
-</td>
-<td style="text-align:right;">
-0.0028667
-</td>
-<td style="text-align:right;">
-2.1594842
-</td>
-<td style="text-align:right;">
-0.0061906
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Daily Pegasus
-</td>
-<td style="text-align:left;">
-julian
-</td>
-<td style="text-align:right;">
-18
-</td>
-<td style="text-align:right;">
-0.0086001
-</td>
-<td style="text-align:right;">
-1.8718022
-</td>
-<td style="text-align:right;">
-0.0160977
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Daily Pegasus
-</td>
-<td style="text-align:left;">
-bodrogi
-</td>
-<td style="text-align:right;">
-13
-</td>
-<td style="text-align:right;">
-0.0062112
-</td>
-<td style="text-align:right;">
-0.9555114
-</td>
-<td style="text-align:right;">
-0.0059349
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Daily Pegasus
-</td>
-<td style="text-align:left;">
-reese
+disease
 </td>
 <td style="text-align:right;">
 9
@@ -3860,890 +3516,10 @@ reese
 0.0043000
 </td>
 <td style="text-align:right;">
-1.4663371
+1.466337
 </td>
 <td style="text-align:right;">
 0.0063053
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Daily Pegasus
-</td>
-<td style="text-align:left;">
-incidence
-</td>
-<td style="text-align:right;">
-6
-</td>
-<td style="text-align:right;">
-0.0028667
-</td>
-<td style="text-align:right;">
-2.1594842
-</td>
-<td style="text-align:right;">
-0.0061906
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Everyday News
-</td>
-<td style="text-align:left;">
-bottoms
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-0.0035562
-</td>
-<td style="text-align:right;">
-2.1594842
-</td>
-<td style="text-align:right;">
-0.0076795
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Everyday News
-</td>
-<td style="text-align:left;">
-bianca
-</td>
-<td style="text-align:right;">
-11
-</td>
-<td style="text-align:right;">
-0.0078236
-</td>
-<td style="text-align:right;">
-1.6486586
-</td>
-<td style="text-align:right;">
-0.0128985
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Everyday News
-</td>
-<td style="text-align:left;">
-emergency
-</td>
-<td style="text-align:right;">
-7
-</td>
-<td style="text-align:right;">
-0.0049787
-</td>
-<td style="text-align:right;">
-1.6486586
-</td>
-<td style="text-align:right;">
-0.0082081
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Everyday News
-</td>
-<td style="text-align:left;">
-cotton
-</td>
-<td style="text-align:right;">
-15
-</td>
-<td style="text-align:right;">
-0.0106686
-</td>
-<td style="text-align:right;">
-1.4663371
-</td>
-<td style="text-align:right;">
-0.0156437
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Everyday News
-</td>
-<td style="text-align:left;">
-caramel
-</td>
-<td style="text-align:right;">
-15
-</td>
-<td style="text-align:right;">
-0.0106686
-</td>
-<td style="text-align:right;">
-3.2580965
-</td>
-<td style="text-align:right;">
-0.0347592
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Homeland Illumination
-</td>
-<td style="text-align:left;">
-illumination
-</td>
-<td style="text-align:right;">
-10
-</td>
-<td style="text-align:right;">
-0.0039793
-</td>
-<td style="text-align:right;">
-2.1594842
-</td>
-<td style="text-align:right;">
-0.0085933
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Homeland Illumination
-</td>
-<td style="text-align:left;">
-homeland
-</td>
-<td style="text-align:right;">
-11
-</td>
-<td style="text-align:right;">
-0.0043772
-</td>
-<td style="text-align:right;">
-2.1594842
-</td>
-<td style="text-align:right;">
-0.0094526
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Homeland Illumination
-</td>
-<td style="text-align:left;">
-community
-</td>
-<td style="text-align:right;">
-14
-</td>
-<td style="text-align:right;">
-0.0055710
-</td>
-<td style="text-align:right;">
-0.9555114
-</td>
-<td style="text-align:right;">
-0.0053232
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Homeland Illumination
-</td>
-<td style="text-align:left;">
-prior
-</td>
-<td style="text-align:right;">
-8
-</td>
-<td style="text-align:right;">
-0.0031834
-</td>
-<td style="text-align:right;">
-1.8718022
-</td>
-<td style="text-align:right;">
-0.0059588
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Homeland Illumination
-</td>
-<td style="text-align:left;">
-didn
-</td>
-<td style="text-align:right;">
-9
-</td>
-<td style="text-align:right;">
-0.0035814
-</td>
-<td style="text-align:right;">
-2.1594842
-</td>
-<td style="text-align:right;">
-0.0077339
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-International News
-</td>
-<td style="text-align:left;">
-nespola
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-0.0083612
-</td>
-<td style="text-align:right;">
-0.8602013
-</td>
-<td style="text-align:right;">
-0.0071923
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-International News
-</td>
-<td style="text-align:left;">
-thugs
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-0.0033445
-</td>
-<td style="text-align:right;">
-2.1594842
-</td>
-<td style="text-align:right;">
-0.0072224
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-International News
-</td>
-<td style="text-align:left;">
-cannons
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-0.0033445
-</td>
-<td style="text-align:right;">
-2.1594842
-</td>
-<td style="text-align:right;">
-0.0072224
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-International News
-</td>
-<td style="text-align:left;">
-capitol
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-0.0050167
-</td>
-<td style="text-align:right;">
-1.4663371
-</td>
-<td style="text-align:right;">
-0.0073562
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-International News
-</td>
-<td style="text-align:left;">
-officers
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-0.0083612
-</td>
-<td style="text-align:right;">
-1.3121864
-</td>
-<td style="text-align:right;">
-0.0109715
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-International Times
-</td>
-<td style="text-align:left;">
-drug
-</td>
-<td style="text-align:right;">
-13
-</td>
-<td style="text-align:right;">
-0.0091614
-</td>
-<td style="text-align:right;">
-0.6190392
-</td>
-<td style="text-align:right;">
-0.0056713
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-International Times
-</td>
-<td style="text-align:left;">
-bianca
-</td>
-<td style="text-align:right;">
-11
-</td>
-<td style="text-align:right;">
-0.0077519
-</td>
-<td style="text-align:right;">
-1.6486586
-</td>
-<td style="text-align:right;">
-0.0127803
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-International Times
-</td>
-<td style="text-align:left;">
-unrest
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-0.0021142
-</td>
-<td style="text-align:right;">
-2.5649494
-</td>
-<td style="text-align:right;">
-0.0054227
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-International Times
-</td>
-<td style="text-align:left;">
-cotton
-</td>
-<td style="text-align:right;">
-15
-</td>
-<td style="text-align:right;">
-0.0105708
-</td>
-<td style="text-align:right;">
-1.4663371
-</td>
-<td style="text-align:right;">
-0.0155004
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-International Times
-</td>
-<td style="text-align:left;">
-designer
-</td>
-<td style="text-align:right;">
-8
-</td>
-<td style="text-align:right;">
-0.0056378
-</td>
-<td style="text-align:right;">
-1.6486586
-</td>
-<td style="text-align:right;">
-0.0092948
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Kronos Star
-</td>
-<td style="text-align:left;">
-officers
-</td>
-<td style="text-align:right;">
-7
-</td>
-<td style="text-align:right;">
-0.0062057
-</td>
-<td style="text-align:right;">
-1.3121864
-</td>
-<td style="text-align:right;">
-0.0081430
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Kronos Star
-</td>
-<td style="text-align:left;">
-concerned
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-0.0044326
-</td>
-<td style="text-align:right;">
-1.1786550
-</td>
-<td style="text-align:right;">
-0.0052245
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Kronos Star
-</td>
-<td style="text-align:left;">
-cannons
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-0.0026596
-</td>
-<td style="text-align:right;">
-2.1594842
-</td>
-<td style="text-align:right;">
-0.0057433
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Kronos Star
-</td>
-<td style="text-align:left;">
-welfare
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-0.0026596
-</td>
-<td style="text-align:right;">
-2.1594842
-</td>
-<td style="text-align:right;">
-0.0057433
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Kronos Star
-</td>
-<td style="text-align:left;">
-rally
-</td>
-<td style="text-align:right;">
-6
-</td>
-<td style="text-align:right;">
-0.0053191
-</td>
-<td style="text-align:right;">
-0.9555114
-</td>
-<td style="text-align:right;">
-0.0050825
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-News Desk
-</td>
-<td style="text-align:left;">
-checked
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-0.0043365
-</td>
-<td style="text-align:right;">
-2.5649494
-</td>
-<td style="text-align:right;">
-0.0111229
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-News Desk
-</td>
-<td style="text-align:left;">
-dob
-</td>
-<td style="text-align:right;">
-11
-</td>
-<td style="text-align:right;">
-0.0095403
-</td>
-<td style="text-align:right;">
-1.4663371
-</td>
-<td style="text-align:right;">
-0.0139893
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-News Desk
-</td>
-<td style="text-align:left;">
-robber
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-0.0043365
-</td>
-<td style="text-align:right;">
-3.2580965
-</td>
-<td style="text-align:right;">
-0.0141288
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-News Desk
-</td>
-<td style="text-align:left;">
-accused
-</td>
-<td style="text-align:right;">
-12
-</td>
-<td style="text-align:right;">
-0.0104076
-</td>
-<td style="text-align:right;">
-1.0608720
-</td>
-<td style="text-align:right;">
-0.0110412
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-News Desk
-</td>
-<td style="text-align:left;">
-stable
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-0.0043365
-</td>
-<td style="text-align:right;">
-3.2580965
-</td>
-<td style="text-align:right;">
-0.0141288
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-News Online Today
-</td>
-<td style="text-align:left;">
-hrs
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-0.0023063
-</td>
-<td style="text-align:right;">
-2.1594842
-</td>
-<td style="text-align:right;">
-0.0049804
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-News Online Today
-</td>
-<td style="text-align:left;">
-cotton
-</td>
-<td style="text-align:right;">
-9
-</td>
-<td style="text-align:right;">
-0.0041513
-</td>
-<td style="text-align:right;">
-1.4663371
-</td>
-<td style="text-align:right;">
-0.0060872
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-News Online Today
-</td>
-<td style="text-align:left;">
-candy
-</td>
-<td style="text-align:right;">
-9
-</td>
-<td style="text-align:right;">
-0.0041513
-</td>
-<td style="text-align:right;">
-1.8718022
-</td>
-<td style="text-align:right;">
-0.0077704
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-News Online Today
-</td>
-<td style="text-align:left;">
-dob
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-0.0023063
-</td>
-<td style="text-align:right;">
-1.4663371
-</td>
-<td style="text-align:right;">
-0.0033818
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-News Online Today
-</td>
-<td style="text-align:left;">
-drug
-</td>
-<td style="text-align:right;">
-13
-</td>
-<td style="text-align:right;">
-0.0059963
-</td>
-<td style="text-align:right;">
-0.6190392
-</td>
-<td style="text-align:right;">
-0.0037120
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Abila Post
-</td>
-<td style="text-align:left;">
-theft
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-0.0035714
-</td>
-<td style="text-align:right;">
-1.8718022
-</td>
-<td style="text-align:right;">
-0.0066850
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Abila Post
-</td>
-<td style="text-align:left;">
-statement
-</td>
-<td style="text-align:right;">
-10
-</td>
-<td style="text-align:right;">
-0.0089286
-</td>
-<td style="text-align:right;">
-1.3121864
-</td>
-<td style="text-align:right;">
-0.0117159
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Abila Post
-</td>
-<td style="text-align:left;">
-wfa
-</td>
-<td style="text-align:right;">
-11
-</td>
-<td style="text-align:right;">
-0.0098214
-</td>
-<td style="text-align:right;">
-0.8602013
-</td>
-<td style="text-align:right;">
-0.0084484
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Abila Post
-</td>
-<td style="text-align:left;">
-dob
-</td>
-<td style="text-align:right;">
-11
-</td>
-<td style="text-align:right;">
-0.0098214
-</td>
-<td style="text-align:right;">
-1.4663371
-</td>
-<td style="text-align:right;">
-0.0144015
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Abila Post
-</td>
-<td style="text-align:left;">
-hrs
-</td>
-<td style="text-align:right;">
-12
-</td>
-<td style="text-align:right;">
-0.0107143
-</td>
-<td style="text-align:right;">
-2.1594842
-</td>
-<td style="text-align:right;">
-0.0231373
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Continent
-</td>
-<td style="text-align:left;">
-boat
-</td>
-<td style="text-align:right;">
-6
-</td>
-<td style="text-align:right;">
-0.0038560
-</td>
-<td style="text-align:right;">
-2.5649494
-</td>
-<td style="text-align:right;">
-0.0098906
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Continent
-</td>
-<td style="text-align:left;">
-aforesaid
-</td>
-<td style="text-align:right;">
-12
-</td>
-<td style="text-align:right;">
-0.0077121
-</td>
-<td style="text-align:right;">
-1.4663371
-</td>
-<td style="text-align:right;">
-0.0113085
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Continent
-</td>
-<td style="text-align:left;">
-designer
-</td>
-<td style="text-align:right;">
-8
-</td>
-<td style="text-align:right;">
-0.0051414
-</td>
-<td style="text-align:right;">
-1.6486586
-</td>
-<td style="text-align:right;">
-0.0084764
 </td>
 </tr>
 <tr>
@@ -4760,7 +3536,7 @@ cotton
 0.0096401
 </td>
 <td style="text-align:right;">
-1.4663371
+1.466337
 </td>
 <td style="text-align:right;">
 0.0141356
@@ -4768,102 +3544,22 @@ cotton
 </tr>
 <tr>
 <td style="text-align:left;">
-The Continent
+The General Post
 </td>
 <td style="text-align:left;">
-bianca
-</td>
-<td style="text-align:right;">
-11
-</td>
-<td style="text-align:right;">
-0.0070694
-</td>
-<td style="text-align:right;">
-1.6486586
-</td>
-<td style="text-align:right;">
-0.0116550
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Explainer
-</td>
-<td style="text-align:left;">
-halting
-</td>
-<td style="text-align:right;">
-13
-</td>
-<td style="text-align:right;">
-0.0112554
-</td>
-<td style="text-align:right;">
-2.1594842
-</td>
-<td style="text-align:right;">
-0.0243059
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Explainer
-</td>
-<td style="text-align:left;">
-uproars
+relation
 </td>
 <td style="text-align:right;">
 4
 </td>
 <td style="text-align:right;">
-0.0034632
+0.0069565
 </td>
 <td style="text-align:right;">
-3.2580965
+2.564949
 </td>
 <td style="text-align:right;">
-0.0112835
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Explainer
-</td>
-<td style="text-align:left;">
-dob
-</td>
-<td style="text-align:right;">
-11
-</td>
-<td style="text-align:right;">
-0.0095238
-</td>
-<td style="text-align:right;">
-1.4663371
-</td>
-<td style="text-align:right;">
-0.0139651
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Explainer
-</td>
-<td style="text-align:left;">
-conductor
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-0.0025974
-</td>
-<td style="text-align:right;">
-3.2580965
-</td>
-<td style="text-align:right;">
-0.0084626
+0.0178431
 </td>
 </tr>
 <tr>
@@ -4880,1210 +3576,10 @@ haltings
 0.0043290
 </td>
 <td style="text-align:right;">
-2.5649494
+2.564949
 </td>
 <td style="text-align:right;">
 0.0111037
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The General Post
-</td>
-<td style="text-align:left;">
-million
-</td>
-<td style="text-align:right;">
-6
-</td>
-<td style="text-align:right;">
-0.0104348
-</td>
-<td style="text-align:right;">
-1.0608720
-</td>
-<td style="text-align:right;">
-0.0110700
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The General Post
-</td>
-<td style="text-align:left;">
-multimillionaire
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-0.0052174
-</td>
-<td style="text-align:right;">
-3.2580965
-</td>
-<td style="text-align:right;">
-0.0169988
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The General Post
-</td>
-<td style="text-align:left;">
-imposed
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-0.0034783
-</td>
-<td style="text-align:right;">
-3.2580965
-</td>
-<td style="text-align:right;">
-0.0113325
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The General Post
-</td>
-<td style="text-align:left;">
-perforated
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-0.0052174
-</td>
-<td style="text-align:right;">
-2.1594842
-</td>
-<td style="text-align:right;">
-0.0112669
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The General Post
-</td>
-<td style="text-align:left;">
-demands
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-0.0086957
-</td>
-<td style="text-align:right;">
-1.1786550
-</td>
-<td style="text-align:right;">
-0.0102492
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Guide
-</td>
-<td style="text-align:left;">
-tubes
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-0.0027223
-</td>
-<td style="text-align:right;">
-2.5649494
-</td>
-<td style="text-align:right;">
-0.0069826
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Guide
-</td>
-<td style="text-align:left;">
-nespola
-</td>
-<td style="text-align:right;">
-13
-</td>
-<td style="text-align:right;">
-0.0117967
-</td>
-<td style="text-align:right;">
-0.8602013
-</td>
-<td style="text-align:right;">
-0.0101476
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Guide
-</td>
-<td style="text-align:left;">
-pacific
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-0.0045372
-</td>
-<td style="text-align:right;">
-1.8718022
-</td>
-<td style="text-align:right;">
-0.0084928
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Guide
-</td>
-<td style="text-align:left;">
-samples
-</td>
-<td style="text-align:right;">
-7
-</td>
-<td style="text-align:right;">
-0.0063521
-</td>
-<td style="text-align:right;">
-1.6486586
-</td>
-<td style="text-align:right;">
-0.0104724
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Guide
-</td>
-<td style="text-align:left;">
-julian
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-0.0036298
-</td>
-<td style="text-align:right;">
-1.8718022
-</td>
-<td style="text-align:right;">
-0.0067942
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Light of Truth
-</td>
-<td style="text-align:left;">
-nonfounded
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-0.0034542
-</td>
-<td style="text-align:right;">
-3.2580965
-</td>
-<td style="text-align:right;">
-0.0112542
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Light of Truth
-</td>
-<td style="text-align:left;">
-tripartite
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-0.0034542
-</td>
-<td style="text-align:right;">
-3.2580965
-</td>
-<td style="text-align:right;">
-0.0112542
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Light of Truth
-</td>
-<td style="text-align:left;">
-registered
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-0.0051813
-</td>
-<td style="text-align:right;">
-1.8718022
-</td>
-<td style="text-align:right;">
-0.0096985
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Light of Truth
-</td>
-<td style="text-align:left;">
-million
-</td>
-<td style="text-align:right;">
-6
-</td>
-<td style="text-align:right;">
-0.0103627
-</td>
-<td style="text-align:right;">
-1.0608720
-</td>
-<td style="text-align:right;">
-0.0109935
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Light of Truth
-</td>
-<td style="text-align:left;">
-billionaire
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-0.0051813
-</td>
-<td style="text-align:right;">
-1.8718022
-</td>
-<td style="text-align:right;">
-0.0096985
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Orb
-</td>
-<td style="text-align:left;">
-henk
-</td>
-<td style="text-align:right;">
-10
-</td>
-<td style="text-align:right;">
-0.0044092
-</td>
-<td style="text-align:right;">
-1.4663371
-</td>
-<td style="text-align:right;">
-0.0064653
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Orb
-</td>
-<td style="text-align:left;">
-bodrogi
-</td>
-<td style="text-align:right;">
-15
-</td>
-<td style="text-align:right;">
-0.0066138
-</td>
-<td style="text-align:right;">
-0.9555114
-</td>
-<td style="text-align:right;">
-0.0063195
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Orb
-</td>
-<td style="text-align:left;">
-civils
-</td>
-<td style="text-align:right;">
-13
-</td>
-<td style="text-align:right;">
-0.0057319
-</td>
-<td style="text-align:right;">
-1.8718022
-</td>
-<td style="text-align:right;">
-0.0107290
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Orb
-</td>
-<td style="text-align:left;">
-chiefs
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-0.0022046
-</td>
-<td style="text-align:right;">
-3.2580965
-</td>
-<td style="text-align:right;">
-0.0071828
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Orb
-</td>
-<td style="text-align:left;">
-servant
-</td>
-<td style="text-align:right;">
-16
-</td>
-<td style="text-align:right;">
-0.0070547
-</td>
-<td style="text-align:right;">
-1.0608720
-</td>
-<td style="text-align:right;">
-0.0074841
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Truth
-</td>
-<td style="text-align:left;">
-servants
-</td>
-<td style="text-align:right;">
-7
-</td>
-<td style="text-align:right;">
-0.0061674
-</td>
-<td style="text-align:right;">
-1.6486586
-</td>
-<td style="text-align:right;">
-0.0101679
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Truth
-</td>
-<td style="text-align:left;">
-nespola
-</td>
-<td style="text-align:right;">
-13
-</td>
-<td style="text-align:right;">
-0.0114537
-</td>
-<td style="text-align:right;">
-0.8602013
-</td>
-<td style="text-align:right;">
-0.0098525
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Truth
-</td>
-<td style="text-align:left;">
-mob
-</td>
-<td style="text-align:right;">
-16
-</td>
-<td style="text-align:right;">
-0.0140969
-</td>
-<td style="text-align:right;">
-1.8718022
-</td>
-<td style="text-align:right;">
-0.0263866
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Truth
-</td>
-<td style="text-align:left;">
-collection
-</td>
-<td style="text-align:right;">
-6
-</td>
-<td style="text-align:right;">
-0.0052863
-</td>
-<td style="text-align:right;">
-1.4663371
-</td>
-<td style="text-align:right;">
-0.0077516
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Truth
-</td>
-<td style="text-align:left;">
-extra
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-0.0044053
-</td>
-<td style="text-align:right;">
-1.8718022
-</td>
-<td style="text-align:right;">
-0.0082458
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Tulip
-</td>
-<td style="text-align:left;">
-consultant
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-0.0034188
-</td>
-<td style="text-align:right;">
-3.2580965
-</td>
-<td style="text-align:right;">
-0.0111388
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Tulip
-</td>
-<td style="text-align:left;">
-prepared
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-0.0085470
-</td>
-<td style="text-align:right;">
-2.5649494
-</td>
-<td style="text-align:right;">
-0.0219226
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Tulip
-</td>
-<td style="text-align:left;">
-deserved
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-0.0034188
-</td>
-<td style="text-align:right;">
-3.2580965
-</td>
-<td style="text-align:right;">
-0.0111388
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Tulip
-</td>
-<td style="text-align:left;">
-eventual
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-0.0051282
-</td>
-<td style="text-align:right;">
-2.5649494
-</td>
-<td style="text-align:right;">
-0.0131536
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Tulip
-</td>
-<td style="text-align:left;">
-proportion
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-0.0051282
-</td>
-<td style="text-align:right;">
-2.5649494
-</td>
-<td style="text-align:right;">
-0.0131536
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The World
-</td>
-<td style="text-align:left;">
-cato
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-0.0066815
-</td>
-<td style="text-align:right;">
-1.4663371
-</td>
-<td style="text-align:right;">
-0.0097974
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The World
-</td>
-<td style="text-align:left;">
-million
-</td>
-<td style="text-align:right;">
-6
-</td>
-<td style="text-align:right;">
-0.0133630
-</td>
-<td style="text-align:right;">
-1.0608720
-</td>
-<td style="text-align:right;">
-0.0141765
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The World
-</td>
-<td style="text-align:left;">
-advisor
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-0.0044543
-</td>
-<td style="text-align:right;">
-2.5649494
-</td>
-<td style="text-align:right;">
-0.0114252
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The World
-</td>
-<td style="text-align:left;">
-relationship
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-0.0066815
-</td>
-<td style="text-align:right;">
-1.4663371
-</td>
-<td style="text-align:right;">
-0.0097974
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The World
-</td>
-<td style="text-align:left;">
-billion
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-0.0089087
-</td>
-<td style="text-align:right;">
-1.4663371
-</td>
-<td style="text-align:right;">
-0.0130631
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Wrap
-</td>
-<td style="text-align:left;">
-servants
-</td>
-<td style="text-align:right;">
-15
-</td>
-<td style="text-align:right;">
-0.0065646
-</td>
-<td style="text-align:right;">
-1.6486586
-</td>
-<td style="text-align:right;">
-0.0108227
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Wrap
-</td>
-<td style="text-align:left;">
-remind
-</td>
-<td style="text-align:right;">
-8
-</td>
-<td style="text-align:right;">
-0.0035011
-</td>
-<td style="text-align:right;">
-3.2580965
-</td>
-<td style="text-align:right;">
-0.0114069
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Wrap
-</td>
-<td style="text-align:left;">
-couple
-</td>
-<td style="text-align:right;">
-10
-</td>
-<td style="text-align:right;">
-0.0043764
-</td>
-<td style="text-align:right;">
-1.8718022
-</td>
-<td style="text-align:right;">
-0.0081917
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Wrap
-</td>
-<td style="text-align:left;">
-boring
-</td>
-<td style="text-align:right;">
-7
-</td>
-<td style="text-align:right;">
-0.0030635
-</td>
-<td style="text-align:right;">
-3.2580965
-</td>
-<td style="text-align:right;">
-0.0099810
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Wrap
-</td>
-<td style="text-align:left;">
-range
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-0.0021882
-</td>
-<td style="text-align:right;">
-3.2580965
-</td>
-<td style="text-align:right;">
-0.0071293
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Who What News
-</td>
-<td style="text-align:left;">
-flame
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-0.0078534
-</td>
-<td style="text-align:right;">
-1.3121864
-</td>
-<td style="text-align:right;">
-0.0103051
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Who What News
-</td>
-<td style="text-align:left;">
-levied
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-0.0052356
-</td>
-<td style="text-align:right;">
-1.8718022
-</td>
-<td style="text-align:right;">
-0.0098000
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Who What News
-</td>
-<td style="text-align:left;">
-ceo
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-0.0130890
-</td>
-<td style="text-align:right;">
-0.7731899
-</td>
-<td style="text-align:right;">
-0.0101203
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Who What News
-</td>
-<td style="text-align:left;">
-million
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-0.0104712
-</td>
-<td style="text-align:right;">
-1.0608720
-</td>
-<td style="text-align:right;">
-0.0111086
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Who What News
-</td>
-<td style="text-align:left;">
-cato
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-0.0078534
-</td>
-<td style="text-align:right;">
-1.4663371
-</td>
-<td style="text-align:right;">
-0.0115157
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-World Journal
-</td>
-<td style="text-align:left;">
-read
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-0.0032072
-</td>
-<td style="text-align:right;">
-2.1594842
-</td>
-<td style="text-align:right;">
-0.0069259
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-World Journal
-</td>
-<td style="text-align:left;">
-boat
-</td>
-<td style="text-align:right;">
-6
-</td>
-<td style="text-align:right;">
-0.0038486
-</td>
-<td style="text-align:right;">
-2.5649494
-</td>
-<td style="text-align:right;">
-0.0098715
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-World Journal
-</td>
-<td style="text-align:left;">
-principal
-</td>
-<td style="text-align:right;">
-8
-</td>
-<td style="text-align:right;">
-0.0051315
-</td>
-<td style="text-align:right;">
-1.8718022
-</td>
-<td style="text-align:right;">
-0.0096051
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-World Journal
-</td>
-<td style="text-align:left;">
-sugar
-</td>
-<td style="text-align:right;">
-15
-</td>
-<td style="text-align:right;">
-0.0096216
-</td>
-<td style="text-align:right;">
-2.5649494
-</td>
-<td style="text-align:right;">
-0.0246788
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-World Journal
-</td>
-<td style="text-align:left;">
-originator
-</td>
-<td style="text-align:right;">
-8
-</td>
-<td style="text-align:right;">
-0.0051315
-</td>
-<td style="text-align:right;">
-3.2580965
-</td>
-<td style="text-align:right;">
-0.0167189
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-World Source
-</td>
-<td style="text-align:left;">
-emergency
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-0.0051458
-</td>
-<td style="text-align:right;">
-1.6486586
-</td>
-<td style="text-align:right;">
-0.0084837
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-World Source
-</td>
-<td style="text-align:left;">
-singapore
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-0.0051458
-</td>
-<td style="text-align:right;">
-1.8718022
-</td>
-<td style="text-align:right;">
-0.0096319
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-World Source
-</td>
-<td style="text-align:left;">
-brand
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-0.0034305
-</td>
-<td style="text-align:right;">
-2.5649494
-</td>
-<td style="text-align:right;">
-0.0087991
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-World Source
-</td>
-<td style="text-align:left;">
-aid
-</td>
-<td style="text-align:right;">
-6
-</td>
-<td style="text-align:right;">
-0.0102916
-</td>
-<td style="text-align:right;">
-0.9555114
-</td>
-<td style="text-align:right;">
-0.0098337
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-World Source
-</td>
-<td style="text-align:left;">
-relief
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-0.0068611
-</td>
-<td style="text-align:right;">
-1.4663371
-</td>
-<td style="text-align:right;">
-0.0100606
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Worldwise
-</td>
-<td style="text-align:left;">
-nespola
-</td>
-<td style="text-align:right;">
-13
-</td>
-<td style="text-align:right;">
-0.0112554
-</td>
-<td style="text-align:right;">
-0.8602013
-</td>
-<td style="text-align:right;">
-0.0096819
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Worldwise
-</td>
-<td style="text-align:left;">
-sectors
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-0.0025974
-</td>
-<td style="text-align:right;">
-2.5649494
-</td>
-<td style="text-align:right;">
-0.0066622
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Worldwise
-</td>
-<td style="text-align:left;">
-parliament
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-0.0034632
-</td>
-<td style="text-align:right;">
-3.2580965
-</td>
-<td style="text-align:right;">
-0.0112835
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Worldwise
-</td>
-<td style="text-align:left;">
-wellbeing
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-0.0034632
-</td>
-<td style="text-align:right;">
-2.1594842
-</td>
-<td style="text-align:right;">
-0.0074787
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Worldwise
-</td>
-<td style="text-align:left;">
-jet
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-0.0025974
-</td>
-<td style="text-align:right;">
-2.5649494
-</td>
-<td style="text-align:right;">
-0.0066622
 </td>
 </tr>
 </tbody>
@@ -6116,7 +3612,7 @@ Membership
 <tbody>
 <tr>
 <td style="text-align:left;">
-Daily Pegasus
+The Orb
 </td>
 <td style="text-align:left;">
 1
@@ -6124,7 +3620,7 @@ Daily Pegasus
 </tr>
 <tr>
 <td style="text-align:left;">
-The Wrap
+News Online Today
 </td>
 <td style="text-align:left;">
 1
@@ -6148,7 +3644,7 @@ The Guide
 </tr>
 <tr>
 <td style="text-align:left;">
-Central Bulletin
+The Abila Post
 </td>
 <td style="text-align:left;">
 3
@@ -6156,10 +3652,18 @@ Central Bulletin
 </tr>
 <tr>
 <td style="text-align:left;">
-The Abila Post
+Athena Speaks
 </td>
 <td style="text-align:left;">
 3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+The Continent
+</td>
+<td style="text-align:left;">
+4
 </td>
 </tr>
 <tr>
@@ -6172,15 +3676,7 @@ Everyday News
 </tr>
 <tr>
 <td style="text-align:left;">
-International Times
-</td>
-<td style="text-align:left;">
-4
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-The Light of Truth
+Who What News
 </td>
 <td style="text-align:left;">
 5
@@ -6188,7 +3684,7 @@ The Light of Truth
 </tr>
 <tr>
 <td style="text-align:left;">
-The World
+The Light of Truth
 </td>
 <td style="text-align:left;">
 5
@@ -6241,10 +3737,79 @@ Membership
 <tbody>
 <tr>
 <td style="text-align:left;">
+Daily Pegasus
+</td>
+<td style="text-align:left;">
+henk
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+0.0043000
+</td>
+<td style="text-align:right;">
+1.4663371
+</td>
+<td style="text-align:right;">
+0.0063053
+</td>
+<td style="text-align:left;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Athena Speaks
+</td>
+<td style="text-align:left;">
+temps
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+0.0106195
+</td>
+<td style="text-align:right;">
+3.2580965
+</td>
+<td style="text-align:right;">
+0.0345993
+</td>
+<td style="text-align:left;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+International News
+</td>
+<td style="text-align:left;">
+nespola
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+0.0083612
+</td>
+<td style="text-align:right;">
+0.8602013
+</td>
+<td style="text-align:right;">
+0.0071923
+</td>
+<td style="text-align:left;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
 The Explainer
 </td>
 <td style="text-align:left;">
-districto
+conductor
 </td>
 <td style="text-align:right;">
 3
@@ -6253,7 +3818,7 @@ districto
 0.0025974
 </td>
 <td style="text-align:right;">
-3.258097
+3.2580965
 </td>
 <td style="text-align:right;">
 0.0084626
@@ -6264,91 +3829,22 @@ districto
 </tr>
 <tr>
 <td style="text-align:left;">
-Athena Speaks
+The Orb
 </td>
 <td style="text-align:left;">
-flight
+bodrogi
 </td>
 <td style="text-align:right;">
-4
+15
 </td>
 <td style="text-align:right;">
-0.0035398
+0.0066138
 </td>
 <td style="text-align:right;">
-3.258097
+0.9555114
 </td>
 <td style="text-align:right;">
-0.0115331
-</td>
-<td style="text-align:left;">
-3
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Daily Pegasus
-</td>
-<td style="text-align:left;">
-incidence
-</td>
-<td style="text-align:right;">
-6
-</td>
-<td style="text-align:right;">
-0.0028667
-</td>
-<td style="text-align:right;">
-2.159484
-</td>
-<td style="text-align:right;">
-0.0061906
-</td>
-<td style="text-align:left;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Central Bulletin
-</td>
-<td style="text-align:left;">
-accused
-</td>
-<td style="text-align:right;">
-10
-</td>
-<td style="text-align:right;">
-0.0128041
-</td>
-<td style="text-align:right;">
-1.060872
-</td>
-<td style="text-align:right;">
-0.0135835
-</td>
-<td style="text-align:left;">
-3
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Daily Pegasus
-</td>
-<td style="text-align:left;">
-perforated
-</td>
-<td style="text-align:right;">
-6
-</td>
-<td style="text-align:right;">
-0.0028667
-</td>
-<td style="text-align:right;">
-2.159484
-</td>
-<td style="text-align:right;">
-0.0061906
+0.0063195
 </td>
 <td style="text-align:left;">
 1
@@ -6492,10 +3988,10 @@ group
 <tbody>
 <tr>
 <td style="text-align:left;">
-possessions
+jr
 </td>
 <td style="text-align:left;">
-kronos
+time
 </td>
 <td style="text-align:right;">
 1
@@ -6506,58 +4002,58 @@ The Light of Truth
 </tr>
 <tr>
 <td style="text-align:left;">
-million
+municipality
 </td>
 <td style="text-align:left;">
-cubic
+abila
 </td>
 <td style="text-align:right;">
 1
 </td>
 <td style="text-align:left;">
-Who What News
+The Tulip
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-remind
+medical
 </td>
 <td style="text-align:left;">
-juliana
+aid
 </td>
 <td style="text-align:right;">
-4
+3
 </td>
 <td style="text-align:left;">
-The Wrap
+Everyday News
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-country
+cesare
 </td>
 <td style="text-align:left;">
-growth
+nespola
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:left;">
+Kronos Star
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+estimation
+</td>
+<td style="text-align:left;">
+anticipated
 </td>
 <td style="text-align:right;">
 1
 </td>
 <td style="text-align:left;">
-The World
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-increase
-</td>
-<td style="text-align:left;">
-drug
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-News Desk
+The General Post
 </td>
 </tr>
 </tbody>
@@ -6725,7 +4221,7 @@ News Desk
 </code></pre>
 </div>
 <div id="htmlwidget-75c7e5400d7ad6a77594" style="width:624px;height:384px;" class="visNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-75c7e5400d7ad6a77594">{"x":{"nodes":{"id":["abila","abilia","ability","accused","action","activist","added","america","appears","armed","attacked","attention","audiences","belonged","blossom","brilliant","candy","capital","ceo","certainty","close","colliding","committed","company","conservative","corporation","countries","crack","crackdown","crossfire","custody","declaration","declared","demonstrations","denied","died","disaster","driving","drymiau","eastern","elodis","empire","europe","exposure","favored","fields","food","found","front","future","gas","gastech","giant","government","head","headquarters","heart","held","holds","horrified","hospital","image","influenced","initially","initiated","international","investors","issues","jail","jr","kdt","kronos","kronosians","largest","leader","legacies","likened","live","mantle","naked","national","notify","nowadays","past","payments","people","perks","pipeline","pok","president","production","propelled","protectors","pump","quipped","refuses","responsible","rest","roots","sanjorge","served","set","social","spokesperson","spotlight","stated","sten","strives","submit","supporters","supportive","swamped","takes","tax","terrorism","terrorist","tethys","told","towns","traffic","treasury","truck","trust","tv","violence","waste","week","wellness"],"color.background":["grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","red","red","grey","grey","grey","grey","grey","grey","grey","grey","blue","grey","grey","blue","grey","grey","grey","grey","grey","grey","blue","blue","blue","grey","grey","grey","grey","grey","grey","grey","red","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","blue","grey","grey","grey","grey","grey","grey","grey","blue","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","blue","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","red","blue","grey","grey","blue","grey","grey","grey","grey","grey","grey","grey","red","grey","grey","blue","grey","grey"],"n":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,1,1,1,1,2,1,2,1,1,1,36,1,2,1,1,1,1,1,1,1,1,1,1,1,10,1,1,2,1,1,56,1,1,4,1,1,1,1,1,1,1,1,1,1,2,1,2,35,1,1,1,1,1,1,1,1,1,1,4,1,1,1,1,1,1,2,1,1,2,1,1,1,1,2,2,3,1,2,1,1,1,1,1,2,1,1,1],"label":["abila","abilia","ability","accused","action","activist","added","america","appears","armed","attacked","attention","audiences","belonged","blossom","brilliant","candy","capital","ceo","certainty","close","colliding","committed","company","conservative","corporation","countries","crack","crackdown","crossfire","custody","declaration","declared","demonstrations","denied","died","disaster","driving","drymiau","eastern","elodis","empire","europe","exposure","favored","fields","food","found","front","future","gas","gastech","giant","government","head","headquarters","heart","held","holds","horrified","hospital","image","influenced","initially","initiated","international","investors","issues","jail","jr","kdt","kronos","kronosians","largest","leader","legacies","likened","live","mantle","naked","national","notify","nowadays","past","payments","people","perks","pipeline","pok","president","production","propelled","protectors","pump","quipped","refuses","responsible","rest","roots","sanjorge","served","set","social","spokesperson","spotlight","stated","sten","strives","submit","supporters","supportive","swamped","takes","tax","terrorism","terrorist","tethys","told","towns","traffic","treasury","truck","trust","tv","violence","waste","week","wellness"],"color.highlight.background":["brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown"],"color.border":["black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black"],"x":[0.0890991046533394,0.448484870402877,0.36186354693294,0.329561725787198,-0.949267774662196,0.0129210259571479,-0.986407318083133,0.449168932384013,0.334754621778965,0.559461875226431,-0.877701798813342,-0.784227722636066,0.0516384987128353,-0.936541179936291,0.295251706069074,0.460697279544012,0.532918516459562,0.391050900832487,0.135515007708684,0.546334748905406,0.53952579913981,0.131271532124578,-0.746773445733428,0.502610051332492,0.162440133278691,0.44114672899645,0.918894285816991,-1,-0.633495691353301,0.412401615322055,-0.303512868855071,-0.935685976279127,0.290340359162664,0.0525739336073177,-0.80232282242663,-0.883393435017096,0.377161225643455,-0.817287633334858,-0.872311139723574,0.203738668788029,-0.303013680384686,0.205699301803185,0.473218719500515,0.191958904855574,0.145871075168274,0.124276262997006,0.288472348416649,-0.0395181842343384,0.221700294158036,0.454575134423108,0.368735307198927,0.298678147171522,0.0853034294388015,0.190305526725184,0.397247677128457,0.0983531900649159,0.463103923261804,-0.775290978868117,-0.718678688181058,0.345941864243226,0.227605719783635,-0.977073609826991,0.998924415863018,0.304256837754256,-0.812530067091934,0.715944175506345,0.939014417529343,-0.883028490646604,-0.518852230350589,0.597987235954746,0.556413705875954,0.223141322887062,0.498385374217586,0.0399093343231802,-0.181960631749585,0.149026265891324,-0.892814647048676,0.014029943298687,-0.672010747898878,-0.38424781375638,0.117435847449971,0.227956113055726,0.181867089459632,0.442842821305729,0.379450991806776,-0.257979628067644,0.535695164961534,0.282020948094857,-0.665909226572639,0.388260149249825,0.236612243652605,-0.801565144094345,0.451694097049275,0.0437814061810655,0.522860165087939,0.50326028865986,0.986637241672633,0.428347806875143,0.319051661131887,0.48485143320833,1,0.120895062861757,-0.945398255856155,0.0198778932951997,-0.71129267986572,0.103171035741033,0.399718771899567,0.388727249776959,-0.86451171478409,-0.710019422554052,0.240729589309167,0.485073514524096,0.497263474848697,0.38515644662781,-0.230484738678413,-0.236676224864345,0.415564718076588,-0.863365431869178,0.244960464597525,-0.991840182108337,0.235555644272728,0.543835218658711,0.876829440679215,0.300761072448433,-0.250320305985571,0.0602671826074828,0.50046804994878,0.938282391829889],"y":[-0.509057244470815,-0.583299910709847,0.381640374513466,-0.596444558157354,-0.436508441717659,-0.393418971435449,-0.407849613133122,-0.321382824352423,-0.483646459953685,-0.429474118998473,-0.414931561953878,-0.322838606670911,0.343919220897364,-0.578844577496337,-0.625858984367454,1,-0.517622562436544,-0.612394673193226,0.269367461593335,0.343696065561487,-0.38589224145098,0.338395829105337,-0.63025955021087,-0.455285954501373,-0.608893449140639,0.294145878080575,0.272192308435136,-0.500788564857735,-0.564982547257271,-0.4481577018359,-1,-0.512758677184155,-0.296548112056444,-0.553392750046345,-0.586221057858039,-0.367314174085174,-0.337001606107809,-0.627923497398432,-0.565389303503147,-0.285716781857693,-0.84392904195606,0.314183984551804,0.348484872223758,0.194900437198768,0.387419558711025,-0.419826620611298,0.399475915806229,-0.667637058803307,0.370065778147268,0.241985964266516,-0.293860541641611,0.242085725483837,0.38562381141788,-0.478165756046779,0.341389562308533,0.220670637979038,-0.490093149548641,-0.532507120654311,-0.575284621792497,-0.388188883919508,-0.583980307159974,-0.545506319648856,0.2551866000457,-0.559169236734508,-0.461090225694428,0.218069097167753,0.200922103117902,-0.61050540308971,-0.687514350648348,0.981409286001867,-0.478984159314304,-0.423347642542785,-0.352437560985365,-0.342958917925905,-0.213243516342666,-0.550546261406734,-0.470601635114431,-0.504604021966111,-0.615346909065577,-0.992894875158288,-0.301812713219315,-0.624029262648155,0.417868612024558,0.406745916933503,-0.52083936157055,-0.457943693795673,0.30168048251924,-0.0839692340115262,-0.460218598023915,-0.565985444114688,-0.335726330950481,-0.375764250986453,-0.531415768556286,0.263429460734135,0.977942242768079,-0.555524492407619,0.296945607011282,-0.383223235637795,0.43758793690245,0.85072919474979,0.211337615578308,-0.349865863609693,-0.37232084146812,-0.451514788934427,-0.342156376614733,-0.586472527195723,0.575244449843366,0.181383678265938,-0.521776030794073,-0.412563019272307,0.4328140896468,-0.41232409705222,0.200108586693647,0.4238271562115,-0.442978245161631,-0.478133864118476,-0.0319493936095916,-0.329571810105558,-0.0835800273446151,-0.464096461806383,-0.535452024065339,0.255900264988225,0.339995920496961,0.336451926019584,-0.422274918286019,0.304278113834042,0.387593220247094,0.327036383006092]},"edges":{"from":["abila","abilia","accused","added","america","armed","attacked","attention","audiences","blossom","candy","certainty","colliding","committed","company","conservative","crack","crackdown","crossfire","custody","declaration","demonstrations","driving","eastern","elodis","elodis","europe","exposure","favored","fields","food","front","gas","gastech","gastech","gastech","gastech","gastech","gastech","gastech","gastech","gastech","gastech","gastech","gastech","gastech","gastech","gastech","gastech","gastech","gastech","giant","government","head","heart","hospital","image","influenced","international","international","international","international","international","international","issues","jail","kdt","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","leader","leader","likened","live","mantle","naked","nowadays","past","payments","people","perks","pok","pok","pok","pok","pok","pok","pok","pok","pok","pok","pok","pok","pok","pok","pok","pok","pok","production","propelled","protectors","quipped","rest","sanjorge","sanjorge","stated","sten","submit","supporters","supportive","terrorism","tethys","towns","towns","trust","violence","week"],"to":["kronos","kronos","kronos","pok","kronos","kronos","pok","pok","gastech","kronos","kronos","gastech","gastech","pok","kronos","kronos","pok","pok","kronos","elodis","pok","kronos","pok","kronos","found","jail","gastech","gastech","gastech","kronos","gastech","gastech","kronos","ability","ceo","corporation","empire","future","headquarters","international","pipeline","pump","roots","sten","strives","takes","tax","tethys","truck","tv","waste","gastech","kronos","gastech","kronos","kronos","pok","international","countries","gastech","investors","responsible","served","wellness","pok","pok","kronos","activist","appears","capital","close","declared","disaster","fields","found","government","horrified","initially","kronos","kronosians","largest","leader","legacies","national","notify","people","pipeline","president","refuses","set","spokesperson","swamped","terrorist","tethys","treasury","gastech","pok","pok","kronos","pok","elodis","gastech","gastech","kronos","pok","gastech","action","belonged","denied","died","drymiau","held","holds","initiated","leader","social","spotlight","supporters","terrorism","terrorist","told","traffic","violence","kronos","pok","kronos","sanjorge","kronos","brilliant","jr","kronos","sanjorge","pok","pok","gastech","kronos","international","gastech","kronos","international","kronos","gastech"],"value":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,1,1,1,1,1,1,1,1,1,1,3,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,1,4,1,1,2,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,5,1,1,1,2,2,2,1,1,1,1,1,1,1,1,2,1],"group":["International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times"],"color":["gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","font":{"size":34,"style":"font-weight:600"},"physics":false},"manipulation":{"enabled":false},"edges":{"arrows":"middle","color":{"highlight":"brown"},"smooth":false},"physics":{"stabilization":false},"interaction":{"multiselect":true}},"groups":null,"width":null,"height":null,"idselection":{"enabled":true,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"News Source:  International Times","style":"font-family:Verdana;font-weight:600;color:#000000;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","igraphlayout":{"type":"square"},"highlight":{"enabled":true,"hoverNearest":false,"degree":0,"algorithm":"all","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":false,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"tooltipStay":300,"tooltipStyle":"position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;font-family: verdana;font-size:14px;font-color:#000000;background-color: #f5f4ed;-moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);"},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-75c7e5400d7ad6a77594">{"x":{"nodes":{"id":["abila","abilia","ability","accused","action","activist","added","america","appears","armed","attacked","attention","audiences","belonged","blossom","brilliant","candy","capital","ceo","certainty","close","colliding","committed","company","conservative","corporation","countries","crack","crackdown","crossfire","custody","declaration","declared","demonstrations","denied","died","disaster","driving","drymiau","eastern","elodis","empire","europe","exposure","favored","fields","food","found","front","future","gas","gastech","giant","government","head","headquarters","heart","held","holds","horrified","hospital","image","influenced","initially","initiated","international","investors","issues","jail","jr","kdt","kronos","kronosians","largest","leader","legacies","likened","live","mantle","naked","national","notify","nowadays","past","payments","people","perks","pipeline","pok","president","production","propelled","protectors","pump","quipped","refuses","responsible","rest","roots","sanjorge","served","set","social","spokesperson","spotlight","stated","sten","strives","submit","supporters","supportive","swamped","takes","tax","terrorism","terrorist","tethys","told","towns","traffic","treasury","truck","trust","tv","violence","waste","week","wellness"],"color.background":["grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","red","red","grey","grey","grey","grey","grey","grey","grey","grey","blue","grey","grey","blue","grey","grey","grey","grey","grey","grey","blue","blue","blue","grey","grey","grey","grey","grey","grey","grey","red","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","blue","grey","grey","grey","grey","grey","grey","grey","blue","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","blue","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","grey","red","blue","grey","grey","blue","grey","grey","grey","grey","grey","grey","grey","red","grey","grey","blue","grey","grey"],"n":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,1,1,1,1,2,1,2,1,1,1,36,1,2,1,1,1,1,1,1,1,1,1,1,1,10,1,1,2,1,1,56,1,1,4,1,1,1,1,1,1,1,1,1,1,2,1,2,35,1,1,1,1,1,1,1,1,1,1,4,1,1,1,1,1,1,2,1,1,2,1,1,1,1,2,2,3,1,2,1,1,1,1,1,2,1,1,1],"label":["abila","abilia","ability","accused","action","activist","added","america","appears","armed","attacked","attention","audiences","belonged","blossom","brilliant","candy","capital","ceo","certainty","close","colliding","committed","company","conservative","corporation","countries","crack","crackdown","crossfire","custody","declaration","declared","demonstrations","denied","died","disaster","driving","drymiau","eastern","elodis","empire","europe","exposure","favored","fields","food","found","front","future","gas","gastech","giant","government","head","headquarters","heart","held","holds","horrified","hospital","image","influenced","initially","initiated","international","investors","issues","jail","jr","kdt","kronos","kronosians","largest","leader","legacies","likened","live","mantle","naked","national","notify","nowadays","past","payments","people","perks","pipeline","pok","president","production","propelled","protectors","pump","quipped","refuses","responsible","rest","roots","sanjorge","served","set","social","spokesperson","spotlight","stated","sten","strives","submit","supporters","supportive","swamped","takes","tax","terrorism","terrorist","tethys","told","towns","traffic","treasury","truck","trust","tv","violence","waste","week","wellness"],"color.highlight.background":["brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown","brown"],"color.border":["black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black","black"],"x":[-0.731776945289578,-0.496342996201665,0.139081078582186,-0.594757896127415,-0.347328506438148,-0.401548308748326,-0.500011913086638,-0.507606486782424,-0.691112678312243,-0.672352064799932,-0.407090784231812,-0.269852780089747,0.297883257955261,-0.305273767852074,-0.546928899836798,1,-0.573489150843447,-0.733641680783461,0.350390827403842,0.339059497338895,-0.654995572431799,0.234278095158425,-0.360137612932219,-0.574845854362382,-0.742343754413187,0.196030680100753,0.14256392438079,-0.221746523443117,-0.262518535097262,-0.447673673832099,-1,-0.514538707299172,-0.720688753952504,-0.66991226410054,-0.456466869760497,-0.446079581422538,-0.716676275026392,-0.229276622721045,-0.498699520133904,-0.600780773400765,-0.841158577354991,0.158396606084738,0.332659825992059,0.373102950208884,0.377272069989547,-0.536801447053732,0.259522308273919,-0.710707730707034,0.298014903437394,0.249615852327643,-0.491688375281275,0.212422873346156,0.332565765427369,-0.504240324259046,0.27505734309256,0.221382144851631,-0.434355660995997,-0.547132015949943,-0.307923703465214,-0.469660396182541,-0.400161892915185,-0.540892412426663,0.240047667764371,-0.425200163128904,-0.400350625839325,0.151572989645712,0.100644500838844,-0.471322884976959,-0.645979129648395,0.978170555727362,-0.626951145161357,-0.514031455635907,-0.681663697160353,-0.58350325205968,-0.216276376995217,-0.61882407778697,-0.507193258904778,-0.647458312537466,-0.453976643242569,-0.974440535085695,-0.691567075567493,-0.612313228359047,0.411635313781027,0.422030357585951,-0.714523447538343,-0.486145726785302,0.378875527856734,-0.149155753243914,-0.38964008254867,-0.373592325176729,-0.641252763066173,-0.262055973448985,-0.399840038815946,0.412359423279695,0.998518488281323,-0.540397988486246,0.193890956413036,-0.380393686495208,0.307402837829053,0.848553361896335,0.279932121939545,-0.537274057424817,-0.350434572572242,-0.624873594423169,-0.559372943195399,-0.649931817363163,0.558388743628524,0.203047979338148,-0.244061261164888,-0.335960658229566,0.340952991392957,-0.678102688664882,0.298372369125561,0.409439878901825,-0.447158685945554,-0.428743695386857,-0.097551257436748,-0.298735028374,-0.142962733679034,-0.397503533035887,-0.448338073295396,0.373425511112941,0.231708470751521,0.287102783214094,-0.466508610378024,0.156878275070359,0.372533946270572,0.161637537943688],"y":[0.306704205790439,0.391523477114155,0.420121279043129,0.0497285692982208,-0.942102705585218,0.393516672271556,-0.669698614779704,0.484112362682538,0.0320823288913019,0.13057495149549,-0.998559929360657,-0.648040948628142,0.398931249062292,-0.964118787017164,-0.0193316503414408,0.578169757235321,0.49878120754362,0.140949097690312,0.366270874077671,0.569689063284855,0.471691869804658,0.194404814497508,-1,0.313501617526625,0.241525684867692,0.128716571408553,0.929657432935459,-0.766528907290647,-0.817138345985364,0.36663891035128,-0.625956964405901,-0.811478502316135,0.196511508862669,0.356316415409586,-0.856142121260137,-0.924691281955165,0.0854970420825476,-0.852239600268571,-0.952305299924389,-0.0326723767627073,-0.532986987875355,0.233299450784271,0.199570854654326,0.436701864612274,0.304070290620183,0.10710243883087,0.483535160470966,-0.187224993146256,0.535397451624989,0.093303963278587,-0.00114772046426337,0.331711392313062,0.476655128437037,0.274135585946873,0.592539156204747,0.572982291917855,0.450246585320133,-0.873146727988225,-0.795780235254786,0.482233326129248,0.159245421566557,-0.721906582214435,0.899900455827237,0.272490338828211,-0.823809399931215,0.71654643783166,0.956076097813414,-0.763959123159697,-0.649556475114532,0.646577884291805,0.424917241371981,0.187725951928088,0.417885623575101,0.406204877837616,-0.161092333945809,0.170289350450344,-0.889604246789908,0.0670383362608076,-0.983924265757889,-0.697034088660118,0.287985861487814,0.495354521921091,0.225945727580332,0.30618712787783,0.369843434356955,-0.273477157556063,0.15475854164681,0.283625914365137,-0.670287662804642,0.223932022142397,0.259417062669154,-0.921058286403446,0.0814791600330615,0.450158816178296,0.502529062620038,0.421377626561646,0.945934842798109,0.317124628226347,0.28558852089457,0.528961973013037,0.92182873068398,0.520056586451481,-0.864757263906743,0.338667563995278,-0.792352628375201,-0.00966128015135503,0.436662556280766,0.490525035370563,-0.709397950323697,-0.701593790715745,0.114114594129629,0.206582308143051,0.086390478224871,0.373750371052723,-0.268847535192598,-0.246813561881095,0.404619841837789,-0.886886968907018,0.24692099899591,-0.92506633207812,0.0499852153449512,0.51826736156608,0.980333594857308,0.167756256548781,-0.248690894376762,0.521332257915002,0.231401017023364,1]},"edges":{"from":["abila","abilia","accused","added","america","armed","attacked","attention","audiences","blossom","candy","certainty","colliding","committed","company","conservative","crack","crackdown","crossfire","custody","declaration","demonstrations","driving","eastern","elodis","elodis","europe","exposure","favored","fields","food","front","gas","gastech","gastech","gastech","gastech","gastech","gastech","gastech","gastech","gastech","gastech","gastech","gastech","gastech","gastech","gastech","gastech","gastech","gastech","giant","government","head","heart","hospital","image","influenced","international","international","international","international","international","international","issues","jail","kdt","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","kronos","leader","leader","likened","live","mantle","naked","nowadays","past","payments","people","perks","pok","pok","pok","pok","pok","pok","pok","pok","pok","pok","pok","pok","pok","pok","pok","pok","pok","production","propelled","protectors","quipped","rest","sanjorge","sanjorge","stated","sten","submit","supporters","supportive","terrorism","tethys","towns","towns","trust","violence","week"],"to":["kronos","kronos","kronos","pok","kronos","kronos","pok","pok","gastech","kronos","kronos","gastech","gastech","pok","kronos","kronos","pok","pok","kronos","elodis","pok","kronos","pok","kronos","found","jail","gastech","gastech","gastech","kronos","gastech","gastech","kronos","ability","ceo","corporation","empire","future","headquarters","international","pipeline","pump","roots","sten","strives","takes","tax","tethys","truck","tv","waste","gastech","kronos","gastech","kronos","kronos","pok","international","countries","gastech","investors","responsible","served","wellness","pok","pok","kronos","activist","appears","capital","close","declared","disaster","fields","found","government","horrified","initially","kronos","kronosians","largest","leader","legacies","national","notify","people","pipeline","president","refuses","set","spokesperson","swamped","terrorist","tethys","treasury","gastech","pok","pok","kronos","pok","elodis","gastech","gastech","kronos","pok","gastech","action","belonged","denied","died","drymiau","held","holds","initiated","leader","social","spotlight","supporters","terrorism","terrorist","told","traffic","violence","kronos","pok","kronos","sanjorge","kronos","brilliant","jr","kronos","sanjorge","pok","pok","gastech","kronos","international","gastech","kronos","international","kronos","gastech"],"value":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,1,1,1,1,1,1,1,1,1,1,3,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,1,4,1,1,2,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,5,1,1,1,2,2,2,1,1,1,1,1,1,1,1,2,1],"group":["International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times","International Times"],"color":["gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray","gray"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","font":{"size":34,"style":"font-weight:600"},"physics":false},"manipulation":{"enabled":false},"edges":{"arrows":"middle","color":{"highlight":"brown"},"smooth":false},"physics":{"stabilization":false},"interaction":{"multiselect":true}},"groups":null,"width":null,"height":null,"idselection":{"enabled":true,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"News Source:  International Times","style":"font-family:Verdana;font-weight:600;color:#000000;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","igraphlayout":{"type":"square"},"highlight":{"enabled":true,"hoverNearest":false,"degree":0,"algorithm":"all","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":false,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"tooltipStay":300,"tooltipStyle":"position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;font-family: verdana;font-size:14px;font-color:#000000;background-color: #f5f4ed;-moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);"},"evals":[],"jsHooks":[]}</script>
 </div>
 <h3 id="word-cloud-by-communities">Word Cloud by Communities</h3>
 <ol type="1">
@@ -6885,7 +4381,7 @@ cofounder
 </div>
 </div>
 <h2 id="building-the-visuals-for-question-3">Building the Visuals for Question 3</h2>
-<h3 id="email-network-communities-by-department">Email Network (Communities by Department)</h3>
+<h3 id="email-network-communities-by-dept">Email Network (Communities by Dept)</h3>
 <p>This network will show an overview of the employees and conversations within their departments.</p>
 <ol type="1">
 <li>First we will set up the links, <code>links</code> , and nodes, <code>nodes_df</code></li>
@@ -7855,7 +5351,7 @@ Engineering
 </code></pre>
 </div>
 <div id="htmlwidget-d00dd67d7949b2a0ae29" style="width:624px;height:384px;" class="plotly html-widget"></div>
-<script type="application/json" data-for="htmlwidget-d00dd67d7949b2a0ae29">{"x":{"data":[{"x":[46560,51540,53820,42780,43620,42060,42060,42060,48660,48660,48660,70920,70920,70920,39900,49800,49800,49800,47220,49140,49140,49140,55440,55440,55440,57720,58380,58380,58380,64740,64740,64740,66900,66900,66900,46680,46680,31920,31920,31920,57900],"y":[4,4,4,2,2,5,1,4,5,1,4,1,4,5,6,4,1,5,5,1,4,3,1,4,3,4,1,4,3,5,1,4,5,1,4,5,1,5,1,3,4],"text":["Sub: RE  IPO<br>Date: 2014-01-06<br>To: Orhan Strum<br>To_Title: SVP/COO<br>To_Dep: Executive<br>Time Sent: 12:56:00<br>","Sub: RE  IPO<br>Date: 2014-01-06<br>To: Orhan Strum<br>To_Title: SVP/COO<br>To_Dep: Executive<br>Time Sent: 14:19:00<br>","Sub: RE  IPO<br>Date: 2014-01-06<br>To: Orhan Strum<br>To_Title: SVP/COO<br>To_Dep: Executive<br>Time Sent: 14:57:00<br>","Sub: RE  Late for meeting<br>Date: 2014-01-07<br>To: Inga Ferro<br>To_Title: Site Control<br>To_Dep: Security<br>Time Sent: 11:53:00<br>","Sub: RE  Late for meeting<br>Date: 2014-01-07<br>To: Inga Ferro<br>To_Title: Site Control<br>To_Dep: Security<br>Time Sent: 12:07:00<br>","Sub: RE  Impact of local politics on profit margin<br>Date: 2014-01-09<br>To: Sten Sanjorge Jr<br>To_Title: NA<br>To_Dep: NA<br>Time Sent: 11:41:00<br>","Sub: RE  Impact of local politics on profit margin<br>Date: 2014-01-09<br>To: Ada Campo-Corrente<br>To_Title: SVP/CIO<br>To_Dep: Executive<br>Time Sent: 11:41:00<br>","Sub: RE  Impact of local politics on profit margin<br>Date: 2014-01-09<br>To: Orhan Strum<br>To_Title: SVP/COO<br>To_Dep: Executive<br>Time Sent: 11:41:00<br>","Sub: RE  Impact of local politics on profit margin<br>Date: 2014-01-09<br>To: Sten Sanjorge Jr<br>To_Title: NA<br>To_Dep: NA<br>Time Sent: 13:31:00<br>","Sub: RE  Impact of local politics on profit margin<br>Date: 2014-01-09<br>To: Ada Campo-Corrente<br>To_Title: SVP/CIO<br>To_Dep: Executive<br>Time Sent: 13:31:00<br>","Sub: RE  Impact of local politics on profit margin<br>Date: 2014-01-09<br>To: Orhan Strum<br>To_Title: SVP/COO<br>To_Dep: Executive<br>Time Sent: 13:31:00<br>","Sub: RE  Impromptu golf vacation   who s in <br>Date: 2014-01-09<br>To: Ada Campo-Corrente<br>To_Title: SVP/CIO<br>To_Dep: Executive<br>Time Sent: 19:42:00<br>","Sub: RE  Impromptu golf vacation   who s in <br>Date: 2014-01-09<br>To: Orhan Strum<br>To_Title: SVP/COO<br>To_Dep: Executive<br>Time Sent: 19:42:00<br>","Sub: RE  Impromptu golf vacation   who s in <br>Date: 2014-01-09<br>To: Sten Sanjorge Jr<br>To_Title: NA<br>To_Dep: NA<br>Time Sent: 19:42:00<br>","Sub: Meeting<br>Date: 2014-01-10<br>To: Varja Lagos<br>To_Title: Badging Office<br>To_Dep: Security<br>Time Sent: 11:05:00<br>","Sub: Recommend a good vacation spot <br>Date: 2014-01-13<br>To: Orhan Strum<br>To_Title: SVP/COO<br>To_Dep: Executive<br>Time Sent: 13:50:00<br>","Sub: Recommend a good vacation spot <br>Date: 2014-01-13<br>To: Ada Campo-Corrente<br>To_Title: SVP/CIO<br>To_Dep: Executive<br>Time Sent: 13:50:00<br>","Sub: Recommend a good vacation spot <br>Date: 2014-01-13<br>To: Sten Sanjorge Jr<br>To_Title: NA<br>To_Dep: NA<br>Time Sent: 13:50:00<br>","Sub: Operational efficiencies<br>Date: 2014-01-14<br>To: Sten Sanjorge Jr<br>To_Title: NA<br>To_Dep: NA<br>Time Sent: 13:07:00<br>","Sub: Impact of local politics on profit margin<br>Date: 2014-01-14<br>To: Ada Campo-Corrente<br>To_Title: SVP/CIO<br>To_Dep: Executive<br>Time Sent: 13:39:00<br>","Sub: Impact of local politics on profit margin<br>Date: 2014-01-14<br>To: Orhan Strum<br>To_Title: SVP/COO<br>To_Dep: Executive<br>Time Sent: 13:39:00<br>","Sub: Impact of local politics on profit margin<br>Date: 2014-01-14<br>To: Ingrid Barranco<br>To_Title: SVP/CFO<br>To_Dep: Executive<br>Time Sent: 13:39:00<br>","Sub: RE  Impact of local politics on profit margin<br>Date: 2014-01-14<br>To: Ada Campo-Corrente<br>To_Title: SVP/CIO<br>To_Dep: Executive<br>Time Sent: 15:24:00<br>","Sub: RE  Impact of local politics on profit margin<br>Date: 2014-01-14<br>To: Orhan Strum<br>To_Title: SVP/COO<br>To_Dep: Executive<br>Time Sent: 15:24:00<br>","Sub: RE  Impact of local politics on profit margin<br>Date: 2014-01-14<br>To: Ingrid Barranco<br>To_Title: SVP/CFO<br>To_Dep: Executive<br>Time Sent: 15:24:00<br>","Sub: RE  Maximizing quarterly profits<br>Date: 2014-01-14<br>To: Orhan Strum<br>To_Title: SVP/COO<br>To_Dep: Executive<br>Time Sent: 16:02:00<br>","Sub: RE  Impact of local politics on profit margin<br>Date: 2014-01-14<br>To: Ada Campo-Corrente<br>To_Title: SVP/CIO<br>To_Dep: Executive<br>Time Sent: 16:13:00<br>","Sub: RE  Impact of local politics on profit margin<br>Date: 2014-01-14<br>To: Orhan Strum<br>To_Title: SVP/COO<br>To_Dep: Executive<br>Time Sent: 16:13:00<br>","Sub: RE  Impact of local politics on profit margin<br>Date: 2014-01-14<br>To: Ingrid Barranco<br>To_Title: SVP/CFO<br>To_Dep: Executive<br>Time Sent: 16:13:00<br>","Sub: RE  Yearly numbers looking good<br>Date: 2014-01-15<br>To: Sten Sanjorge Jr<br>To_Title: NA<br>To_Dep: NA<br>Time Sent: 17:59:00<br>","Sub: RE  Yearly numbers looking good<br>Date: 2014-01-15<br>To: Ada Campo-Corrente<br>To_Title: SVP/CIO<br>To_Dep: Executive<br>Time Sent: 17:59:00<br>","Sub: RE  Yearly numbers looking good<br>Date: 2014-01-15<br>To: Orhan Strum<br>To_Title: SVP/COO<br>To_Dep: Executive<br>Time Sent: 17:59:00<br>","Sub: RE  Yearly numbers looking good<br>Date: 2014-01-15<br>To: Sten Sanjorge Jr<br>To_Title: NA<br>To_Dep: NA<br>Time Sent: 18:35:00<br>","Sub: RE  Yearly numbers looking good<br>Date: 2014-01-15<br>To: Ada Campo-Corrente<br>To_Title: SVP/CIO<br>To_Dep: Executive<br>Time Sent: 18:35:00<br>","Sub: RE  Yearly numbers looking good<br>Date: 2014-01-15<br>To: Orhan Strum<br>To_Title: SVP/COO<br>To_Dep: Executive<br>Time Sent: 18:35:00<br>","Sub: RE  Recommend a good vacation spot <br>Date: 2014-01-16<br>To: Sten Sanjorge Jr<br>To_Title: NA<br>To_Dep: NA<br>Time Sent: 12:58:00<br>","Sub: RE  Recommend a good vacation spot <br>Date: 2014-01-16<br>To: Ada Campo-Corrente<br>To_Title: SVP/CIO<br>To_Dep: Executive<br>Time Sent: 12:58:00<br>","Sub: Managing perceptions about the IPO<br>Date: 2014-01-17<br>To: Sten Sanjorge Jr<br>To_Title: NA<br>To_Dep: NA<br>Time Sent: 08:52:00<br>","Sub: Managing perceptions about the IPO<br>Date: 2014-01-17<br>To: Ada Campo-Corrente<br>To_Title: SVP/CIO<br>To_Dep: Executive<br>Time Sent: 08:52:00<br>","Sub: Managing perceptions about the IPO<br>Date: 2014-01-17<br>To: Ingrid Barranco<br>To_Title: SVP/CFO<br>To_Dep: Executive<br>Time Sent: 08:52:00<br>","Sub: RE  Favor   water plants please next month<br>Date: 2014-01-17<br>To: Orhan Strum<br>To_Title: SVP/COO<br>To_Dep: Executive<br>Time Sent: 16:05:00<br>"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"transparent","opacity":0.6,"size":7.55905511811024,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"}},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[49140,49140,49140],"y":[1,4,3],"text":"","type":"scatter","mode":"lines","line":{"width":0.755905511811024,"color":"rgba(248,118,109,1)","dash":"solid"},"hoveron":"points","name":"Impact of local politics on profit margin","legendgroup":"Impact of local politics on profit margin","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[31920,31920,31920],"y":[5,1,3],"text":"","type":"scatter","mode":"lines","line":{"width":0.755905511811024,"color":"rgba(225,138,0,1)","dash":"solid"},"hoveron":"points","name":"Managing perceptions about the IPO","legendgroup":"Managing perceptions about the IPO","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[39900],"y":[6],"text":"","type":"scatter","mode":"lines","line":{"width":0.755905511811024,"color":"rgba(190,156,0,1)","dash":"solid"},"hoveron":"points","name":"Meeting","legendgroup":"Meeting","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[47220],"y":[5],"text":"","type":"scatter","mode":"lines","line":{"width":0.755905511811024,"color":"rgba(140,171,0,1)","dash":"solid"},"hoveron":"points","name":"Operational efficiencies","legendgroup":"Operational efficiencies","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[57900],"y":[4],"text":"","type":"scatter","mode":"lines","line":{"width":0.755905511811024,"color":"rgba(36,183,0,1)","dash":"solid"},"hoveron":"points","name":"RE  Favor   water plants please next month","legendgroup":"RE  Favor   water plants please next month","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[42060,42060,42060,48660,48660,48660,55440,55440,55440,58380,58380,58380],"y":[5,1,4,5,1,4,1,4,3,1,4,3],"text":"","type":"scatter","mode":"lines","line":{"width":0.755905511811024,"color":"rgba(0,190,112,1)","dash":"solid"},"hoveron":"points","name":"RE  Impact of local politics on profit margin","legendgroup":"RE  Impact of local politics on profit margin","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[70920,70920,70920],"y":[1,4,5],"text":"","type":"scatter","mode":"lines","line":{"width":0.755905511811024,"color":"rgba(0,193,171,1)","dash":"solid"},"hoveron":"points","name":"RE  Impromptu golf vacation   who s in ","legendgroup":"RE  Impromptu golf vacation   who s in ","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[46560,51540,53820],"y":[4,4,4],"text":"","type":"scatter","mode":"lines","line":{"width":0.755905511811024,"color":"rgba(0,187,218,1)","dash":"solid"},"hoveron":"points","name":"RE  IPO","legendgroup":"RE  IPO","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[42780,43620],"y":[2,2],"text":"","type":"scatter","mode":"lines","line":{"width":0.755905511811024,"color":"rgba(0,172,252,1)","dash":"solid"},"hoveron":"points","name":"RE  Late for meeting","legendgroup":"RE  Late for meeting","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[57720],"y":[4],"text":"","type":"scatter","mode":"lines","line":{"width":0.755905511811024,"color":"rgba(139,147,255,1)","dash":"solid"},"hoveron":"points","name":"RE  Maximizing quarterly profits","legendgroup":"RE  Maximizing quarterly profits","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[46680,46680],"y":[5,1],"text":"","type":"scatter","mode":"lines","line":{"width":0.755905511811024,"color":"rgba(213,117,254,1)","dash":"solid"},"hoveron":"points","name":"RE  Recommend a good vacation spot ","legendgroup":"RE  Recommend a good vacation spot ","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[64740,64740,64740,66900,66900,66900],"y":[5,1,4,5,1,4],"text":"","type":"scatter","mode":"lines","line":{"width":0.755905511811024,"color":"rgba(249,98,221,1)","dash":"solid"},"hoveron":"points","name":"RE  Yearly numbers looking good","legendgroup":"RE  Yearly numbers looking good","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[49800,49800,49800],"y":[4,1,5],"text":"","type":"scatter","mode":"lines","line":{"width":0.755905511811024,"color":"rgba(255,101,172,1)","dash":"solid"},"hoveron":"points","name":"Recommend a good vacation spot ","legendgroup":"Recommend a good vacation spot ","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":46.4690743046907,"r":7.30593607305936,"b":41.8264840182648,"l":116.164383561644},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"title":{"text":"Willem Vasco-Pais Executive,Environmental Safety Advisor","font":{"color":"rgba(0,0,0,1)","family":"","size":18.5969281859693},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[29970,72870],"tickmode":"array","ticktext":["10:00:00","12:00:00","14:00:00","16:00:00","18:00:00","20:00:00"],"tickvals":[36000,43200,50400,57600,64800,72000],"categoryorder":"array","categoryarray":["10:00:00","12:00:00","14:00:00","16:00:00","18:00:00","20:00:00"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"y","title":{"text":"Time","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.4,6.6],"tickmode":"array","ticktext":["Ada Campo-Corrente","Inga Ferro","Ingrid Barranco","Orhan Strum","Sten Sanjorge Jr","Varja Lagos"],"tickvals":[1,2,3,4,5,6],"categoryorder":"array","categoryarray":["Ada Campo-Corrente","Inga Ferro","Ingrid Barranco","Orhan Strum","Sten Sanjorge Jr","Varja Lagos"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(240,240,240,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"x","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"","size":10.6268161062682},"y":0.959399606299213},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","showSendToCloud":false},"source":"A","attrs":{"1ea029482e20":{"text":{},"x":{},"y":{},"type":"scatter"},"1ea04e1c2006":{"colour":{},"x":{},"y":{}}},"cur_data":"1ea029482e20","visdat":{"1ea029482e20":["function (y) ","x"],"1ea04e1c2006":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-d00dd67d7949b2a0ae29">{"x":{"data":[{"x":[46560,51540,53820,42780,43620,42060,42060,42060,48660,48660,48660,70920,70920,70920,39900,49800,49800,49800,47220,49140,49140,49140,55440,55440,55440,57720,58380,58380,58380,64740,64740,64740,66900,66900,66900,46680,46680,31920,31920,31920,57900],"y":[4,4,4,2,2,5,1,4,5,1,4,1,4,5,6,4,1,5,5,1,4,3,1,4,3,4,1,4,3,5,1,4,5,1,4,5,1,5,1,3,4],"text":["Sub: RE  IPO<br>Date: 2014-01-06<br>To: Orhan Strum<br>To_Title: SVP/COO<br>To_Dep: Executive<br>Time Sent: 12:56:00<br>","Sub: RE  IPO<br>Date: 2014-01-06<br>To: Orhan Strum<br>To_Title: SVP/COO<br>To_Dep: Executive<br>Time Sent: 14:19:00<br>","Sub: RE  IPO<br>Date: 2014-01-06<br>To: Orhan Strum<br>To_Title: SVP/COO<br>To_Dep: Executive<br>Time Sent: 14:57:00<br>","Sub: RE  Late for meeting<br>Date: 2014-01-07<br>To: Inga Ferro<br>To_Title: Site Control<br>To_Dep: Security<br>Time Sent: 11:53:00<br>","Sub: RE  Late for meeting<br>Date: 2014-01-07<br>To: Inga Ferro<br>To_Title: Site Control<br>To_Dep: Security<br>Time Sent: 12:07:00<br>","Sub: RE  Impact of local politics on profit margin<br>Date: 2014-01-09<br>To: Sten Sanjorge Jr<br>To_Title: NA<br>To_Dep: NA<br>Time Sent: 11:41:00<br>","Sub: RE  Impact of local politics on profit margin<br>Date: 2014-01-09<br>To: Ada Campo-Corrente<br>To_Title: SVP/CIO<br>To_Dep: Executive<br>Time Sent: 11:41:00<br>","Sub: RE  Impact of local politics on profit margin<br>Date: 2014-01-09<br>To: Orhan Strum<br>To_Title: SVP/COO<br>To_Dep: Executive<br>Time Sent: 11:41:00<br>","Sub: RE  Impact of local politics on profit margin<br>Date: 2014-01-09<br>To: Sten Sanjorge Jr<br>To_Title: NA<br>To_Dep: NA<br>Time Sent: 13:31:00<br>","Sub: RE  Impact of local politics on profit margin<br>Date: 2014-01-09<br>To: Ada Campo-Corrente<br>To_Title: SVP/CIO<br>To_Dep: Executive<br>Time Sent: 13:31:00<br>","Sub: RE  Impact of local politics on profit margin<br>Date: 2014-01-09<br>To: Orhan Strum<br>To_Title: SVP/COO<br>To_Dep: Executive<br>Time Sent: 13:31:00<br>","Sub: RE  Impromptu golf vacation   who s in <br>Date: 2014-01-09<br>To: Ada Campo-Corrente<br>To_Title: SVP/CIO<br>To_Dep: Executive<br>Time Sent: 19:42:00<br>","Sub: RE  Impromptu golf vacation   who s in <br>Date: 2014-01-09<br>To: Orhan Strum<br>To_Title: SVP/COO<br>To_Dep: Executive<br>Time Sent: 19:42:00<br>","Sub: RE  Impromptu golf vacation   who s in <br>Date: 2014-01-09<br>To: Sten Sanjorge Jr<br>To_Title: NA<br>To_Dep: NA<br>Time Sent: 19:42:00<br>","Sub: Meeting<br>Date: 2014-01-10<br>To: Varja Lagos<br>To_Title: Badging Office<br>To_Dep: Security<br>Time Sent: 11:05:00<br>","Sub: Recommend a good vacation spot <br>Date: 2014-01-13<br>To: Orhan Strum<br>To_Title: SVP/COO<br>To_Dep: Executive<br>Time Sent: 13:50:00<br>","Sub: Recommend a good vacation spot <br>Date: 2014-01-13<br>To: Ada Campo-Corrente<br>To_Title: SVP/CIO<br>To_Dep: Executive<br>Time Sent: 13:50:00<br>","Sub: Recommend a good vacation spot <br>Date: 2014-01-13<br>To: Sten Sanjorge Jr<br>To_Title: NA<br>To_Dep: NA<br>Time Sent: 13:50:00<br>","Sub: Operational efficiencies<br>Date: 2014-01-14<br>To: Sten Sanjorge Jr<br>To_Title: NA<br>To_Dep: NA<br>Time Sent: 13:07:00<br>","Sub: Impact of local politics on profit margin<br>Date: 2014-01-14<br>To: Ada Campo-Corrente<br>To_Title: SVP/CIO<br>To_Dep: Executive<br>Time Sent: 13:39:00<br>","Sub: Impact of local politics on profit margin<br>Date: 2014-01-14<br>To: Orhan Strum<br>To_Title: SVP/COO<br>To_Dep: Executive<br>Time Sent: 13:39:00<br>","Sub: Impact of local politics on profit margin<br>Date: 2014-01-14<br>To: Ingrid Barranco<br>To_Title: SVP/CFO<br>To_Dep: Executive<br>Time Sent: 13:39:00<br>","Sub: RE  Impact of local politics on profit margin<br>Date: 2014-01-14<br>To: Ada Campo-Corrente<br>To_Title: SVP/CIO<br>To_Dep: Executive<br>Time Sent: 15:24:00<br>","Sub: RE  Impact of local politics on profit margin<br>Date: 2014-01-14<br>To: Orhan Strum<br>To_Title: SVP/COO<br>To_Dep: Executive<br>Time Sent: 15:24:00<br>","Sub: RE  Impact of local politics on profit margin<br>Date: 2014-01-14<br>To: Ingrid Barranco<br>To_Title: SVP/CFO<br>To_Dep: Executive<br>Time Sent: 15:24:00<br>","Sub: RE  Maximizing quarterly profits<br>Date: 2014-01-14<br>To: Orhan Strum<br>To_Title: SVP/COO<br>To_Dep: Executive<br>Time Sent: 16:02:00<br>","Sub: RE  Impact of local politics on profit margin<br>Date: 2014-01-14<br>To: Ada Campo-Corrente<br>To_Title: SVP/CIO<br>To_Dep: Executive<br>Time Sent: 16:13:00<br>","Sub: RE  Impact of local politics on profit margin<br>Date: 2014-01-14<br>To: Orhan Strum<br>To_Title: SVP/COO<br>To_Dep: Executive<br>Time Sent: 16:13:00<br>","Sub: RE  Impact of local politics on profit margin<br>Date: 2014-01-14<br>To: Ingrid Barranco<br>To_Title: SVP/CFO<br>To_Dep: Executive<br>Time Sent: 16:13:00<br>","Sub: RE  Yearly numbers looking good<br>Date: 2014-01-15<br>To: Sten Sanjorge Jr<br>To_Title: NA<br>To_Dep: NA<br>Time Sent: 17:59:00<br>","Sub: RE  Yearly numbers looking good<br>Date: 2014-01-15<br>To: Ada Campo-Corrente<br>To_Title: SVP/CIO<br>To_Dep: Executive<br>Time Sent: 17:59:00<br>","Sub: RE  Yearly numbers looking good<br>Date: 2014-01-15<br>To: Orhan Strum<br>To_Title: SVP/COO<br>To_Dep: Executive<br>Time Sent: 17:59:00<br>","Sub: RE  Yearly numbers looking good<br>Date: 2014-01-15<br>To: Sten Sanjorge Jr<br>To_Title: NA<br>To_Dep: NA<br>Time Sent: 18:35:00<br>","Sub: RE  Yearly numbers looking good<br>Date: 2014-01-15<br>To: Ada Campo-Corrente<br>To_Title: SVP/CIO<br>To_Dep: Executive<br>Time Sent: 18:35:00<br>","Sub: RE  Yearly numbers looking good<br>Date: 2014-01-15<br>To: Orhan Strum<br>To_Title: SVP/COO<br>To_Dep: Executive<br>Time Sent: 18:35:00<br>","Sub: RE  Recommend a good vacation spot <br>Date: 2014-01-16<br>To: Sten Sanjorge Jr<br>To_Title: NA<br>To_Dep: NA<br>Time Sent: 12:58:00<br>","Sub: RE  Recommend a good vacation spot <br>Date: 2014-01-16<br>To: Ada Campo-Corrente<br>To_Title: SVP/CIO<br>To_Dep: Executive<br>Time Sent: 12:58:00<br>","Sub: Managing perceptions about the IPO<br>Date: 2014-01-17<br>To: Sten Sanjorge Jr<br>To_Title: NA<br>To_Dep: NA<br>Time Sent: 08:52:00<br>","Sub: Managing perceptions about the IPO<br>Date: 2014-01-17<br>To: Ada Campo-Corrente<br>To_Title: SVP/CIO<br>To_Dep: Executive<br>Time Sent: 08:52:00<br>","Sub: Managing perceptions about the IPO<br>Date: 2014-01-17<br>To: Ingrid Barranco<br>To_Title: SVP/CFO<br>To_Dep: Executive<br>Time Sent: 08:52:00<br>","Sub: RE  Favor   water plants please next month<br>Date: 2014-01-17<br>To: Orhan Strum<br>To_Title: SVP/COO<br>To_Dep: Executive<br>Time Sent: 16:05:00<br>"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"transparent","opacity":0.6,"size":7.55905511811024,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"}},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[49140,49140,49140],"y":[1,4,3],"text":"","type":"scatter","mode":"lines","line":{"width":0.755905511811024,"color":"rgba(248,118,109,1)","dash":"solid"},"hoveron":"points","name":"Impact of local politics on profit margin","legendgroup":"Impact of local politics on profit margin","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[31920,31920,31920],"y":[5,1,3],"text":"","type":"scatter","mode":"lines","line":{"width":0.755905511811024,"color":"rgba(225,138,0,1)","dash":"solid"},"hoveron":"points","name":"Managing perceptions about the IPO","legendgroup":"Managing perceptions about the IPO","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[39900],"y":[6],"text":"","type":"scatter","mode":"lines","line":{"width":0.755905511811024,"color":"rgba(190,156,0,1)","dash":"solid"},"hoveron":"points","name":"Meeting","legendgroup":"Meeting","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[47220],"y":[5],"text":"","type":"scatter","mode":"lines","line":{"width":0.755905511811024,"color":"rgba(140,171,0,1)","dash":"solid"},"hoveron":"points","name":"Operational efficiencies","legendgroup":"Operational efficiencies","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[57900],"y":[4],"text":"","type":"scatter","mode":"lines","line":{"width":0.755905511811024,"color":"rgba(36,183,0,1)","dash":"solid"},"hoveron":"points","name":"RE  Favor   water plants please next month","legendgroup":"RE  Favor   water plants please next month","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[42060,42060,42060,48660,48660,48660,55440,55440,55440,58380,58380,58380],"y":[5,1,4,5,1,4,1,4,3,1,4,3],"text":"","type":"scatter","mode":"lines","line":{"width":0.755905511811024,"color":"rgba(0,190,112,1)","dash":"solid"},"hoveron":"points","name":"RE  Impact of local politics on profit margin","legendgroup":"RE  Impact of local politics on profit margin","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[70920,70920,70920],"y":[1,4,5],"text":"","type":"scatter","mode":"lines","line":{"width":0.755905511811024,"color":"rgba(0,193,171,1)","dash":"solid"},"hoveron":"points","name":"RE  Impromptu golf vacation   who s in ","legendgroup":"RE  Impromptu golf vacation   who s in ","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[46560,51540,53820],"y":[4,4,4],"text":"","type":"scatter","mode":"lines","line":{"width":0.755905511811024,"color":"rgba(0,187,218,1)","dash":"solid"},"hoveron":"points","name":"RE  IPO","legendgroup":"RE  IPO","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[42780,43620],"y":[2,2],"text":"","type":"scatter","mode":"lines","line":{"width":0.755905511811024,"color":"rgba(0,172,252,1)","dash":"solid"},"hoveron":"points","name":"RE  Late for meeting","legendgroup":"RE  Late for meeting","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[57720],"y":[4],"text":"","type":"scatter","mode":"lines","line":{"width":0.755905511811024,"color":"rgba(139,147,255,1)","dash":"solid"},"hoveron":"points","name":"RE  Maximizing quarterly profits","legendgroup":"RE  Maximizing quarterly profits","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[46680,46680],"y":[5,1],"text":"","type":"scatter","mode":"lines","line":{"width":0.755905511811024,"color":"rgba(213,117,254,1)","dash":"solid"},"hoveron":"points","name":"RE  Recommend a good vacation spot ","legendgroup":"RE  Recommend a good vacation spot ","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[64740,64740,64740,66900,66900,66900],"y":[5,1,4,5,1,4],"text":"","type":"scatter","mode":"lines","line":{"width":0.755905511811024,"color":"rgba(249,98,221,1)","dash":"solid"},"hoveron":"points","name":"RE  Yearly numbers looking good","legendgroup":"RE  Yearly numbers looking good","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[49800,49800,49800],"y":[4,1,5],"text":"","type":"scatter","mode":"lines","line":{"width":0.755905511811024,"color":"rgba(255,101,172,1)","dash":"solid"},"hoveron":"points","name":"Recommend a good vacation spot ","legendgroup":"Recommend a good vacation spot ","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":46.4690743046907,"r":7.30593607305936,"b":41.8264840182648,"l":116.164383561644},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"title":{"text":"Willem Vasco-Pais Executive,Environmental Safety Advisor","font":{"color":"rgba(0,0,0,1)","family":"","size":18.5969281859693},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[29970,72870],"tickmode":"array","ticktext":["10:00:00","12:00:00","14:00:00","16:00:00","18:00:00","20:00:00"],"tickvals":[36000,43200,50400,57600,64800,72000],"categoryorder":"array","categoryarray":["10:00:00","12:00:00","14:00:00","16:00:00","18:00:00","20:00:00"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"y","title":{"text":"Time","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.4,6.6],"tickmode":"array","ticktext":["Ada Campo-Corrente","Inga Ferro","Ingrid Barranco","Orhan Strum","Sten Sanjorge Jr","Varja Lagos"],"tickvals":[1,2,3,4,5,6],"categoryorder":"array","categoryarray":["Ada Campo-Corrente","Inga Ferro","Ingrid Barranco","Orhan Strum","Sten Sanjorge Jr","Varja Lagos"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(240,240,240,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"x","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"","size":10.6268161062682},"y":0.959399606299213},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","showSendToCloud":false},"source":"A","attrs":{"315c39b4626":{"text":{},"x":{},"y":{},"type":"scatter"},"315c49683c8d":{"colour":{},"x":{},"y":{}}},"cur_data":"315c39b4626","visdat":{"315c39b4626":["function (y) ","x"],"315c49683c8d":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 </div>
 <h3 id="creating-the-age-comparison-plot">Creating the Age Comparison Plot</h3>
 <ol type="1">

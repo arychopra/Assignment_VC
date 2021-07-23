@@ -576,7 +576,7 @@ clean_news_before_count <- df.news %>%
                             summarise(count = n()) %>%
                             ungroup()
 
-sample_n(clean_news_before_count,10)
+knitr::kable(sample_n(clean_news_before_count,10), "simple")
 ```
 
 2. Create the correlation dataframe
@@ -587,7 +587,8 @@ newsgroup_cors <- clean_news_before_count %>%
                                word, 
                                count, 
                                sort = TRUE)
-sample_n(newsgroup_cors,5)
+
+knitr::kable(sample_n(newsgroup_cors,5), "simple")
 ```
 
 3. Creating the ggplot object
@@ -843,6 +844,8 @@ visNetwork(data$nodes,data$edges) %>% visEdges(arrows = "middle")
 
 ### Understanding the Author's Links
 
+1. Create the Author table
+
 ```{r author_links,message=F, warning=F}
 
 author_links <- df.news %>% 
@@ -852,26 +855,34 @@ author_links <- df.news %>%
                 rename("from" = "AUTHOR",
                        "to"="SOURCE",
                        "value"="Count")
+knitr::kable(head(author_links,5))
+```
 
+2. Create the visNetwork object
+
+```{r}
 g_author <- graph_from_data_frame(author_links, directed=F)
 
 data_author <- toVisNetworkData(g_author) 
 
 
-data_author$nodes$color <- ifelse(data_author$nodes$id %in% c("The Explainer", 
-                                                              "Athena Speaks", 
-                                                              "News Desk",
-                                                              "The Abila Post"),
-                                                              "#ffff00",
-                                                      ifelse(data_author$nodes$id %in% c("Kronos Star"),
-                                                             "#7be141",
-                                                             ifelse(data_author$nodes$id %in% c("News Online Today",
-                                                              "Homeland Illumination",
-                                                              "All News Today"),
-                                                              "#97c2fc",
-                                                              "#e0e0e0")
-                                                             )
-                                                      )
+data_author$nodes$color <- ifelse(data_author$nodes$id %in% 
+                                    c("The Explainer", 
+                                      "Athena Speaks", 
+                                      "News Desk",
+                                      "The Abila Post"),
+                                      "#ffff00",
+                                  ifelse(data_author$nodes$id %in% 
+                                           c("Kronos Star"),
+                                         "#7be141",
+                                         ifelse(data_author$nodes$id %in% 
+                                                  c("News Online Today",
+                                                    "Homeland Illumination",
+                                                    "All News Today"),
+                                                "#97c2fc",
+                                                "#e0e0e0")
+                                          )
+                                 )
 
 visNetwork(data_author$nodes, 
            data_author$edges) %>% 
@@ -966,9 +977,7 @@ sample_n(tf_idf,5)
 ```{r,message=F, warning=F}
 wc_comms <- TextComm_e(text_network = text_network_before)
 
-wc_comms %>% 
-  group_by(Membership) %>% 
-  sample_n(2)
+knitr::kable(wc_comms %>% group_by(Membership) %>% sample_n(2))
 ```
 
 3. Join to the `tf_idf` dataframe
@@ -978,7 +987,7 @@ com_tf_idf <- inner_join(tf_idf,
                          wc_comms, 
                          by=c("SOURCE")
                          )
-
+knitr::kable(sample_n(com_tf_idf %>% ungroup(),5))
 ```
 
 4. Create the ggplot object
@@ -1049,8 +1058,12 @@ df.news %>%
 
 ## Building the Visuals for Question 2
 
+### Bi-Gram Plots by Source
+
+1. Create the dataframe for the ngrams
+
 ```{r,message=F, warning=F}
-g_before_ngrams2 <- df.news %>% 
+g_before_ngrams <- df.news %>% 
                       filter(1998 <= year(PUBLISHED),
                              year(PUBLISHED)<2014) %>%
                       select(SOURCE, Text) %>% 
@@ -1080,33 +1093,17 @@ g_before_ngrams2 <- df.news %>%
                              "value"="n",
                              "group"="SOURCE")
 
+knitr::kable(sample_n(g_before_ngrams %>% ungroup,5))
 ```
 
 
-```{r,eval=F,message=F, warning=F}
-
-n <- g_before_ngrams2 %>% 
-      ungroup() %>%
-      select(from, to, group) %>% 
-      pivot_longer(cols=c("from","to")) %>% 
-      left_join(get_sentiments("bing"), by=c("value"="word")) %>%
-      replace_na(replace = list(sentiment = "none")) %>%
-      mutate(color = ifelse(sentiment=="negative", "blue", 
-                            ifelse(sentiment=="none", "grey",
-                                   "red"))) %>%
-      select(value, color) %>%
-      rename("id" = "value") %>%
-      group_by(id,color) %>%
-      summarise(n=n())
-```
-
-
+2. Feed into a for-loop to create the plots per source.
 
 ```{r all, message=F, warning=F, eval=F}
 
-for (i in unique(g_before_ngrams2$group)){
+for (i in unique(g_before_ngrams$group)){
   
-      e <- g_before_ngrams2 %>% 
+      e <- g_before_ngrams %>% 
             filter(group ==i)
       
       n <- e %>% 
@@ -1138,19 +1135,16 @@ for (i in unique(g_before_ngrams2$group)){
           visInteraction(multiselect = TRUE)
 
       show(p)
-      
-      
-      
-    
+
 }
 
 ```
 
+3. Extension of the above for-loop to sieve out the primary sources and also identify paired word with key words such as "Gastech", "POK". 
 
+   First a new dataset will be created `g_before_ngrams2` as the line of code, commented out below, is removed. 
 
-
-```{r specific, eval=F}
-
+```{r, message=F, warning=F}
 g_before_ngrams2 <- df.news %>% 
                       filter(1998 <= year(PUBLISHED),
                              year(PUBLISHED)<2014) %>%
@@ -1174,22 +1168,28 @@ g_before_ngrams2 <- df.news %>%
   
   
                       group_by(SOURCE) %>%
-                      #top_n(n=30, wt=n) %>%
+                      #top_n(n=30, wt=n) %>% 
                       relocate(SOURCE, .after = last_col()) %>%
                       rename("from"="word1",
                              "to"="word2",
                              "value"="n",
                              "group"="SOURCE")
+```
+
+For Homeland Illumination, Kronos Star, and The Abila Post, we will use the filter marked as `--1`.
+For The World, and International Times we will use the filter marked as `--2`. 
+
+These filtered datasets will be saved as `g_before_ngrams_specific`
+
+```{r specific, message=F, warning=F}
 
 g_before_ngrams_specific <- g_before_ngrams2 %>% 
-                            filter(group=="International Times")%>%
-                            #filter(from %in% c("pok","elodis","police","government")|to %in% c("pok","elodis","police","government"))
-                            filter(from %in% c("gastech","international", "kronos","sanjorge","pok","elodis","protector")| to %in% c("gastech","international","kronos", "sanjorge","pok","elodis","protector")) 
-                            #filter(from %in% c("people","kronos","pok")|to %in% c("people","kronos", "pok"))
-          
-      e <- g_before_ngrams_specific #%>% 
-            #filter(group=="Homeland Illumination")
-      
+                            filter(group=="International Times") %>% # -- Change
+                            #filter(from %in% c("pok","elodis","police","government")| to %in% c("pok","elodis","police","government")) # -- 1
+                            filter(from %in% c("gastech","international", "kronos","sanjorge","pok","elodis","protector")| to %in% c("gastech","international","kronos", "sanjorge","pok","elodis","protector")) # -- 2
+
+      e <- g_before_ngrams_specific 
+
       n <- e %>% 
             ungroup() %>%
             select(from, to, group) %>% 
@@ -1224,63 +1224,16 @@ g_before_ngrams_specific <- g_before_ngrams2 %>%
                      nodesIdSelection = T
                     ) %>%
           visInteraction(multiselect = TRUE)
+
       
-      
-```
-
-
-```{r,eval=FALSE}
-  g <- graph_from_data_frame(d = e,
-                             directed = T,
-                             vertices = n)
-  g <- simplify(g)
-  size <- betweenness(g)
-  size <- size/700
-
-  nodes_p <- data.frame(id = V(g)$name, 
-                        size =  size,
-                        label=V(g)$name)
-  e_p <- get.data.frame(g, what="edges")
-  
-  
-  visNetwork(nodes = nodes_p, 
-             edges = e_p) %>% visIgraphLayout()#layout = 'layout_nicely')
-  
-```
-
-
-
-```{r,eval=FALSE}
 set.seed(390)
 p
 
 ```
 
+### Word Cloud by Communities 
 
-```{r, eval=F}
-
-for (i in unique(g_before_ngrams2$group)){
-  
-  data <- g_before_ngrams2 %>% 
-          filter(group ==i) %>% 
-          graph_from_data_frame() %>%
-          simplify() %>%
-          toVisNetworkData() 
-
-  p <- visNetwork(data$nodes,
-                  data$edges, main=i
-                  )%>% 
-          visEdges(arrows = "middle") %>%
-          visNodes(size = 30,font = list(size =30) ) %>%
-          visIgraphLayout()
-
-          
-  show(p)
-
-}
-
-```
-
+1. Create a DTM Corpus i.e. Source and their word counts. This would be the same dataset as we created for the correlation plot. 
 
 ```{r,message=F, warning=F}
 
@@ -1295,8 +1248,14 @@ dtm_corpus <- df.news %>%
               group_by(SOURCE, word) %>% 
               summarise(count = n()) %>% 
               inner_join(wc_comms) 
-  
-  
+
+knitr::kable(sample_n(dtm_corpus %>% ungroup(),5))  
+
+```
+
+2. Feed into a for-loop to generate a WordCloud for each of the communities
+
+```{r}
 for (i in unique(dtm_corpus$Membership)){
   
   dtm_model <- dtm_corpus %>% 
@@ -1318,22 +1277,7 @@ for (i in unique(dtm_corpus$Membership)){
                   group_by(topic) %>%
                   top_n(10, beta) %>%
                   ungroup() %>%
-                  mutate(term2 = fct_reorder(term, beta)) # %>%
-                  #ggplot(aes(term2, beta, fill = as.factor(topic))) +
-                  #geom_col(show.legend=F) +
-                  #labs(x="",
-                  #     y="Sources",
-                  #     title=paste(unlist(sources), collapse = ', '))+
-                  #facet_wrap(~topic, scales = "free_y") +
-                  #coord_flip() +
-                  #theme(
-                  #  panel.background = element_rect(fill="white"),
-                  #  panel.grid.major.x = element_line("#d6d6d6"),
-                  #  axis.text.x = element_text(color='black'),
-                  #  plot.title = element_text(size=12, margin=margin(0,0,30,0)),
-                  #  strip.background = element_rect(fill="white",colour = "black")
-      
-                  #)
+                  mutate(term2 = fct_reorder(term, beta)) 
   
   p <- ggwordcloud(word_probs$term, 
                    freq = word_probs$beta, 
@@ -1342,14 +1286,12 @@ for (i in unique(dtm_corpus$Membership)){
             subtitle = paste(unlist(sources), collapse = ', ')) +
        theme(plot.title = element_text(hjust = 0.5, size=14),
              plot.subtitle = element_text(hjust = 0.5, size=12))
-  show(p)
+  #show(p)
   #ggsave(paste('images/5-1-6-',i,".png",sep = ''))
 
 }
 
 ```
-
-
 
 ### Building the Visuals for Question 3
 

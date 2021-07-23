@@ -556,8 +556,12 @@ set.seed(99)
 VisTextNet_e(text_network_2014, label_degree_cut = 0) 
 ```
 
+### Creating the Correlation Plot of Sources
 
-Correlation Plot
+The correlation plot will give an idea of the most similiar new sources based on the word and their counts. <br>
+As we did before, they will be split into two time periods, while the latter is more for exploration purposes. 
+
+1. Create the dataframe of the counts
 
 ```{r corrplot1, message=F, warning=F}
 clean_news_before_count <- df.news %>% 
@@ -569,37 +573,60 @@ clean_news_before_count <- df.news %>%
                             unnest_tokens(word, Text) %>%
                             anti_join(stop_words2) %>%
                             group_by(SOURCE, word) %>% 
-                            summarise(count = n())
+                            summarise(count = n()) %>%
+                            ungroup()
 
+sample_n(clean_news_before_count,10)
+```
+
+2. Create the correlation dataframe
+
+```{r, message=F, warning=F}
 newsgroup_cors <- clean_news_before_count %>%
                   pairwise_cor(SOURCE, 
                                word, 
                                count, 
                                sort = TRUE)
-
-corr_plot_before <- ggplot(newsgroup_cors) +
-                      geom_tile(aes(x=item1, y=item2, fill=correlation)) +
-                      theme(axis.text.x = element_text(angle = 90, 
-                                                       vjust = 0.5,
-                                                       hjust=1)) + 
-                      paletteer::scale_fill_paletteer_c("viridis::plasma") +
-                      labs(x = "",
-                           y=" ", 
-                           title = "Correlations of New Sources from 1998 to 2014")
-
+sample_n(newsgroup_cors,5)
 ```
 
+3. Creating the ggplot object
+
+```{r}
+corr_plot_before <- ggplot(newsgroup_cors) +
+                      geom_tile(aes(x=item1, y=item2, fill=correlation)) +
+                      scale_fill_distiller(palette = "Spectral") +
+                      labs(x = "",
+                           y=" ", 
+                           title = "Correlations of New Sources from 1998 to 2014",
+                           fill = "Correlation") +
+                      theme(axis.text.x = element_text(angle = 90, 
+                                                       vjust = 0.5,
+                                                       hjust=1), 
+                            panel.background = element_rect(fill="white"),
+                            panel.grid.major.y = element_blank(),
+                            panel.grid.major.x = element_blank(),
+                            axis.ticks = element_line(color = "grey"),
+                            plot.title = element_text(size=15)
+                            ) #+
+                      #ggsave(filename = "images/1-corrplot.png",
+                      #       width = 20, 
+                      #       units = "cm")
+corr_plot_before
+```
+
+4. Repeat the same for 2014
 
 ```{r corrplot2, message=F, warning=F}
-clean_news_2014_count      <- df.news %>% 
-                            filter(year(PUBLISHED) == 2014, month(PUBLISHED)==1) %>%
-                            select(SOURCE, Text) %>% 
-                            mutate(Text = gsub("\\d+", " ", Text)) %>%
-                            mutate(Text = str_to_lower(Text)) %>%
-                            unnest_tokens(word, Text) %>%
-                            anti_join(stop_words2) %>%
-                            group_by(SOURCE, word) %>% 
-                            summarise(count = n())
+clean_news_2014_count <- df.news %>% 
+                          filter(year(PUBLISHED) == 2014, month(PUBLISHED)==1) %>%
+                          select(SOURCE, Text) %>% 
+                          mutate(Text = gsub("\\d+", " ", Text)) %>%
+                          mutate(Text = str_to_lower(Text)) %>%
+                          unnest_tokens(word, Text) %>%
+                          anti_join(stop_words2) %>%
+                          group_by(SOURCE, word) %>% 
+                          summarise(count = n())
 
 newsgroup_cors_2014 <- clean_news_2014_count %>%
                         pairwise_cor(SOURCE, 
@@ -611,19 +638,27 @@ corr_plot_2014 <- ggplot(newsgroup_cors_2014) +
                   geom_tile(aes(x=item1, y=item2, fill=correlation)) +
                   theme(axis.text.x = element_text(angle = 90, 
                                                    vjust = 0.5,
-                                                   hjust=1)) +
-                  paletteer::scale_fill_paletteer_c("viridis::plasma") +
+                                                   hjust=1)) + 
+                  scale_fill_distiller(palette = "Spectral") +
                   labs(x = "",
                        y=" ", 
-                       title = "Correlations of New Sources in 2014")
+                       title = "Correlations of New Sources in 2014",
+                       fill = "Correlation") +
+                  theme(panel.background = element_rect(fill="white"),
+                        panel.grid.major.y = element_blank(),
+                        panel.grid.major.x = element_blank(),
+                        axis.ticks = element_line(color = "grey"),
+                        plot.title = element_text(size=15)
+                        ) #+
+                  #ggsave(filename = "images/1-corrplot2.png",
+                  #       width = 20, 
+                  #       units = "cm")
+#corr_plot_2014
 
 ```
 
 
-
-N Grams
-
-```{r ngram_bf, warning=F, message=F}
+```{r ngram_bf, warning=F, message=F, eval=F,echo=F}
 wc_comms <- TextComm_e(text_network = text_network_before)
 
 g_before_ngrams <- df.news %>% 
@@ -662,7 +697,7 @@ add <- g_before_ngrams %>%
 ```
 
 
-```{r vis_ngram_bf_group, eval=F}
+```{r vis_ngram_bf_group, eval=F, echo=F}
 
 data_1 <- add %>% 
   filter(Membership ==1) %>% 
@@ -721,7 +756,8 @@ visNetwork(data_5$nodes,data_5$edges) %>%
 
 ```
 
-```{r ngram_2014, warning=F, message=F}
+
+```{r ngram_2014, warning=F, message=F, eval=F,echo=F}
 wc_comms_2 <- TextComm_e(text_network = text_network_2014)
 
 g_2014_ngrams <- df.news %>% 
@@ -759,7 +795,7 @@ add2 <- g_2014_ngrams %>%
 ```
 
 
-```{r vis_ngram_2014, eval=F}
+```{r vis_ngram_2014, eval=F, echo=F}
 
 data<- add2 %>% 
   filter(Membership ==1) %>% 
@@ -805,12 +841,13 @@ visNetwork(data$nodes,data$edges) %>% visEdges(arrows = "middle")
 ```
 
 
+### Understanding the Author's Links
+
 ```{r author_links,message=F, warning=F}
 
 author_links <- df.news %>% 
                 group_by(SOURCE,AUTHOR) %>% 
                 summarise(Count = n()) %>% 
-                inner_join(wc_comms, by=c("SOURCE")) %>%
                 drop_na(AUTHOR) %>%
                 rename("from" = "AUTHOR",
                        "to"="SOURCE",
@@ -824,23 +861,28 @@ data_author <- toVisNetworkData(g_author)
 data_author$nodes$color <- ifelse(data_author$nodes$id %in% c("The Explainer", 
                                                               "Athena Speaks", 
                                                               "News Desk",
-                                                              "The Abila Post",
-                                                              "Kronos Star",
-                                                              "News Online Today",
+                                                              "The Abila Post"),
+                                                              "#ffff00",
+                                                      ifelse(data_author$nodes$id %in% c("Kronos Star"),
+                                                             "#7be141",
+                                                             ifelse(data_author$nodes$id %in% c("News Online Today",
                                                               "Homeland Illumination",
-                                                              "All News Today"), 
-                                  "#e88bc3", 
-                                  "#b7e697")
+                                                              "All News Today"),
+                                                              "#97c2fc",
+                                                              "#e0e0e0")
+                                                             )
+                                                      )
 
-data_author$edges$color = "grey"
-visNetwork(data_author$nodes, data_author$edges) %>% 
+visNetwork(data_author$nodes, 
+           data_author$edges) %>% 
   visIgraphLayout() %>% 
-  visNodes(font = list(size =18))
+  visNodes(font = list(size =18), 
+           size = 20)
 
 ```
 
 
-```{r location_links}
+```{r location_links, eval=F, echo=F}
 
 location_links <- df.news %>% 
                   group_by(SOURCE,LOCATION) %>% 
@@ -872,8 +914,14 @@ visNetwork(data_loc$nodes, data_loc$edges) %>%
 
 ```
 
+### TF-IDF of News sources
 
-```{r reorder_func}
+1. Set up the re-order func that is able to sort the facet's in descending order
+
+   ![Link](https://github.com/dgrtwo/drlib/blob/master/R/reorder_within.R)
+   
+```{r reorder_func, message=F, warning=F}
+
 reorder_within <- function(x, by, within, fun = mean, sep = "___", ...) {
   new_x <- paste(x, within, sep = sep)
   stats::reorder(new_x, by, FUN = fun)
@@ -892,9 +940,9 @@ scale_y_reordered <- function(..., sep = "___") {
 
 ```
 
+1. Create the TF-IDF Dataframe using the `tidytext` package:
 
 ```{r tf-idf,message=F, warning=F}
-
 
 tf_idf <- df.news %>% 
           filter(1998 <= year(PUBLISHED),
@@ -910,73 +958,96 @@ tf_idf <- df.news %>%
           group_by(SOURCE) %>%
           top_n(7,wt=tf_idf) 
 
+sample_n(tf_idf,5)
+```
+
+2. Using the `TextComm_e` function earlier, we will create a dataframe of the communities
+
+```{r,message=F, warning=F}
+wc_comms <- TextComm_e(text_network = text_network_before)
+
+wc_comms %>% 
+  group_by(Membership) %>% 
+  sample_n(2)
+```
+
+3. Join to the `tf_idf` dataframe
+
+```{r,message=F, warning=F}
 com_tf_idf <- inner_join(tf_idf, 
                          wc_comms, 
-                         by=c("SOURCE"))
-
-p <- com_tf_idf %>% 
-  ggplot(aes(reorder_within(word, 
-                            tf_idf, 
-                            SOURCE),
-             tf_idf,
-             fill = Membership)) +
-  geom_bar(stat = 'identity',color='black', size=0.1) +
-  scale_x_reordered() +
-  coord_flip() + 
-  facet_wrap(~SOURCE, scales = "free_y", ncol = 7) + 
-  scale_fill_manual(values=c("1"='#97c2fc',
-                              "2"="#7be141",
-                              "3"="#ffff00",
-                              "4"='#fb7e81',
-                              "5"='#eb7df4')) +
-  labs(x='',y='', title = "TF-IDF") +
-  theme(axis.title.x = element_blank(),
-        axis.text.x = element_blank(),
-        axis.ticks.x = element_blank(),
-        panel.background = element_rect(fill="white"),
-        strip.background =element_rect(fill="white"),
-        plot.title = element_text(size=16, margin=margin(0,0,5,0), hjust=0.5)
-        )
-
+                         by=c("SOURCE")
+                         )
 
 ```
 
+4. Create the ggplot object
 
+```{r,message=F, warning=F}
+p <- com_tf_idf %>% 
+      ggplot(aes(reorder_within(word, 
+                            tf_idf, 
+                            SOURCE),
+                 tf_idf,
+                 fill = Membership)) +
+      geom_bar(stat = 'identity',color='black', size=0.1) +
+      scale_x_reordered() +
+      coord_flip() + 
+      facet_wrap(~SOURCE, scales = "free_y", ncol = 7) + 
+      scale_fill_manual(values=c("1"='#97c2fc',
+                                  "2"="#7be141",
+                                  "3"="#ffff00",
+                                  "4"='#fb7e81',
+                                  "5"='#eb7df4')) +
+      labs(x='',y='', title = "TF-IDF") +
+      theme(axis.title.x = element_blank(),
+            axis.text.x = element_blank(),
+            axis.ticks.x = element_blank(),
+            panel.background = element_rect(fill="white"),
+            strip.background =element_rect(fill="white"),
+            plot.title = element_text(size=16, margin=margin(0,0,5,0), hjust=0.5)
+            )
+
+#p
+
+```
+
+### Average No. of Words Per Source
 
 ```{r words,message=F, warning=F}
 
 df.news %>% 
-  filter(1998 <= year(PUBLISHED), year(PUBLISHED)<2014) %>%
-  unnest_tokens(word,Text) %>%
-  filter(!(SOURCE %in% c("Tethys News", "Centrum Sentinel", "Modern Rubicon"))) %>%
-  group_by(SOURCE) %>% 
-  count(FILE, SOURCE) %>%
-  summarise(avg_word = mean(n)) %>%
-  ungroup() %>%
-  left_join(wc_comms) %>%
-  arrange(Membership, desc(avg_word)) %>%
-  mutate(SOURCE2 = factor(SOURCE, levels=SOURCE)) %>%
-  ggplot(aes(avg_word,SOURCE2,fill=Membership)) +
-  geom_col(color='black', size=0.5) + 
-  scale_fill_manual(values=c("1"='#97c2fc',
-                              "2"="#7be141",
-                              "3"="#ffff00",
-                              "4"='#fb7e81',
-                              "5"='#eb7df4')) +
-  labs(x = "Average No. of Words",
-       y = element_blank(),
-       title = "Average No. of Words in each News Source") +
-  theme(panel.background = element_rect(fill="white"),
-        panel.grid.major.x = element_line("#d6d6d6"),
-        axis.text = element_text(size = 10, color="black"),
-        plot.title = element_text(size=15, margin=margin(0,0,30,0))
-        ) +
-  ggsave('images/5-1-2.png')
+    filter(1998 <= year(PUBLISHED), year(PUBLISHED)<2014) %>%
+    unnest_tokens(word,Text) %>%
+    filter(!(SOURCE %in% c("Tethys News", "Centrum Sentinel", "Modern Rubicon"))) %>%
+    group_by(SOURCE) %>% 
+    count(FILE, SOURCE) %>%
+    summarise(avg_word = mean(n)) %>%
+    ungroup() %>%
+    left_join(wc_comms) %>%
+    arrange(Membership, desc(avg_word)) %>%
+    mutate(SOURCE2 = factor(SOURCE, levels=SOURCE)) %>%
+    ggplot(aes(avg_word,SOURCE2,fill=Membership)) +
+    geom_col(color='black', size=0.5) + 
+    scale_fill_manual(values=c("1"='#97c2fc',
+                                "2"="#7be141",
+                                "3"="#ffff00",
+                                "4"='#fb7e81',
+                                "5"='#eb7df4')) +
+    labs(x = "Average No. of Words",
+         y = element_blank(),
+         title = "Average No. of Words in each News Source") +
+    theme(panel.background = element_rect(fill="white"),
+          panel.grid.major.x = element_line("#d6d6d6"),
+          axis.text = element_text(size = 10, color="black"),
+          plot.title = element_text(size=15, margin=margin(0,0,30,0))
+          ) #+
+    #ggsave('images/5-1-2.png')
 
 ```
 
 
-### Building the Visuals for Question 2
+## Building the Visuals for Question 2
 
 ```{r,message=F, warning=F}
 g_before_ngrams2 <- df.news %>% 

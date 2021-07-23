@@ -571,7 +571,10 @@ clean_news_before_count <- df.news %>%
                             summarise(count = n()) %>%
                             ungroup()
 
-knitr::kable(sample_n(clean_news_before_count,10), "simple")
+knitr::kable(sample_n(clean_news_before_count,10), "simple") %>%
+  kableExtra:: kable_paper("hover", 
+                           full_width = F,
+                           html_font = "helvetica")
 ```
 
 2. Create the correlation dataframe
@@ -583,7 +586,10 @@ newsgroup_cors <- clean_news_before_count %>%
                                count, 
                                sort = TRUE)
 
-knitr::kable(sample_n(newsgroup_cors,5), "simple")
+knitr::kable(sample_n(newsgroup_cors,5), "simple") %>%
+  kableExtra:: kable_paper("hover", 
+                           full_width = F,
+                           html_font = "helvetica")
 ```
 
 3. Creating the ggplot object
@@ -608,7 +614,7 @@ corr_plot_before <- ggplot(newsgroup_cors) +
                       #ggsave(filename = "images/1-corrplot.png",
                       #       width = 20, 
                       #       units = "cm")
-corr_plot_before
+#corr_plot_before
 ```
 
 4. Repeat the same for 2014
@@ -850,12 +856,15 @@ author_links <- df.news %>%
                 rename("from" = "AUTHOR",
                        "to"="SOURCE",
                        "value"="Count")
-knitr::kable(head(author_links,5))
+knitr::kable(head(author_links,5)) %>%
+  kableExtra:: kable_paper("hover", 
+                           full_width = F,
+                           html_font = "helvetica")
 ```
 
 2. Create the visNetwork object
 
-```{r}
+```{r, eval=F}
 g_author <- graph_from_data_frame(author_links, directed=F)
 
 data_author <- toVisNetworkData(g_author) 
@@ -924,7 +933,7 @@ visNetwork(data_loc$nodes, data_loc$edges) %>%
 
 1. Set up the re-order func that is able to sort the facet's in descending order
 
-   ![Link](https://github.com/dgrtwo/drlib/blob/master/R/reorder_within.R)
+![Link](https://github.com/dgrtwo/drlib/blob/master/R/reorder_within.R)
    
 ```{r reorder_func, message=F, warning=F}
 
@@ -946,7 +955,7 @@ scale_y_reordered <- function(..., sep = "___") {
 
 ```
 
-1. Create the TF-IDF Dataframe using the `tidytext` package:
+2. Create the TF-IDF Dataframe using the `tidytext` package:
 
 ```{r tf-idf,message=F, warning=F}
 
@@ -964,7 +973,11 @@ tf_idf <- df.news %>%
           group_by(SOURCE) %>%
           top_n(7,wt=tf_idf) 
 
-sample_n(tf_idf,5)
+knitr::kable(sample_n(tf_idf,5)) %>%
+  kableExtra:: kable_paper("hover", 
+                           full_width = F,
+                           html_font = "helvetica")
+
 ```
 
 2. Using the `TextComm_e` function earlier, we will create a dataframe of the communities
@@ -972,7 +985,10 @@ sample_n(tf_idf,5)
 ```{r,message=F, warning=F}
 wc_comms <- TextComm_e(text_network = text_network_before)
 
-knitr::kable(wc_comms %>% group_by(Membership) %>% sample_n(2))
+knitr::kable(wc_comms %>% group_by(Membership) %>% sample_n(2)) %>%
+  kableExtra:: kable_paper("hover", 
+                           full_width = F,
+                           html_font = "helvetica")
 ```
 
 3. Join to the `tf_idf` dataframe
@@ -982,7 +998,10 @@ com_tf_idf <- inner_join(tf_idf,
                          wc_comms, 
                          by=c("SOURCE")
                          )
-knitr::kable(sample_n(com_tf_idf %>% ungroup(),5))
+knitr::kable(sample_n(com_tf_idf %>% ungroup(),5)) %>%
+  kableExtra:: kable_paper("hover", 
+                           full_width = F,
+                           html_font = "helvetica")
 ```
 
 4. Create the ggplot object
@@ -1009,7 +1028,9 @@ p <- com_tf_idf %>%
             axis.ticks.x = element_blank(),
             panel.background = element_rect(fill="white"),
             strip.background =element_rect(fill="white"),
-            plot.title = element_text(size=16, margin=margin(0,0,5,0), hjust=0.5)
+            plot.title = element_text(size=16, 
+                                      margin=margin(0,0,5,0), 
+                                      hjust=0.5)
             )
 
 #p
@@ -1018,7 +1039,7 @@ p <- com_tf_idf %>%
 
 ### Average No. of Words Per Source
 
-```{r words,message=F, warning=F}
+```{r words,message=F, warning=F, include=T}
 
 df.news %>% 
     filter(1998 <= year(PUBLISHED), year(PUBLISHED)<2014) %>%
@@ -1088,7 +1109,10 @@ g_before_ngrams <- df.news %>%
                              "value"="n",
                              "group"="SOURCE")
 
-knitr::kable(sample_n(g_before_ngrams %>% ungroup,5))
+knitr::kable(sample_n(g_before_ngrams %>% ungroup,5)) %>%
+  kableExtra:: kable_paper("hover", 
+                           full_width = F,
+                           html_font = "helvetica")
 ```
 
 
@@ -1180,8 +1204,32 @@ These filtered datasets will be saved as `g_before_ngrams_specific`
 
 g_before_ngrams_specific <- g_before_ngrams2 %>% 
                             filter(group=="International Times") %>% # -- Change
-                            #filter(from %in% c("pok","elodis","police","government")| to %in% c("pok","elodis","police","government")) # -- 1
-                            filter(from %in% c("gastech","international", "kronos","sanjorge","pok","elodis","protector")| to %in% c("gastech","international","kronos", "sanjorge","pok","elodis","protector")) # -- 2
+                            #filter(from %in% c("pok",
+                            #                   "elodis",
+                            #                   "police",
+                            #                   "government") | 
+                            #       to %in% c("pok",
+                            #                 "elodis",
+                            #                 "police",
+                            #                 "government")
+                            #       ) # -- 1
+
+  
+                            filter(from %in% c("gastech",
+                                               "international",
+                                               "kronos",
+                                               "sanjorge",
+                                               "pok",
+                                               "elodis",
+                                               "protector")|
+                                     to %in%
+                                     c("gastech",
+                                       "international",
+                                       "kronos", 
+                                       "sanjorge",
+                                       "pok",
+                                       "elodis",
+                                       "protector")) # -- 2
 
       e <- g_before_ngrams_specific 
 
@@ -1191,9 +1239,13 @@ g_before_ngrams_specific <- g_before_ngrams2 %>%
             pivot_longer(cols=c("from","to")) %>% 
             left_join(get_sentiments("bing"), by=c("value"="word")) %>%
             replace_na(replace = list(sentiment = "none")) %>%
-            mutate(color.background = ifelse(sentiment=="negative", "blue", 
-                                ifelse(sentiment=="none", "grey",
-                                       "red"))) %>%
+            mutate(color.background = ifelse(sentiment=="negative", 
+                                             "blue",
+                                             ifelse(sentiment=="none", 
+                                                    "grey",
+                                                    "red")
+                                             )
+                   ) %>%
             select(value, color.background) %>%
             rename("id" = "value") %>%
             group_by(id,color.background) %>%
@@ -1244,7 +1296,10 @@ dtm_corpus <- df.news %>%
               summarise(count = n()) %>% 
               inner_join(wc_comms) 
 
-knitr::kable(sample_n(dtm_corpus %>% ungroup(),5), caption = "Snapshot of dtm_corpus")  
+knitr::kable(sample_n(dtm_corpus %>% ungroup(),5)) %>%
+  kableExtra:: kable_paper("hover", 
+                           full_width = F,
+                           html_font = "helvetica")
 
 ```
 
@@ -1290,7 +1345,7 @@ for (i in unique(dtm_corpus$Membership)){
 
 ## Building the Visuals for Question 3
 
-### Creating the email Network, communities by Department
+### Email Network (Communities by Department)
 
 This network will show an overview of the employees and conversations within their departments. 
 
@@ -1309,7 +1364,10 @@ links <- df.emails %>%
           summarise(count=n()) %>%
           rename(weight = count)
 
-knitr::kable(head(links,5))
+knitr::kable(head(links,5)) %>%
+  kableExtra:: kable_paper("hover", 
+                           full_width = F,
+                           html_font = "helvetica")
 ```
 
 Nodes:
@@ -1324,7 +1382,10 @@ nodes_df <- data.frame(id = unique(c(links$From, links$To))) %>%
                    department = CurrentEmploymentType) %>%
             replace_na(list(department = "Executive", 
                             title = "CEO"))
-knitr::kable(head(nodes_df,5))
+knitr::kable(head(nodes_df,5)) %>%
+  kableExtra:: kable_paper("hover", 
+                           full_width = F,
+                           html_font = "helvetica")
 
 ```
 
@@ -1529,7 +1590,9 @@ visNetwork(nodes3, edges3) %>%
 ```
 
 
-### Creating the email Network, communities by Weight i.e. frequency of email correspondence
+### Email Network (Communities by Weight)
+
+The communities are created by weight i.e. the frequency of email correspondence. 
 
 ```{r, warning=F, message=F}
 
@@ -1564,7 +1627,7 @@ visNetwork(nodes_wt, edges_wt) %>%
 ```
 
 
-### Creating the email Network, communites by Text
+### Email Network (Communities by Text)
 
 1. First, we create the dataframe below `emails_grouped`. This dataframe contains email correspondence with cleaned and tokenized text. 
 
@@ -1588,8 +1651,16 @@ emails_grouped<- df.emails %>%
                   rename(group = CurrentEmploymentType) %>%
                   replace_na(replace=list(From_dep = "Executive"))
 
-knitr::kable(sample_n(emails_grouped %>% ungroup(),5))
+
+knitr::kable(head(emails_grouped %>% ungroup(),5)) %>%
+  kableExtra:: kable_paper("hover", 
+                           full_width = F,
+                           html_font = "helvetica") %>%
+  kableExtra::column_spec(column = 3, width_max="7cm",extra_css = "overflow-x: scroll")
+
+
 ```
+
 
 2. Create the Text Network
 
@@ -1765,7 +1836,7 @@ set.seed(390)
 VisTextNet_e_2(email_text_nt, df = df.emp)
 ```
 
-### Create the Age Plot
+### Creating the Email Conversation Plot
 
 ```{r,warning=F, message=F, echo=F,eval=F}
 
@@ -1805,7 +1876,8 @@ x_full <- df.emails %>%
 knitr::kable(head(x_full,5)) %>% 
   kableExtra:: kable_paper("hover", 
                            full_width = F,
-                           html_font = "helvetica")
+                           html_font = "helvetica") %>%
+  kableExtra::column_spec(column = 1:12, width_max="1cm",extra_css = "overflow-x: scroll")
 ```
 
 
@@ -1887,7 +1959,7 @@ age_df <- df.emp %>%
 
 3. Create the ggplot object
 
-```{r}
+```{r, eval=F, include=T}
 age_df %>% 
     ggplot(aes(x = Approx_age, y= FullName2)) +
     geom_point(aes(color = CurrentEmploymentType), size=5)  +
@@ -2066,14 +2138,14 @@ df.emp <- df.emp %>%
 
 2. Two charts will be created, one for Kronos and the other for Tethys. The code line marks `--1` and `--2` will be changed to create the new charts.
 
-```{r army_gg,warning=F, message=F}
+```{r army_gg,warning=F, message=F, include=T, eval=F}
 mil_data<-df.emp %>%
           filter(!is.na(MilitaryDischargeYear)) %>%
           mutate(ArmyLoc =  ifelse(str_detect(MilitaryServiceBranch,"Kronos"),"Kronos","Tethys")) %>%
           filter(ArmyLoc == "Kronos")
 
 mil_data %>%
-ggplot(aes(y = FullName, x = MilitaryStartYear)) + 
+  ggplot(aes(y = FullName, x = MilitaryStartYear)) + 
   geom_point(size=2, color="#81b879") +
   geom_point(aes(MilitaryDischargeYear), color="#769ab5", size=2) +
   geom_segment(aes(x=MilitaryStartYear, xend=MilitaryDischargeYear, y=FullName,yend=FullName), size=0.5, alpha=0.7) +
@@ -2093,7 +2165,7 @@ ggplot(aes(y = FullName, x = MilitaryStartYear)) +
 
 ### Creating the Year Joined Chart
 
-```{r join_gg, warning=F,message=F}
+```{r join_gg, warning=F,message=F, eval=F}
 year_labels <- unique(substr(sort(year(df.emp$CurrentEmploymentStartDate)),3,4))
 year_labels[1] <- "1990"
 year_labels[20] <- "2013"

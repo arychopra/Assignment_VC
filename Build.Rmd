@@ -1249,7 +1249,7 @@ dtm_corpus <- df.news %>%
               summarise(count = n()) %>% 
               inner_join(wc_comms) 
 
-knitr::kable(sample_n(dtm_corpus %>% ungroup(),5))  
+knitr::kable(sample_n(dtm_corpus %>% ungroup(),5), caption = "Snapshot of dtm_corpus")  
 
 ```
 
@@ -1293,8 +1293,15 @@ for (i in unique(dtm_corpus$Membership)){
 
 ```
 
-### Building the Visuals for Question 3
+## Building the Visuals for Question 3
 
+### Creating the email Network, communities by Department
+
+This network will show an overview of the employees and conversations within their departments. 
+
+1. First we will set up the links, `links` , and nodes, `nodes_df`
+
+Links: 
 
 ```{r}
 links <- df.emails %>% 
@@ -1307,6 +1314,12 @@ links <- df.emails %>%
           summarise(count=n()) %>%
           rename(weight = count)
 
+knitr::kable(head(links,5))
+```
+
+Nodes:
+
+```{r}
 nodes_df <- data.frame(id = unique(c(links$From, links$To))) %>%
             left_join(df.emp, by = c("id"="FullName")) %>% 
             select(c(id, 
@@ -1316,10 +1329,11 @@ nodes_df <- data.frame(id = unique(c(links$From, links$To))) %>%
                    department = CurrentEmploymentType) %>%
             replace_na(list(department = "Executive", 
                             title = "CEO"))
+knitr::kable(head(nodes_df,5))
+
 ```
 
-
-Department Network: 
+2. Next, the following code chunk will create the visNetwork
 
 ```{r, warning=F, message=F}
 
@@ -1340,7 +1354,9 @@ edges$value <- links$weight
 #edges$color.highlight <- "red"
 
 nodes$color.highlight.background <- "brown"
-nodes <- nodes %>% mutate(font.size = 25, font.weight= 1000)
+
+nodes <- nodes %>% mutate(font.size = 25, 
+                          font.weight= 1000)
 
 
 lnodes <- data.frame(shape = rep('square',6),
@@ -1427,20 +1443,12 @@ lnodes <- data.frame(shape = rep('square',6),
 ```
 
 
-```{r}
+```{r, echo=F, message=F, warning=F}
 set.seed(333)
 p
 ```
 
-
-
-Centrality Based Networks
-
-
-Sizing by Betweeness Centrality
-
-
-```{r, warning=F, message=F, echo=F}
+```{r betweeness, warning=F, message=F, echo=F}
 email_network3 <- graph_from_data_frame(d = links, 
                                         vertices = nodes_df, 
                                         directed = F)
@@ -1468,11 +1476,7 @@ q<-visNetwork(nodes2, edges2) %>%
 q
 ```
 
-
-Sizing by Eigenvalue Centrality
-
-
-```{r, warning=F, message=F, echo=F}
+```{r eigenvalue, warning=F, message=F, echo=F}
 email_network4 <- graph_from_data_frame(d = links, 
                                         vertices = nodes_df, 
                                         directed = T)
@@ -1497,11 +1501,7 @@ visNetwork(nodes3, edges3) %>%
   visLegend(enabled = T)
 ```
 
-
-Seeing Closeness
-
-
-```{r, eval=FALSE, warning=F, message=F, echo=F}
+```{r closeness, eval=FALSE, warning=F, message=F, echo=F}
 email_network4 <- graph_from_data_frame(d = links, 
                                         vertices = nodes_df, 
                                         directed = FALSE)
@@ -1533,25 +1533,29 @@ visNetwork(nodes3, edges3) %>%
 ```
 
 
-Communities based on Weights
-
+### Creating the email Network, communities by Weight i.e. frequency of email correspondence
 
 ```{r, warning=F, message=F}
-email_network4 <- graph_from_data_frame(d = links, 
-                                        vertices = nodes_df, 
-                                        directed = T)
 
-w_comm <- edge.betweenness.community(email_network4, weights = E(email_network4)$weight)
+email_network_wt <- graph_from_data_frame(d = links, 
+                                          vertices = nodes_df, 
+                                          directed = T)
 
-nodes3 <- data.frame(id = V(email_network4)$name, 
-                     title = V(email_network4)$title, 
-                     group = factor(w_comm$membership))
+wt_comm <- edge.betweenness.community(email_network_wt, 
+                                     weights = E(email_network_wt)$weight)
 
-edges3 <- get.data.frame(email_network4, what="edges")[1:2]
-nodes3$color.highlight.background <- "brown"
-nodes3 <- nodes3 %>% mutate(font.size = 25, font.weight= 1000)
+nodes_wt <- data.frame(id = V(email_network_wt)$name, 
+                       title = V(email_network_wt)$title, 
+                       group = factor(wt_comm$membership))
 
-visNetwork(nodes3, edges3) %>%
+edges_wt <- get.data.frame(email_network_wt, what="edges")[1:2]
+
+nodes_wt$color.highlight.background <- "brown"
+nodes_wt <- nodes_wt %>% 
+              mutate(font.size = 25,
+                     font.weight= 1000)
+
+visNetwork(nodes_wt, edges_wt) %>%
   visOptions(highlightNearest = TRUE, 
              nodesIdSelection = T,
              selectedBy = "group"
@@ -1559,55 +1563,17 @@ visNetwork(nodes3, edges3) %>%
   visEdges(width = 0.2) %>% 
   visIgraphLayout(layout = 'layout_nicely') %>%
   visInteraction(multiselect = T) %>%
-      visGroups(groupname = "Executive", 
-                # Red
-                color = list(border = "#FA0A10", 
-                             background = "#FB7E81", 
-                             highlight = list(border = "#FA0A10", background = "#FB7E81"),
-                             hover = list(background = "#FA0A10", border = "#FB7E81")
-                             )) %>%
-      visGroups(groupname = "Facilities", 
-                # Green
-                color = list(border = "#41A906", 
-                             background = "#7BE141", 
-                             highlight = list(border = "#41A906", background = "#7BE141"),
-                             hover = list(background = "#41A906", border = "#7BE141")
-                             )) %>%
-      visGroups(groupname = "Engineering", 
-                # Yellow
-                    color = list(border = "#FFA500", 
-                                 background = "#FFFF00", 
-                                 highlight = list(border = "#FFA500", background = "#FFFF00"),
-                                 hover = list(background = "#FFA500", border = "#FFFF00")
-                                 )) %>%
-      visGroups(groupname = "Administration", 
-                # Blue
-                    color = list(border = "#2B7CE9", 
-                                 background = "#97C2FC", 
-                                 highlight = list(border = "#2B7CE9", background = "#97C2FC"),
-                                 hover = list(background = "#2B7CE9", border = "#97C2FC")
-                                 )) %>%
-      visGroups(groupname = "Security", 
-                # Purple
-                    color = list(border = "#7C29F0", 
-                                 background = "#AD85E4", 
-                                 highlight = list(border = "#7C29F0", background = "#AD85E4"),
-                                 hover = list(background = "#7C29F0", border = "#AD85E4")
-                                 )) %>%
-      visGroups(groupname = "Information Technology", 
-                # Magenta
-                    color = list(border = "#E129F0", 
-                                 background = "#EB7DF4", 
-                                 highlight = list(border = "#E129F0", background = "#EB7DF4"),
-                                 hover = list(background = "#E129F0", border = "#EB7DF4")
-                                 )) %>%
-     visLegend()
+  visLegend(F)
 
 ```
 
-Communities based on Conversation
+
+### Creating the email Network, communites by Text
+
+1. First, we create the dataframe below `emails_grouped`. This dataframe contains email correspondence with cleaned and tokenized text. 
 
 ```{r,warning=F, message=F}
+
 emails_grouped<- df.emails %>% 
                   mutate(To = str_split(To,pattern=',')) %>% 
                   unnest_longer(To) %>% 
@@ -1626,23 +1592,25 @@ emails_grouped<- df.emails %>%
                   rename(group = CurrentEmploymentType) %>%
                   replace_na(replace=list(From_dep = "Executive"))
 
-
+knitr::kable(sample_n(emails_grouped %>% ungroup(),5))
 ```
 
+2. Create the Text Network
 
 ```{r,warning=F, message=F}
 
-
-x <- PrepText(emails_grouped, 
+email_text <- PrepText(emails_grouped, 
                   groupvar = "From", 
                   textvar = "word", 
                   node_type = "groups", 
                   tokenizer = "words", 
                   compound_nouns = TRUE)
 
-x_c <- CreateTextnet(x)
+email_text_nt <- CreateTextnet(email_text)
 
 ```
+
+3. Re-edit the `VisTextNet` function to include the coloring of nodes by department
 
 ```{r VisTextChanged_email, message=F, warning=F}
 VisTextNet_e_2 <- function(text_network, alpha = .25, label_degree_cut=0, df){
@@ -1793,16 +1761,19 @@ VisTextNet_e_2 <- function(text_network, alpha = .25, label_degree_cut=0, df){
 }
 ```
 
+4. Create visNetwork object
 
 ```{r,warning=F, message=F}
 set.seed(390)
 
-VisTextNet_e_2(x_c, df=df.emp)
+VisTextNet_e_2(email_text_nt, df = df.emp)
 ```
 
+### Create the Age Plot
 
-```{r,warning=F, message=F}
-x<- df.emails %>% 
+```{r,warning=F, message=F, echo=F,eval=F}
+
+x <- df.emails %>% 
           mutate(To = str_split(To,pattern=',')) %>% 
           unnest_longer(To) %>% 
           mutate(To = str_trim(To),
@@ -1813,9 +1784,15 @@ x<- df.emails %>%
           group_by(From,To, Date.Date) %>%
           count(word) %>% 
           arrange(desc(n)) %>%
-         left_join(select(df.emp, FullName, CurrentEmploymentType, CurrentEmploymentTitle), by=c("From"="FullName")) %>%
-         replace_na(list(CurrentEmploymentType = "Executive", CurrentEmploymentTitle="CEO"))
+          left_join(select(df.emp, FullName, CurrentEmploymentType, CurrentEmploymentTitle), by=c("From"="FullName")) %>%
+          replace_na(list(CurrentEmploymentType = "Executive", CurrentEmploymentTitle="CEO"))
+```
 
+1. Create a new dataframe `x_full`.
+
+This dataframe will contain the department each of the employee in the email is from.
+
+```{r}
 x_full <- df.emails %>% 
           mutate(To = str_split(To,pattern=',')) %>% 
           unnest_longer(To) %>% 
@@ -1828,11 +1805,12 @@ x_full <- df.emails %>%
           rename(From_title = CurrentEmploymentTitle, From_dep =  CurrentEmploymentType) %>% 
           left_join(select(df.emp, FullName, CurrentEmploymentTitle, CurrentEmploymentType), by = c("To"="FullName")) %>%
           rename(To_title = CurrentEmploymentTitle, To_dep =  CurrentEmploymentType)
-  
+
+knitr::kable(head(x_full,5))
 ```
 
 
-```{r}
+```{r, echo=FALSE, eval=F}
 x_full <- x_full %>% 
           mutate(s = str_replace(Subject, 
                                  "RE: ",
@@ -1840,16 +1818,12 @@ x_full <- x_full %>%
                  ) 
 ```
 
+2. Feed into a for-loop to generate the conversation plot_ly object for each employee
 
-
-```{r first, eval=F,warning=F, message=F}
-
+```{r first, warning=F, message=F}
 
 for (i in sort(unique(c(x_full$From, x_full$To)))){
   
-    
-
-    
     dat <- x_full %>%
            filter(From==i)
     
@@ -1881,15 +1855,16 @@ for (i in sort(unique(c(x_full$From, x_full$To)))){
 
     gg <- ggplotly(g, tooltip = c("text")) 
 
-    show(gg)
-  
-    
+    #show(gg)
      
 }
 ```
 
 
+```{r}
+gg
 
+```
 
 
 ```{r,warning=F, message=F}

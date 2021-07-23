@@ -166,7 +166,7 @@ df.emp <- df.emp %>%
 
 ## Loading the Libraries
 
-The following libraries will be loaded:
+The following libraries will be loade to build the visuals. 
 
 ```{r libraries, message=FALSE, warning=FALSE}
 library(ggplot2)
@@ -179,55 +179,98 @@ library(textdata)
 library(igraph)
 library(ggraph)
 library(tidygraph)
-library(corporaexplorer)
+library(corporaexplorer) 
 library(topicmodels)
 library(widyr)
 ```
 
-Corpora Explorer -  To Analyse the Texts by Source
 
-```{r corpora_explorer, eval=FALSE, message=FALSE}
+Corpora Explorer -  To Analyze the Texts by Source
+![GitHub Link](https://kgjerde.github.io/corporaexplorer/)
 
-all_news_data <- df.news %>% 
-                  rename("Date"="PUBLISHED")
+The documents were built into two corpus, one was built according to the source and the other was by the date. 
 
-all_news_data$Text <- paste(all_news_data$Date, "\n", 
-                            all_news_data$AUTHOR, "\n",
-                            all_news_data$NOTE, "\n", 
-                            all_news_data$Text)
-all_news_data <- all_news_data %>% select(-Date)
+The following two code can be run within R markdown to open the Shiny Application for document exploration by key word.
 
-news_corpus <- prepare_data(
-                dataset = all_news_data,
-                date_based_corpus = F,
-                grouping_variable = "SOURCE")
+By source:
 
-explore(news_corpus)
+```{r corpora_explorer, eval=FALSE, message=FALSE, include=T}
+
+all_news_by_source <- df.news %>% 
+                    rename("Date"="PUBLISHED")
+
+# This line of code adds in some details of the document in the document view. 
+
+all_news_by_source$Text <- paste(all_news_by_source$Date, "\n", 
+                                 all_news_by_source$AUTHOR, "\n",
+                                 all_news_by_source$NOTE, "\n", 
+                                 all_news_by_source$Text)
+
+all_news_by_source <- all_news_by_source %>% 
+                      select(-Date)
+
+news_corpus_source <- prepare_data(
+                        dataset = all_news_by_source,
+                        date_based_corpus = F,
+                        grouping_variable = "SOURCE")
+
+explore(news_corpus_source)
 
 ```
 
+Snapshot of Corpus by Source
 
-Corpora Explorer -  To Analyse the Texts by Date
+```{r}
+knitr::include_graphics('images/5-Corpus.png')
+```
 
-```{r corpora_explorer_date, eval=FALSE, message=FALSE}
 
-all_news_data_2 <- df.news %>% 
-                   rename("Date"="PUBLISHED") %>% 
-                   mutate(Date = date(Date))
+By Date: 
 
-all_news_data_2$Text <- paste(all_news_data_2$SOURCE,": \n", all_news_data_2$AUTHOR, "\n", all_news_data_2$Text)
+```{r corpora_explorer_date, eval=FALSE, message=FALSE, include=T}
+
+all_news_by_date <- df.news %>% 
+                      rename("Date"="PUBLISHED") %>% 
+                      mutate(Date = date(Date))
+
+# This line of code adds in some details of the document in the document view. 
+all_news_by_date$Text <- paste(all_news_by_date$SOURCE,
+                               ": \n", 
+                               all_news_by_date$AUTHOR, 
+                               "\n", 
+                               all_news_by_date$Text)
 
 news_corpus_date <- prepare_data(
-                    dataset = all_news_data_2,
-                    date_based_corpus = T,
-                    grouping_variable = "SOURCE")
+                      dataset = all_news_by_date,
+                      date_based_corpus = T,
+                      grouping_variable = "SOURCE")
 
 explore(news_corpus_date)
 
 ```
 
+Snapshot of Corpus by Date
 
-Re-making the functions for building text visuals:
+```{r, echo=F}
+knitr::include_graphics('images/5-Corpus2.png')
+```
+
+## Building the Visuals for Question 1
+
+For building the text network, the visTextNet function was used. 
+
+![Link](https://github.com/cbail/textnets)
+
+The function does the following:
+
+* calculates the term frequency inverse document frequency of each word; 
+* creates a weighted adjacency matrix where the rows and columns are the groups and the cells describe the sum of 
+overlapping TFIDF between them; 
+* creates an igraph object from this adjacency matrix.
+
+### Editing Functions
+
+The functions retrieved from GitHub were re-edited for building the text visuals:
 
 ```{r VisTextChanged, message=F, warning=F}
 VisTextNet_e <- function(text_network, alpha = .25, label_degree_cut=0, betweenness=FALSE){
@@ -286,9 +329,10 @@ VisTextNet_e <- function(text_network, alpha = .25, label_degree_cut=0, betweenn
   pruned <- delete.vertices(pruned, isolates)
   
   # calculate modularity for coloring
-  communities <- cluster_louvain(pruned)
-  #V(pruned)$modularity <- communities$membership
-  #print(communities$membership)
+  communities <- cluster_louvain(pruned) 
+  
+  #Cluster Lovain grouping was used for community detection as any text network is large in nature. 
+  
   
   #calculate betweenness for sizing nodes
   size <- 25 #default 25
@@ -303,6 +347,7 @@ VisTextNet_e <- function(text_network, alpha = .25, label_degree_cut=0, betweenn
   
   V(pruned)$degree <- degree(pruned)
   
+  ## Changed Code: 
   nodes <- data.frame(id = V(pruned)$name, 
                       title = paste0("Degree of Node: <br>",
                                      V(pruned)$degree),
@@ -312,26 +357,25 @@ VisTextNet_e <- function(text_network, alpha = .25, label_degree_cut=0, betweenn
   
   nodes <- nodes[order(nodes$id, decreasing = F),]
   nodes$shadow <- TRUE
-  #nodes$title <- "black"
-  nodes <- nodes %>% mutate(font.size = 20, font.weight= 900)
+  nodes <- nodes %>% mutate(font.size = 20, font.weight= 900) 
   nodes$color.highlight.background <- "brown"
 
   edges <- get.data.frame(pruned, what="edges")[1:2]
   edges$value <- E(pruned)$weight
-  nodes$color.highlight.background <- "brown"
+  nodes$color.highlight.background <- "brown" 
 
   visNetwork(nodes, edges) %>%
     visLayout(randomSeed = 123) %>% 
     visOptions(highlightNearest = TRUE, 
                nodesIdSelection = TRUE, 
                selectedBy = "group") %>% 
-    visNodes(labelHighlightBold = T) %>%
-    #visEdges(color=list(color = 'black', highlight = "brown")) %>%
+    visNodes(labelHighlightBold = T, size=20) %>%
     visIgraphLayout(layout = 'layout.davidson.harel') %>%
     visInteraction(multiselect = TRUE)
 }
 ```
 
+Similarly the Text Communities function was changed so as to return a dataframe of the communities and the names:
 
 ```{r TextCommChanged, message=F, warning=F}
 TextComm_e <- function(text_network, alpha = .25, label_degree_cut=0, betweenness=FALSE){
@@ -389,31 +433,25 @@ TextComm_e <- function(text_network, alpha = .25, label_degree_cut=0, betweennes
   isolates <- V(pruned)[degree(pruned)==0]
   pruned <- delete.vertices(pruned, isolates)
   
-  # calculate modularity for coloring
   communities <- cluster_louvain(pruned)
-  #V(pruned)$modularity <- communities$membership
-  #print(communities$membership)
-  
-  #calculate betweenness for sizing nodes
-  size <- 25 #default 25
-  
-  if(betweenness){
-    size <- betweenness(pruned) 
-    
-    size <- size/0.95
-  }
-  
+
   V(pruned)$community <- communities$membership
   
-  output <- data.frame(cbind(communities$names, communities$membership))
+  ## Changed Code:
+  
+  output <- data.frame(cbind(communities$names, 
+                             communities$membership))
   names(output)<-c("SOURCE","Membership")
+  
   return(output)
 
 }
 ```
 
 
-### Building the Visuals for Question 1
+### Creating the VisNetwork for Texts
+
+1. First, the common words are sieved out. This will included words such as GasTech, POK, that might skew the data.This data frame will be called `common_words`
 
 ```{r, message=F}
 
@@ -423,21 +461,37 @@ common_words <- df.news %>%
                   count(word) %>% 
                   filter(n>200) %>% 
                   mutate(lexicon = "CUSTOM")
+```
 
+2. Bind it to the `stop_words` dataframe
+
+```{r, message=F}
 stop_words2 <- stop_words %>% 
                 bind_rows(common_words)
 
+```
 
+3. Next, we will create two dataframe. One from 1998 - 2014 (for analysis purpose), and the other in 2014(solely for exploratory purpose)
+
+   This is done as new sources such as "Modern Rubicon", "Centrum Sentinel" and "Tethy News" will solely reporting in 2014 i.e. the kidnapping event. 
+   
+   In addition to that, some news sources such as "The International Times" were reporting as early as 1982. 
+   
+   To prevent skewing of the data, the period was split into such.
+   
+   Other notions for the lines of code are marked as comments in the code chunk below:
+   
+```{r, message=F}
 clean_news_before <- df.news %>% 
                       filter(1998 <= year(PUBLISHED),
                              year(PUBLISHED)<2014) %>%
                       select(SOURCE, Text) %>% 
-                      mutate(Text = gsub("\\d+", " ", Text)) %>%
-                      mutate(Text = str_to_lower(Text)) %>%
+                      mutate(Text = gsub("\\d+", " ", Text)) %>% # Remove any digits
+                      mutate(Text = str_to_lower(Text)) %>% # Make all lower case
                       unnest_tokens(word, Text) %>%
-                      anti_join(stop_words2) %>%
+                      anti_join(stop_words2) %>% # antijoin will preserve all words that appear in df.news that do not appear in stop_word
                       group_by(SOURCE) %>% 
-                      summarise(word = paste(word, collapse = ","))
+                      summarise(word = paste(word, collapse = ",")) # So that each new source is a single row and the column word contains all the words across the articules
 
 clean_news_2014 <- df.news %>% 
                     filter(year(PUBLISHED)==2014) %>%
@@ -450,6 +504,58 @@ clean_news_2014 <- df.news %>%
                     summarise(word = paste(word, collapse = ","))
 
 ```
+
+4. Building the Text Network object for the period 1998-2014
+
+```{r txt_ntwk_bf, messsage=F}
+
+text_grouped <- clean_news_before %>% 
+                group_by(SOURCE)
+
+news_before <- PrepText(text_grouped, 
+                         groupvar = "SOURCE", 
+                         textvar = "word", 
+                         node_type = "groups", 
+                         tokenizer = "words", 
+                         pos = "nouns", 
+                         remove_stop_words = TRUE, 
+                         compound_nouns = TRUE)
+
+text_network_before <- CreateTextnet(news_before)
+```
+
+5. Visualising the Text Network
+
+```{r vis_ntwk_bf,messsage=F}
+set.seed(390)
+VisTextNet_e(text_network_before)
+```
+
+
+6. Building the Text Network object for the period 2014
+
+```{r txt_ntwk_2014,message=F, warning=F}
+text_grouped2 <- clean_news_2014 %>% group_by(SOURCE)
+
+new_2014 <- PrepText(text_grouped2, 
+                         groupvar = "SOURCE", 
+                         textvar = "word", 
+                         node_type = "groups", 
+                         tokenizer = "words", 
+                         pos = "nouns", 
+                         remove_stop_words = TRUE, 
+                         compound_nouns = TRUE)
+
+text_network_2014 <- CreateTextnet(new_2014)
+```
+
+7. Visualising the Text Network
+
+```{r vis_ntwk_2014,message=F, warning=F}
+set.seed(99)
+VisTextNet_e(text_network_2014, label_degree_cut = 0) 
+```
+
 
 Correlation Plot
 
@@ -514,54 +620,6 @@ corr_plot_2014 <- ggplot(newsgroup_cors_2014) +
 ```
 
 
-```{r txt_ntwk_bf, messsage=F}
-
-text_grouped <- clean_news_before %>% 
-                group_by(SOURCE)
-
-news_before <- PrepText(text_grouped, 
-                         groupvar = "SOURCE", 
-                         textvar = "word", 
-                         node_type = "groups", 
-                         tokenizer = "words", 
-                         pos = "nouns", 
-                         remove_stop_words = TRUE, 
-                         compound_nouns = TRUE)
-
-text_network_before <- CreateTextnet(news_before)
-```
-
-
-
-```{r vis_ntwk_bf,messsage=F}
-set.seed(390)
-#VisTextNet_e(text_network_before, label_degree_cut = 0, betweenness = T) 
-VisTextNet_e(text_network_before)
-```
-
-
-
-```{r txt_ntwk_2014,message=F, warning=F}
-text_grouped2 <- clean_news_2014 %>% group_by(SOURCE)
-
-new_2014 <- PrepText(text_grouped2, 
-                         groupvar = "SOURCE", 
-                         textvar = "word", 
-                         node_type = "groups", 
-                         tokenizer = "words", 
-                         pos = "nouns", 
-                         remove_stop_words = TRUE, 
-                         compound_nouns = TRUE)
-
-text_network_2014 <- CreateTextnet(new_2014)
-```
-
-
-```{r vis_ntwk_2014,message=F, warning=F}
-set.seed(99)
-VisTextNet_e(text_network_2014, label_degree_cut = 0) 
-VisTextNet_e(text_network_2014,label_degree_cut = 0,betweenness = T) 
-```
 
 N Grams
 

@@ -86,7 +86,7 @@ knitr::opts_chunk$set(tidy.opts=list(blank=FALSE, width.cutoff = 30))
 ```
 
 
-## Question 1
+## Insights for Question 1
 
 Characterising News Sources <br> 
 
@@ -132,9 +132,10 @@ What are the relationships between the primary and derivative sources?
 
 The chart flows below are extracted events that have occurred surrounding GasTech (Hank Fluss's death), APA (Drug dealings) and POK (arrests). 
 
+### Primary Source: The World. 
 
 ```{r}
-knitr::include_graphics('images/5-1-5.png')
+knitr::include_graphics('images/5-TheWorld.png')
 ```
 
 
@@ -152,10 +153,12 @@ knitr::include_graphics('images/5-1-9.png')
 
 Hence the primary source in this cluster is *The World*. 
 
+### Primary Source: Homeland Illumination & Kronos Star
+
 The chart below shows the links between the news sources during the arrests at the Tiskele River in 2005. 
 
 ```{r}
-knitr::include_graphics('images/5-1-6.png')
+knitr::include_graphics('images/5-HomelandIllumination.png')
 ```
 
 
@@ -179,9 +182,10 @@ The Orb and the Wrap and translations of Homeland Illuminations versions. This i
 
 For many such articles, community 1 and 2 are linked. 
 
+### Primary Source: Abila Post 
 
 ```{r}
-knitr::include_graphics('images/5-1-7.png')
+knitr::include_graphics('images/5-KronosStar.png')
 ```
 
 In 2011, POK was declared as a public threat by the Government of Kronos. 
@@ -199,9 +203,10 @@ Central Bulletin is a re-write as the grammatical correctness of the phrase "A S
 
 The derivative sources are: Central Bulletin, News Desk, The Explainer and Athena Speaks. However, The Explainer manages to retain much of the original meaning. 
 
+### Primary Source: International Times
 
 ```{r}
-knitr::include_graphics('images/5-1-8.png')
+knitr::include_graphics('images/5-InternationalTimes.png')
 ```
 
 Community 5's primary source is International Times, as it was the first to publish the article on the drug situation in Abila. 
@@ -210,20 +215,16 @@ As discussed previously, News Online Today, likely an online source, is a short 
 
 
 
-
-### 5.2 Question 2
+## Insights for Question 2
 
 Using Latent Dichrelet Allocations, we have identified the following topics in the different clusters found above.
 
 We can get a general idea of the topics that each of the clusters covers:
 
+
+
 ```{r}
 knitr::include_graphics('images/5-1-6-1.png')
-```
-
-
-```{r}
-knitr::include_graphics('images/5-1-10.png')
 ```
 
 
@@ -239,10 +240,6 @@ knitr::include_graphics('images/5-1-6-2.png')
 
 
 ```{r}
-knitr::include_graphics('images/5-1-11.png')
-```
-
-```{r}
 knitr::include_graphics('images/5-1-11A.png')
 ```
 
@@ -253,24 +250,12 @@ knitr::include_graphics('images/5-1-6-3.png')
 
 
 ```{r}
-knitr::include_graphics('images/5-1-12.png')
-```
-
-
-```{r}
 knitr::include_graphics('images/5-1-12A.png')
 ```
 
 
-
-
 ```{r}
 knitr::include_graphics('images/5-1-6-4.png')
-```
-
-
-```{r}
-knitr::include_graphics('images/5-1-14.png')
 ```
 
 
@@ -285,49 +270,72 @@ knitr::include_graphics('images/5-1-6-5.png')
 
 
 ```{r}
-knitr::include_graphics('images/5-1-13.png')
-```
-
-
-```{r}
 knitr::include_graphics('images/5-1-13A.png')
 ```
 
-### 5.3 Question 3
 
-Department Network
+## Insights for Question 3
 
-```{r}
-knitr::include_graphics('images/5-3-1.png')
-```
-
-
-```{r}
-knitr::include_graphics('images/5-3-4.png')
-```
-
-
-```{r}
-knitr::include_graphics('images/5-3-5.png')
-```
-
-
-```{r}
-knitr::include_graphics('images/5-3-2.png')
-```
-
-
-```{r}
-knitr::include_graphics('images/5-3-3.png')
-```
-
+POK's History
 
 ```{r}
 knitr::include_graphics('images/5-3-6.png')
 ```
 
 
-### 5.4 Question 4
+Department Network
+
+```{r}
+knitr::include_graphics('images/5-Department_Network.png')
+```
+
+
+```{r}
+knitr::include_graphics('images/5-PotentialPOK.png')
+```
+
+```{r}
+knitr::include_graphics('images/5-TextNetwork.png')
+```
+
+
+```{r}
+knitr::include_graphics('images/5-TextNetworkPOK.png')
+```
+
+
+```{r city_tethys}
+knitr::include_graphics('images/5-3-4.png')
+```
+
+
+```{r city_kronos}
+knitr::include_graphics('images/5-3-5.png')
+```
+
+
+```{r army_kronos}
+knitr::include_graphics('images/5-3-2.png')
+```
+
+
+```{r army_tethys}
+knitr::include_graphics('images/5-3-3.png')
+```
+
+
+```{r}
+knitr::include_graphics('images/5-Age.png')
+
+```
+
+
+```{r}
+knitr::include_graphics('images/5-3-7.png')
+
+```
+
+## Question 4
 
 
 

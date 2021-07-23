@@ -101,16 +101,11 @@ df.news <- df.news %>%
 ```
 
 
-```{r, echo=FALSE}
-df.news %>% 
-  distinct(AUTHOR)
-```
-
 
 ```{r, echo=FALSE}
 df.news <- df.news %>% 
             mutate(AUTHOR = str_remove(AUTHOR, "By "))
-df.news %>% distinct(AUTHOR)
+#df.news %>% distinct(AUTHOR)
 ```
 
 
@@ -1448,7 +1443,8 @@ set.seed(333)
 p
 ```
 
-```{r betweeness, warning=F, message=F, echo=F}
+
+```{r betweeness, warning=F, message=F, echo=F, eval=F}
 email_network3 <- graph_from_data_frame(d = links, 
                                         vertices = nodes_df, 
                                         directed = F)
@@ -1476,7 +1472,7 @@ q<-visNetwork(nodes2, edges2) %>%
 q
 ```
 
-```{r eigenvalue, warning=F, message=F, echo=F}
+```{r eigenvalue, warning=F, message=F, echo=F, eval=F}
 email_network4 <- graph_from_data_frame(d = links, 
                                         vertices = nodes_df, 
                                         directed = T)
@@ -1806,7 +1802,10 @@ x_full <- df.emails %>%
           left_join(select(df.emp, FullName, CurrentEmploymentTitle, CurrentEmploymentType), by = c("To"="FullName")) %>%
           rename(To_title = CurrentEmploymentTitle, To_dep =  CurrentEmploymentType)
 
-knitr::kable(head(x_full,5))
+knitr::kable(head(x_full,5)) %>% 
+  kableExtra:: kable_paper("hover", 
+                           full_width = F,
+                           html_font = "helvetica")
 ```
 
 
@@ -1866,6 +1865,9 @@ gg
 
 ```
 
+### Creating the Age Comparison Plot
+
+1. Create the column of the approximate age, which is 2014 - birth year
 
 ```{r,warning=F, message=F}
 df.emp <-df.emp %>% 
@@ -1873,6 +1875,37 @@ df.emp <-df.emp %>%
 
 ```
 
+2. Create an dataframe as follow,`age_df`
+
+```{r, warning=F, message=F}
+
+age_df <- df.emp %>% 
+          select(FullName, Approx_age, CurrentEmploymentType) %>% 
+          mutate(FullName2 = fct_reorder(FullName,CurrentEmploymentType)) %>%
+          mutate(hjust = ifelse(Approx_age >60, 1.05, -0.1)) 
+```
+
+3. Create the ggplot object
+
+```{r}
+age_df %>% 
+    ggplot(aes(x = Approx_age, y= FullName2)) +
+    geom_point(aes(color = CurrentEmploymentType), size=5)  +
+    geom_text(aes(label=FullName2, hjust = hjust), size=3, vjust=0.1)+
+    scale_x_continuous(breaks = c(20,30,40,50,60))+
+    labs(y="",x="Time",title = "Approximate Ages of GasTech Employees", color="Department") +
+    theme(legend.text = element_text(size = 8),
+          panel.background = element_rect(fill="white"),
+          panel.grid.major.x = element_line(color="#c9c9c9", linetype = 3),
+          panel.border = element_rect(color="grey", fill=NA),
+          plot.title = element_text(size=14),
+          axis.text.y = element_blank(),
+          axis.ticks.x  = element_blank(),
+          axis.ticks.y  = element_blank()
+          ) #+
+    #ggsave(filename = 'images/5-Age.png', width = 30, units = "cm")
+
+```
 
 ```{r age_vis,warning=F, message=F, echo=F, eval=F}
 age_link <- df.emp %>%
@@ -1959,6 +1992,7 @@ visNetwork(nodes = data_age$nodes,
 
 ```
 
+### Creating the Citizenship Chart
 
 ```{r city_vis,warning=F, message=F}
 citi_link <- df.emp %>%
@@ -2017,6 +2051,9 @@ visNetwork(nodes = data_citi$nodes,
 
 ```
 
+### Creating the Military Period
+
+1. Create new columns `MilitaryStartYear` and `MilitaryDischargeYear` and add it to the `df.emp` dataframe
 
 ```{r,warning=F, message=F}
 df.emp <- df.emp %>% 
@@ -2027,6 +2064,7 @@ df.emp <- df.emp %>%
           
 ```
 
+2. Two charts will be created, one for Kronos and the other for Tethys. The code line marks `--1` and `--2` will be changed to create the new charts.
 
 ```{r army_gg,warning=F, message=F}
 mil_data<-df.emp %>%
@@ -2053,8 +2091,9 @@ ggplot(aes(y = FullName, x = MilitaryStartYear)) +
 
 ```
 
+### Creating the Year Joined Chart
 
-```{r join_gg}
+```{r join_gg, warning=F,message=F}
 year_labels <- unique(substr(sort(year(df.emp$CurrentEmploymentStartDate)),3,4))
 year_labels[1] <- "1990"
 year_labels[20] <- "2013"
@@ -2067,9 +2106,6 @@ df.emp %>%
     ggplot(aes(x = Year, y= FullName2)) +
     geom_point(aes(color = CurrentEmploymentType), size=2)  +
     geom_text(aes(label=FullName2, hjust =  hjust), size=3) +
-    #scale_x_continuous(breaks = seq(min(year(df.emp$CurrentEmploymentStartDate)), 
-    #                                max(year(df.emp$CurrentEmploymentStartDate)), 
-    #                                by=2))+
     scale_x_continuous(breaks = sort(unique(year(df.emp$CurrentEmploymentStartDate))), labels = year_labels) +
     labs(y="",x="Year",title = "Year Employee of GasTech Joined", color="Department") +
     theme(legend.text = element_text(size = 5),
@@ -2086,8 +2122,7 @@ df.emp %>%
 ```
 
 
-```{r}
-
+```{r, echo=F, eval=F}
 df.emp %>% 
     select(FullName, Approx_age, CurrentEmploymentType) %>% 
     mutate(FullName2 = fct_reorder(FullName,CurrentEmploymentType)) %>%
@@ -2110,8 +2145,7 @@ df.emp %>%
 ```
 
 
-
-```{r,warning=F, message=F}
+```{r,warning=F, message=F,echo=F, eval=F}
 df.emp <- df.emp %>% 
           mutate(army_year = year(MilitaryDischargeDate))
           
@@ -2156,7 +2190,7 @@ p2<-visNetwork(nodes = data_army$nodes,
 ```
 
 
-```{r}
+```{r, echo=F, eval=F}
 set.seed(309)
 p2
 
@@ -2230,10 +2264,6 @@ visNetwork(nodes = data$nodes,
 ```
 
 
-
-
-
-
 ```{r, eval=F, echo=FALSE}
   
 for (i in unique(x$CurrentEmploymentType)){
@@ -2269,7 +2299,6 @@ for (i in unique(x$CurrentEmploymentType)){
 }
 
 ```
-
 
 
 ```{r, eval=F, echo=FALSE}

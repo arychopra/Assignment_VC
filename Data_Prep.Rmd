@@ -424,4 +424,3 @@ df.emp <- df.emp %>%
   unite(FullName, FirstName, LastName, sep=" ", remove=FALSE)
 ```
 
-

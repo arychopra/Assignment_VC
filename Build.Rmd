@@ -1506,91 +1506,6 @@ p
 ```
 
 
-```{r betweeness, warning=F, message=F, echo=F, eval=F}
-email_network3 <- graph_from_data_frame(d = links, 
-                                        vertices = nodes_df, 
-                                        directed = F)
-
-size <- betweenness(email_network3)
-email_network3 <- simplify(email_network3)
-
-
-nodes2 <- data.frame(id = V(email_network3)$name, 
-                     title = V(email_network3)$title, 
-                     group = factor(V(email_network3)$department),
-                     size = size/3)
-
-edges2 <- get.data.frame(email_network3, what="edges")[1:2]
-
-nodes2$color.highlight.background <- "brown"
-
-q<-visNetwork(nodes2, edges2) %>%
-    visOptions(highlightNearest = list(enabled = T, degree=0), 
-               nodesIdSelection = T,
-               selectedBy = "group"
-               ) %>% 
-    visLayout(randomSeed = 123) %>%
-    visIgraphLayout(layout = 'layout.davidson.harel')
-q
-```
-
-```{r eigenvalue, warning=F, message=F, echo=F, eval=F}
-email_network4 <- graph_from_data_frame(d = links, 
-                                        vertices = nodes_df, 
-                                        directed = T)
-
-size <- (eigen_centrality(email_network4)$vector) * 50
-
-nodes3 <- data.frame(id = V(email_network4)$name, 
-                     title = V(email_network4)$title, 
-                     group = factor(V(email_network4)$department),
-                     size = size)
-
-edges3 <- get.data.frame(email_network4, what="edges")[1:2]
-
-visNetwork(nodes3, edges3) %>%
-  visOptions(highlightNearest = TRUE, 
-             nodesIdSelection = T,
-             selectedBy = "group"
-             ) %>% 
-  visEdges(arrows = "middle") %>% 
-  visLayout(randomSeed = 123) %>% 
-  visIgraphLayout(layout = 'layout.davidson.harel') %>%
-  visLegend(enabled = T)
-```
-
-```{r closeness, eval=FALSE, warning=F, message=F, echo=F}
-email_network4 <- graph_from_data_frame(d = links, 
-                                        vertices = nodes_df, 
-                                        directed = FALSE)
-
-#email_network4 <- simplify(email_network4)
-E(email_network4)$width <- closeness(email_network4) * 1000
-
-nodes3 <- data.frame(id = V(email_network4)$name, 
-                     title = V(email_network4)$title, 
-                     group = factor(V(email_network4)$department),
-                     size = size)
-
-#nodes <- nodes[order(nodes$id, decreasing = F),]
-#nodes2$color.highlight.background <- "brown"
-
-edges3 <- get.data.frame(email_network4, what="edges")[1:2]
-
-
-visNetwork(nodes3, edges3) %>%
-  visOptions(highlightNearest = TRUE, 
-             nodesIdSelection = T,
-             selectedBy = "group"
-             ) %>% 
-  visEdges(arrows = "middle") %>% 
-  visLayout(randomSeed = 123) %>% 
-  visIgraphLayout(layout = 'layout.davidson.harel') %>%
-  visLegend(enabled = T)
-
-```
-
-
 ### Email Network (Communities by Weight)
 
 The communities are created by weight i.e. the frequency of email correspondence. 
@@ -1939,8 +1854,7 @@ Example:
 gg
 ```
 
-3. Plot the graph network for that particular subject
-
+3. Create the datatable object
 
 ```{r, warning=F, message=F}
 m <- x_full %>%
@@ -1950,16 +1864,24 @@ m <- x_full %>%
   #arrange(desc(Count))
 
 temp_g <- m %>% 
-            filter(str_detect(s, "lunch"))
+            filter(str_detect(s, "Virus"))
 
-temp_g %>% select(From, To, Date.Date, Date.Time, Subject) %>% DT::datatable(temp_g)
+temp_g %>% 
+  select(From, From_title, To, To_title, Date.Date, Date.Time, Subject) %>% 
+  DT::datatable(temp_g, fillContainer = T)
 
+```
+
+4. Create the VisNetwork Object
+
+```{r}
 temp_g_links <- temp_g %>% 
                   select(From, To, Subject) %>% 
                   rename(group = Subject)
 
 temp_g_nodes <- data.frame(id = unique(c(temp_g$From, temp_g$To)))
 #temp_g_nodes$title <- temp_g_nodes$id
+
 temp_g_nodes <- temp_g_nodes %>% 
                   left_join(select(df.emp, FullName, CurrentEmploymentType), by = c('id' = 'FullName')) %>%
                   rename(group = CurrentEmploymentType)

@@ -311,7 +311,9 @@ The plot below shows that department network as GasTech
 knitr::include_graphics('images/5-Department_Network.png')
 ```
 
+
 Possible members of the POK coud be in the Facilies or Security department, with the exception of Ruscella Mies Haber, who is in the admin department and assistant to the engineering group manager, Lidelse Dedos.
+
 
 ```{r, out.width=700}
 knitr::include_graphics('images/5-PotentialPOK.png')
@@ -361,15 +363,22 @@ knitr::include_graphics('images/5-3-2.png')
 knitr::include_graphics('images/5-3-3.png')
 ```
 
-Isia Vann joined GasTech as soon as he was out of the army. This is quite suspicious as he is a confirmed memeber of the POK. 
+Isia Vann joined GasTech as soon as he was out of the army. This is quite suspicious as he is a confirmed member of the POK. 
 
 We can see that in 2013, many of suspected members joined in 2013 in key areas of Security and Facilities.
 
 ```{r year_joined, out.width=700}
 knitr::include_graphics('images/5-3-7.png')
-
 ```
 
+
+In addition to that, Isia Vann seems to be in a relationship with Rachel Pantanal, the authencity of the relationship from Isia's end could be doubted as she is in a crucial position, being the assistant to the CIO, Ada Campo-Corrente. However, despite Rachel being a citizen of Tethys, she nevertheless forwarded an email by the APA. 
+
+This might indicate a few reasons, she is involved in the APA, they're planning to split the ransom amount or she believes in Isia's cause. 
+
+```{r isia-rachel, out.width=700}
+knitr::include_graphics('images/Email-2.png')
+```
 
 ### APA & The POK
 

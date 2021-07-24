@@ -92,8 +92,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   
   
   <!--  https://schema.org/Article -->
-  <meta property="article:published" itemprop="datePublished" content="2021-07-23"/>
-  <meta property="article:created" itemprop="dateCreated" content="2021-07-23"/>
+  <meta property="article:published" itemprop="datePublished" content="2021-07-25"/>
+  <meta property="article:created" itemprop="dateCreated" content="2021-07-25"/>
   <meta name="article:author" content="Aryah U. Chopra"/>
   
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
@@ -112,7 +112,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Data Preparation"]},{"type":"character","attributes":{},"value":["A new article created using the Distill format.\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Aryah U. Chopra"]},{"type":"character","attributes":{},"value":["https://www.linkedin.com/in/aryahuc/"]}]}]},{"type":"character","attributes":{},"value":["2021-07-23"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","toc"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"logical","attributes":{},"value":[true]}]}]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Data Preparation"]},{"type":"character","attributes":{},"value":["A new article created using the Distill format.\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Aryah U. Chopra"]},{"type":"character","attributes":{},"value":["https://www.linkedin.com/in/aryahuc/"]}]}]},{"type":"character","attributes":{},"value":["2021-07-25"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","toc"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"logical","attributes":{},"value":[true]}]}]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -2454,8 +2454,6 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     color: var(--hover-color, white);
   }</style>
   <!--/radix_placeholder_distill-->
-  <script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
-  <link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
   <script src="site_libs/popper-2.6.0/popper.min.js"></script>
   <link href="site_libs/tippy-6.2.7/tippy.css" rel="stylesheet" />
   <link href="site_libs/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
@@ -2475,7 +2473,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Data Preparation","description":"A new article created using the Distill format.","authors":[{"author":"Aryah U. Chopra","authorURL":"https://www.linkedin.com/in/aryahuc/","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2021-07-23T00:00:00.000+08:00","citationText":"Chopra, 2021"}
+{"title":"Data Preparation","description":"A new article created using the Distill format.","authors":[{"author":"Aryah U. Chopra","authorURL":"https://www.linkedin.com/in/aryahuc/","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2021-07-25T00:00:00.000+08:00","citationText":"Chopra, 2021"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2508,7 +2506,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <div class="d-byline">
   Aryah U. Chopra <a href="https://www.linkedin.com/in/aryahuc/" class="uri">https://www.linkedin.com/in/aryahuc/</a> 
   
-<br/>2021-07-23
+<br/>2021-07-25
 </div>
 
 <div class="d-article">
@@ -2613,6 +2611,7 @@ script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"
 <li>GAStech Kronos Organization Chart (PDF Image)</li>
 <li>Map of Krono (Image)</li>
 </ul>
+<p><a href="https://vast-challenge.github.io/2021/MC1.html">Link to Download Data</a></p>
 <h2 id="news-article-data">News Article Data</h2>
 <p>First, we will load the following libraries for the data clean:</p>
 <div class="layout-chunk" data-layout="l-body">
@@ -2916,7 +2915,9 @@ script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>df.emails</span> <span class='op'>&lt;-</span> <span class='va'>df.emails</span> <span class='op'>%&gt;%</span> <span class='fu'>mutate</span><span class='op'>(</span>nTo <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/lengths.html'>lengths</a></span><span class='op'>(</span><span class='fu'>str_split</span><span class='op'>(</span><span class='va'>To</span>,pattern<span class='op'>=</span><span class='st'>","</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>nTo</span><span class='op'>&lt;=</span><span class='fl'>12</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>df.emails</span> <span class='op'>&lt;-</span> <span class='va'>df.emails</span> <span class='op'>%&gt;%</span> 
+              <span class='fu'>mutate</span><span class='op'>(</span>nTo <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/lengths.html'>lengths</a></span><span class='op'>(</span><span class='fu'>str_split</span><span class='op'>(</span><span class='va'>To</span>,pattern<span class='op'>=</span><span class='st'>","</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+              <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>nTo</span><span class='op'>&lt;=</span><span class='fl'>12</span><span class='op'>)</span>
 </code></pre>
 </div>
 </div>
@@ -2932,137 +2933,13 @@ script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>df.emp</span> <span class='op'>&lt;-</span> <span class='va'>df.emp</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>unite</span><span class='op'>(</span><span class='va'>FullName</span>, <span class='va'>FirstName</span>, <span class='va'>LastName</span>, sep<span class='op'>=</span><span class='st'>" "</span>, remove<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
+            <span class='fu'>unite</span><span class='op'>(</span><span class='va'>FullName</span>, 
+                  <span class='va'>FirstName</span>, 
+                  <span class='va'>LastName</span>, 
+                  sep<span class='op'>=</span><span class='st'>" "</span>, 
+                  remove<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
 </code></pre>
 </div>
-</div>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>df.news</span>,<span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span><span class='fu'>kableExtra</span><span class='fu'>::</span> <span class='fu'><a href='https://rdrr.io/pkg/kableExtra/man/kable_classic.html'>kable_classic_2</a></span><span class='op'>(</span>full_width <span class='op'>=</span> <span class='cn'>F</span><span class='op'>)</span>
-</code></pre>
-</div>
-<table class=" lightable-classic-2" style='font-family: "Arial Narrow", "Source Sans Pro", sans-serif; width: auto !important; margin-left: auto; margin-right: auto;'>
-<thead>
-<tr>
-<th style="text-align:left;">
-FILE
-</th>
-<th style="text-align:left;">
-SOURCE
-</th>
-<th style="text-align:left;">
-TITLE
-</th>
-<th style="text-align:left;">
-PUBLISHED
-</th>
-<th style="text-align:left;">
-LOCATION
-</th>
-<th style="text-align:left;">
-TEXT
-</th>
-<th style="text-align:left;">
-AUTHOR
-</th>
-<th style="text-align:left;">
-NOTE
-</th>
-<th style="text-align:left;">
-Text
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-121.txt
-</td>
-<td style="text-align:left;">
-All News Today
-</td>
-<td style="text-align:left;">
-POK PROTESTS END IN ARRESTS
-</td>
-<td style="text-align:left;">
-2005-04-06
-</td>
-<td style="text-align:left;">
-ELODIS, KRONOS
-</td>
-<td style="text-align:left;">
-Fifteen members of the Protectors of Kronos (POK) activist organization were arrested by Kronos federal police yesterday following an dispute at the gates of the Tiskele Bend GAStech facility. Swaying, the protesters sang well-known protest songs, including “This is Our Land”, “Songs of the Farmer” and “The Weavers of our Homeland” When the federal police began arresting the POK protesters, they moved in an orderly fashion into the waiting police van, singing the entire time.
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-Fifteen members of the Protectors of Kronos POK activist organization were arrested by Kronos federal police yesterday following an dispute at the gates of the Tiskele Bend GAStech facility Swaying the protesters sang well known protest songs including This is Our Land Songs of the Farmer and The Weavers of our Homeland When the federal police began arresting the POK protesters they moved in an orderly fashion into the waiting police van singing the entire time
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-135.txt
-</td>
-<td style="text-align:left;">
-All News Today
-</td>
-<td style="text-align:left;">
-RALLY SCHEDULED IN SUPPORT OF INCREASED GOVERNMENT ACCOUNTABILITY
-</td>
-<td style="text-align:left;">
-2012-04-09
-</td>
-<td style="text-align:left;">
-ABILA, KRONOS
-</td>
-<td style="text-align:left;">
-Silvia Marek, leader of the Protectors of Kronos social action organization is appealing to the citizens of Kronos to join her for a day of peaceful protest tomorrow. Marek asks all concerned citizens to join her to bring awareness to the problem of political corruption and favoritism pervasive in the offices of the government of Kronos. “I’m calling for an end to the heinous corruption, the nepotism and the favoritism displayed by our elected officials”
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-Silvia Marek leader of the Protectors of Kronos social action organization is appealing to the citizens of Kronos to join her for a day of peaceful protest tomorrow Marek asks all concerned citizens to join her to bring awareness to the problem of political corruption and favoritism pervasive in the offices of the government of Kronos I m calling for an end to the heinous corruption the nepotism and the favoritism displayed by our elected officials
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-152.txt
-</td>
-<td style="text-align:left;">
-All News Today
-</td>
-<td style="text-align:left;">
-LACK OF DETAILS MARS GOVERNMENT INTENTIONS
-</td>
-<td style="text-align:left;">
-1993-02-02
-</td>
-<td style="text-align:left;">
-ABILA, KRONOS
-</td>
-<td style="text-align:left;">
-In a glitzy press conference late last year President Luis Araullo announced a historic set of tax incentives intended to bring foreign investment to Kronos under the guise creating jobs, providing cheap energy and building infrastructure. Following the 86-14 vote last month the Minister of the Interior Tomas Sarto lauded the decision as “landmark” and “bettering the people”. The crafters of these revolutionary measures neglected to include a detailed plan about how this windfall would benefit everyday Kronosians. When the first payment from these foreign company lands in the state coffers, how will these funds be dispersed?
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-In a glitzy press conference late last year President Luis Araullo announced a historic set of tax incentives intended to bring foreign investment to Kronos under the guise creating jobs providing cheap energy and building infrastructure Following the 86 14 vote last month the Minister of the Interior Tomas Sarto lauded the decision as landmark and bettering the people The crafters of these revolutionary measures neglected to include a detailed plan about how this windfall would benefit everyday Kronosians When the first payment from these foreign company lands in the state coffers how will these funds be dispersed
-</td>
-</tr>
-</tbody>
-</table>
 </div>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->

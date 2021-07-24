@@ -100,6 +100,8 @@ The MC1 has the following data/documents:
 * GAStech Kronos Organization Chart (PDF Image) 
 * Map of Krono (Image)
 
+[Link to Download Data](https://vast-challenge.github.io/2021/MC1.html)
+
 ## News Article Data
 
 First, we will load the following libraries for the data clean:
@@ -111,6 +113,7 @@ library(DT)
 ```
 
 ### Merging the New Articles
+
 The MC1 folder contains a folder `News Articles`. Within it are subfolders containing the 29 different news sources, within which are articles in a text format. 
 
 We will merge all of the new article's contents into a tidy format for text processing later, this means that each row will represent one observation and each column, one variable. 
@@ -375,8 +378,6 @@ df.news <- df.news %>% mutate(Text = str_replace_all(TEXT, "[[:punct:]]", " "))
 ```
 
 
-
-
 ## Employee Emails
 
 We will save the email conversation CSV as `df.emails` dataframe using the `readr` package
@@ -405,7 +406,9 @@ df.emails <- df.emails %>%
 ```
 
 ```{r}
-df.emails <- df.emails %>% mutate(nTo = lengths(str_split(To,pattern=","))) %>% filter(nTo<=12)
+df.emails <- df.emails %>% 
+              mutate(nTo = lengths(str_split(To,pattern=","))) %>% 
+              filter(nTo<=12)
 
 ```
 
@@ -421,6 +424,10 @@ A second column with their joined names will be created
 
 ```{r}
 df.emp <- df.emp %>% 
-  unite(FullName, FirstName, LastName, sep=" ", remove=FALSE)
+            unite(FullName, 
+                  FirstName, 
+                  LastName, 
+                  sep=" ", 
+                  remove=FALSE)
 ```
 

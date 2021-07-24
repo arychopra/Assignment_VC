@@ -94,14 +94,16 @@ In this analysis, we have used network and text analysis to understand the compl
 
 ## 2 Literature Review
 
-Mini challenge 1 deals with most text and network data, hence the literature review would be a critique of such analysis/visuals.
+Mini challenge 1 deals with most text and network data, hence the literature review would be a critique of such analysis/visuals. 
 
-**Analysis of News Articles**
+All references can be found here: [Link](https://www.cs.umd.edu/hcil/varepository/VAST%20Challenge%202014/challenges/MC1%20-%20Disappearance%20at%20GASTech/)
 
-Reference: VAST Challenge 2014, Submission:  Tianjin University, China (Entry Name: TJU-Cai-MC1)
+### Analysis of News Articles
+
+<u>Reference: VAST Challenge 2014, Submission:  Tianjin University, China (Entry Name: TJU-Cai-MC1)</u>
 
 
-```{r}
+```{r, out.width=700}
 knitr::include_graphics('images/LitRev-1.png')
 ```
 
@@ -120,53 +122,59 @@ Aesthetics:
 * The writer has screenshot the entire background of the software, this is not required, as it creates redundant ink. 
 
 
-Reference: VAST Challenge 2014, Submission:  Peking University (Entry Name: PKU-WANG-MC1)
+<u>Reference: VAST Challenge 2014, Submission:  Peking University (Entry Name: PKU-WANG-MC1)</u>
 
-```{r}
+```{r, out.width=700}
 knitr::include_graphics('images/LitRev-2.png')
 ```
 
 Clarity:
+
 * The writer has uploaded an image with redundant pieces of information that is possibly quoting data out of context or simply unreadable. 
 
 Aesthetics:
+
 * There is too much white space as all the information we require is in the second half of the image, including the date information. 
 
 
 Another analysis of the submission is mapping the timelines.
 
-```{r}
+```{r, out.width=700}
 knitr::include_graphics('images/LitRev-3.png')
 ```
 
 
 Clarity:
+
 * There is an "00:00" timestamp next to the dates of the news articles. THis might create some confusion as the actual timed updates are in the article itself
 * For one of the screenshots, "news292" the time is hidden.
 
-Aesthetics
+Aesthetics:
+
 * The overlapping text boxes create a messy look
 * There is redundant information in the backgroun
 
-**Analysis of Relationship**
+### Analysis of Relationship/Email Networks
 
 
-Reference: VAST Challenge 2014, Submission:  University of Buenos Aires (Entry Name: UBA-Avila-MC1)
+<u>Reference: VAST Challenge 2014, Submission:  University of Buenos Aires (Entry Name: UBA-Avila-MC1)</u>
 
-```{r}
+```{r, out.width=700}
 knitr::include_graphics('images/LitRev-5.png')
 ```
 
 Clarity:
+
 * The arrows leading out from Elian Karel makes it seem as though Mandor Vann and Silvia Marek are both leaders, however, that is not the case. 
 * There is no timeline mentioned in the diagram
 * The text box focuses on a lot on Elian Karel, while the diagram is mapping out the leadership dynamics of the POK. The text box essentially is quoting data out of context. 
 
 Aesthetics:
+
 * There is not much contrast between the white and orange,  and black and maroon. This is a poor choice of colors.
 
 
-```{r}
+```{r, out.width=400}
 knitr::include_graphics('images/LitRev-4.png')
 ```
 
@@ -178,23 +186,25 @@ Clarity:
 It might seem that Silvia Marek, POK's leader after Elian Karel's death, is less important than Lucio Jakab, who is not mentioned in any news articles. 
 
 Aesthetics
-*There is redundant ink i.e. the outermost circle. The use of circles tends to increase non-data ink substantially as it is a shape of bilateral symmetry. A network diagram would be better.
+
+* There is redundant ink i.e. the outermost circle. The use of circles tends to increase non-data ink substantially as it is a shape of bilateral symmetry. A network diagram would be better.
 
 
-```{r}
+```{r, out.width=700}
 knitr::include_graphics('images/LitRev-6.png')
 ```
 
 Clarity:
-* The chart is undirected, it might suggest to the reader that the chart is highlighting relationships rather that email network.
+
+* The chart is undirected, it might suggest to the reader that the chart is highlighting relationships rather that email correspondence which are directional. 
 
 
 Aesthetics:
+
 * The color contrasts are poor
 
-Reference: VAST Challenge 2014, Submission:  Tianjin University, China (Entry Name: TJU-Cai-MC1)
 
-
+<u>Reference: VAST Challenge 2014, Submission:  Tianjin University, China (Entry Name: TJU-Cai-MC1)</u>
 
 ```{r}
 knitr::include_graphics('images/LitRev-8.png')
@@ -202,14 +212,29 @@ knitr::include_graphics('images/LitRev-8.png')
 
 Clarity: 
 
+* The military service does not explicitly show the overlap of the period of military service. 
+* The last names of the GasTech employees could have been highlighted without the need for the background. This creates confusion for the reader as there is data that is out of context
 
-```{r}
+
+Aesthetics:
+
+* The font is unclear and hard to read
+
+```{r, out.width=700}
 knitr::include_graphics('images/LitRev-7.png')
 ```
 
 
 Clarity: 
-* It is unclear what the stars or direction of the emails are
+
+* It is unclear what the stars or direction of the emails are i.e. it is undirected
+* There is no legend provided for the different colored lines
+* The reiteration of the email subjects might create confusion as some of it is directly in line with the conversation tracker
+
+Aesthetics
+
+* There are too many bright warning colors without actually refering to any important piece of information. 
+
 
 
 

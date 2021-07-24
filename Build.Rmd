@@ -2164,7 +2164,9 @@ mil_data %>%
 
 ```
 
+
 ### Creating the Year Joined Chart
+
 
 ```{r join_gg, warning=F,message=F, eval=F}
 year_labels <- unique(substr(sort(year(df.emp$CurrentEmploymentStartDate)),3,4))

@@ -82,9 +82,10 @@ script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"
 
 
 ```{r, echo=FALSE}
-knitr::opts_chunk$set(tidy.opts=list(blank=FALSE, width.cutoff = 30))
+knitr::opts_chunk$set(tidy.opts=list(blank=FALSE, width.cutoff = 30), fig.retina = 2, echo = F)
 ```
 
+**Click on the Images to see an enlarged version**
 
 ## Insights for Question 1
 
@@ -98,6 +99,8 @@ Similar news sources are colored as shown below:
 ```{r}
 knitr::include_graphics('images/5-1-1.png')
 ```
+
+### Characteristics of the News Sources
 
 Average Length of Words
 
@@ -121,18 +124,12 @@ Cluster 4: Across the news sources, the most relevant words are related to the d
 Cluster 5: Across the news sources, the most relevant words are related to the GasTech and the industry. 
 
 
-Centrality 
-
-```{r}
-knitr::include_graphics('images/5-1-4.png')
-```
-
 
 What are the relationships between the primary and derivative sources? 
 
 The chart flows below are extracted events that have occurred surrounding GasTech (Hank Fluss's death), APA (Drug dealings) and POK (arrests). 
 
-### Primary Source: The World. 
+### Primary Source: The World
 
 ```{r}
 knitr::include_graphics('images/5-TheWorld.png')
@@ -221,18 +218,30 @@ Using Latent Dichrelet Allocations, we have identified the following topics in t
 
 We can get a general idea of the topics that each of the clusters covers:
 
+### Cluster 1
 
+Cluster 1, whose primary source is Homeland Illumination, are supporters of the POK. 
+
+The common words, shown in the wordcloud below, tell us that there is a sense of sympathy and support for the citizens of Elodis.
 
 ```{r}
 knitr::include_graphics('images/5-1-6-1.png')
 ```
 
 
+This chart also shows articles that evidently point to new sources in support of POK. 
+
 ```{r}
 knitr::include_graphics('images/5-1-10A.png')
 ```
 
 
+
+### Cluster 2
+
+Cluster 2, whose primary source is Kronos Star, are against the POK. 
+
+The most common word is Kapelou, which refers to both President Kapelou and the Minister of Health. President Kapelou seemed to be against the POK, declaring them as a public threat. Cluster 2 also is more patriotic, often using words such as "our government" and believe that the POK is against the government of Kronos. 
 
 ```{r}
 knitr::include_graphics('images/5-1-6-2.png')
@@ -244,6 +253,10 @@ knitr::include_graphics('images/5-1-11A.png')
 ```
 
 
+### Cluster 3
+
+Cluster 3, whose primary source The Abila Post, also leans towards being against the POK however, they're more balanced.
+
 ```{r}
 knitr::include_graphics('images/5-1-6-3.png')
 ```
@@ -253,6 +266,9 @@ knitr::include_graphics('images/5-1-6-3.png')
 knitr::include_graphics('images/5-1-12A.png')
 ```
 
+### Cluster 4
+
+Cluster 4, whose primary source is International Times, focuses on drug situations in Abila. There are no evident biases.
 
 ```{r}
 knitr::include_graphics('images/5-1-6-4.png')
@@ -263,6 +279,9 @@ knitr::include_graphics('images/5-1-6-4.png')
 knitr::include_graphics('images/5-1-14A.png')
 ```
 
+### Cluster 5
+
+Cluster 4, whose primary source is The World, focuses on largely GasTech. 
 
 ```{r}
 knitr::include_graphics('images/5-1-6-5.png')
@@ -276,14 +295,16 @@ knitr::include_graphics('images/5-1-13A.png')
 
 ## Insights for Question 3
 
-POK's History
+The first and second generations of the POK are largely documented by both the 5-year and 10-year historical documents. However, beyond that, the POK members are not identified.
+
+Based on the last names of the first generation leaders, the possible extended network could be Edward Vann, Loreto Bodrogi, Minke Mies, Ruscella Mies Haber, Hennie Osvaldo, Henk Mies, and Carmine Bodrogi. 
+
 
 ```{r}
 knitr::include_graphics('images/5-3-6.png')
 ```
 
-
-Department Network
+The plot below shows that department network as GasTech
 
 ```{r}
 knitr::include_graphics('images/5-Department_Network.png')
@@ -334,6 +355,9 @@ knitr::include_graphics('images/5-Age.png')
 knitr::include_graphics('images/5-3-7.png')
 
 ```
+
+
+
 
 ## Question 4
 

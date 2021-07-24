@@ -1933,10 +1933,42 @@ for (i in sort(unique(c(x_full$From, x_full$To)))){
 ```
 
 
+Example:
+
 ```{r}
 gg
+```
+
+
+```{r, echo=F, eval=F}
+m <- x_full %>%
+  mutate(s = str_replace(Subject,"RE: ","")) #%>%
+  #group_by(s) %>%
+  #summarise(Count = n()) %>%
+  #arrange(desc(Count))
+
+for (i in unique(m$s)){
+  #print(i)
+  temp_g <- m %>% 
+              filter(s == i) %>%
+              ggplot(aes(x= From, y=To)) + 
+              geom_point(aes(text = sprintf("Sub: %s<br>Date: %s<br>To: %s<br>To_Title: %s<br>To_Dep: %s<br>Time Sent: %s<br>", 
+                                      Subject2, 
+                                      Date.Date, 
+                                      To,
+                                      To_title, 
+                                      To_dep,
+                                      Date.Time), color=factor(Date.Date))) +
+              labs(title=i) +
+              theme(axis.ticks = element_blank())
+  g<- ggplotly(temp_g)
+  show(g)
+  
+  
+}
 
 ```
+
 
 ### Creating the Age Comparison Plot
 
@@ -1955,7 +1987,8 @@ df.emp <-df.emp %>%
 age_df <- df.emp %>% 
           select(FullName, Approx_age, CurrentEmploymentType) %>% 
           mutate(FullName2 = fct_reorder(FullName,CurrentEmploymentType)) %>%
-          mutate(hjust = ifelse(Approx_age >60, 1.05, -0.1)) 
+          mutate(hjust = ifelse(Approx_age >60, 1.05, -0.1)) %>%
+          mutate(vjust =  ifelse(FullName2 == "Varja Lagos",0.5,0.1))
 ```
 
 3. Create the ggplot object
@@ -1964,9 +1997,9 @@ age_df <- df.emp %>%
 age_df %>% 
     ggplot(aes(x = Approx_age, y= FullName2)) +
     geom_point(aes(color = CurrentEmploymentType), size=3)  +
-    geom_text(aes(label=FullName2, hjust = hjust), size=3, vjust=0.1)+
-    scale_x_continuous(breaks = c(20,30,40,50,60))+
-    labs(y="",x="Time",title = "Approximate Ages of GasTech Employees", color="Department") +
+    geom_text(aes(label=FullName2, hjust = hjust, vjust=vjust), size=3)+
+    scale_x_continuous(breaks = c(20, 25,30,35,40,45,50,55,60))+
+    labs(y="",x="Time",title = "Approximate Ages of GasTech Employees in 2014", color="Department") +
     theme(legend.text = element_text(size = 8),
           panel.background = element_rect(fill="white"),
           panel.grid.major.x = element_line(color="#c9c9c9", linetype = 3),
@@ -1974,11 +2007,13 @@ age_df %>%
           plot.title = element_text(size=14),
           axis.text.y = element_blank(),
           axis.ticks.x  = element_blank(),
-          axis.ticks.y  = element_blank()
-          ) #+
-   # ggsave(filename = 'images/5-Age.png', width = 30, units = "cm")
+          axis.ticks.y  = element_blank(),
+          
+          )#+
+   #ggsave(filename = 'images/5-Age.png', width = 30, units = "cm")
 
 ```
+
 
 ```{r age_vis,warning=F, message=F, echo=F, eval=F}
 age_link <- df.emp %>%
@@ -2151,6 +2186,7 @@ mil_data %>%
   geom_point(aes(MilitaryDischargeYear), color="#769ab5", size=2) +
   geom_segment(aes(x=MilitaryStartYear, xend=MilitaryDischargeYear, y=FullName,yend=FullName), size=0.5, alpha=0.7) +
   scale_x_continuous(breaks = seq(min(mil_data$MilitaryStartYear), max(mil_data$MilitaryDischargeYear), by=2))+
+  #scale_color_manual(values = c("#97C2FC","#7BE141","#AD85E4"))+
   #facet_wrap(~ArmyLoc, scales = "free") +
   labs(x = "Year",y ="", title="Time Served in the Military in Kronos")+
   theme(panel.background = element_rect(fill ="white"),
@@ -2158,8 +2194,8 @@ mil_data %>%
         panel.grid.major.x = element_line(colour = "grey",linetype = 3),
         panel.border = element_rect(color="grey", fill=NA),
         axis.ticks.x  = element_blank(),
-        axis.ticks.y  = element_blank()) #+ 
-    #ggsave('images/5-3-2.png',width = 20, units = "cm")
+        axis.ticks.y  = element_blank()) + 
+  ggsave('images/5-3-2.png',width = 30, units = "cm")
 
 
 ```
@@ -2206,7 +2242,7 @@ df.emp %>%
     geom_point(aes(color = CurrentEmploymentType), size=5)  +
     geom_text(aes(label=FullName2), size=3, vjust=0.1, hjust = 1.05)+#, hjust =  hjust), size=3) +
     scale_x_continuous(breaks = c(20,30,40,50,60))+
-    labs(y="",x="Time",title = "Approximate Ages of GasTech Employees", color="Department") +
+    labs(y="",x="Time",title = "Approximate Ages of GasTech Employees in 2014", color="Department") +
     theme(legend.text = element_text(size = 8),
           panel.background = element_rect(fill="white"),
           panel.grid.major.x = element_line(color="#c9c9c9", linetype = 3),

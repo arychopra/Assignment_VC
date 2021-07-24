@@ -102,7 +102,6 @@ df.news <- df.news %>%
 ```
 
 
-
 ```{r, echo=FALSE}
 df.news <- df.news %>% 
             mutate(AUTHOR = str_remove(AUTHOR, "By "))
@@ -1858,17 +1857,14 @@ gg
 
 ```{r, warning=F, message=F}
 m <- x_full %>%
-  mutate(s = str_replace(Subject,"RE: ","")) #%>%
-  #group_by(s) %>%
-  #summarise(Count = n()) %>%
-  #arrange(desc(Count))
+  mutate(s = str_replace(Subject,"RE: ","")) 
 
 temp_g <- m %>% 
-            filter(str_detect(s, "Virus"))
+            filter(str_detect(s, "ARISE"))
 
 temp_g %>% 
   select(From, From_title, To, To_title, Date.Date, Date.Time, Subject) %>% 
-  DT::datatable(temp_g, fillContainer = T)
+  DT::datatable(fillContainer = F, options = list(pageLength = 5), rownames = F)
 
 ```
 
@@ -2155,7 +2151,7 @@ visNetwork(nodes = data_citi$nodes,
 
 ```
 
-### Creating the Military Period
+### Creating the Military Service Chart
 
 1. Create new columns `MilitaryStartYear` and `MilitaryDischargeYear` and add it to the `df.emp` dataframe
 

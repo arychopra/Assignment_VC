@@ -1,7 +1,7 @@
 ---
 title: "Building the Charts"
 description: |
-  A new article created using the Distill format.
+  This articles discusses the code for building the charts
 author:
   - name: Aryah U. Chopra
     url: https://www.linkedin.com/in/aryahuc/
@@ -1841,7 +1841,7 @@ for (i in sort(unique(c(x_full$From, x_full$To)))){
 
     gg <- ggplotly(g, tooltip = c("text")) 
 
-    #show(gg)
+    show(gg)
      
 }
 ```
@@ -1860,7 +1860,7 @@ m <- x_full %>%
   mutate(s = str_replace(Subject,"RE: ","")) 
 
 temp_g <- m %>% 
-            filter(str_detect(s, "ARISE"))
+            filter(str_detect(s, "golf"))
 
 temp_g %>% 
   select(From, From_title, To, To_title, Date.Date, Date.Time, Subject) %>% 
@@ -1880,7 +1880,8 @@ temp_g_nodes <- data.frame(id = unique(c(temp_g$From, temp_g$To)))
 
 temp_g_nodes <- temp_g_nodes %>% 
                   left_join(select(df.emp, FullName, CurrentEmploymentType), by = c('id' = 'FullName')) %>%
-                  rename(group = CurrentEmploymentType)
+                  rename(group = CurrentEmploymentType) %>%
+                  replace_na(list(group = "Executive"))
 
 temp_g_nodes$color.highlight.background <- "brown"
 
@@ -1913,6 +1914,7 @@ visNetwork(data$nodes, data$edges) %>%
   visEdges(arrows = "middle",width = 0.01,length = 5, scaling = list(min=0.1,max=3)) %>%
   visIgraphLayout() %>%
   visNodes(size=20) %>%
+  visOptions(nodesIdSelection = T, highlightNearest = T) %>%
   visLegend(zoom = T, addNodes = lnodes, useGroups = F)  %>%
       visGroups(groupname = "Executive", 
                 # Red
@@ -2193,7 +2195,7 @@ mil_data %>%
 ```
 
 
-```{r army_gg,warning=F, message=F, include=T, eval=F}
+```{r army_gg2,warning=F, message=F, include=T, eval=F}
 mil_data<-df.emp %>%
           filter(!is.na(MilitaryDischargeYear)) %>%
           mutate(ArmyLoc =  ifelse(str_detect(MilitaryServiceBranch,"Kronos"),"Kronos","Tethys")) %>%

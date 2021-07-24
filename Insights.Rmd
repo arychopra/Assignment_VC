@@ -299,7 +299,6 @@ The first and second generations of the POK are largely documented by both the 5
 
 Based on the last names of the first generation leaders, the possible extended network could be Edward Vann, Loreto Bodrogi, Minke Mies, Ruscella Mies Haber, Hennie Osvaldo, Henk Mies, and Carmine Bodrogi. 
 
-### Gastech & The POK
 
 ```{r, out.width=700}
 knitr::include_graphics('images/5-3-6.png')
@@ -388,7 +387,7 @@ knitr::include_graphics('images/5-Carmine.png')
 
 ARISE, is a publication magazine by the APA (International Times 2013-10-21).
 
-There are possible suggestion of links between the POK and the APA. 
+There are possible suggestion of links between the POK and the APA. This highly confirms that Hennie Osvaldo, Inga Ferro, Loreto Bodrogi, Minke Mies and Ruscella Mies Haber are the extended network of POK. 
 
 ```{r}
 knitr::include_graphics('images/Email-1.png')
@@ -400,6 +399,15 @@ knitr::include_graphics('images/Email-1.png')
 knitr::include_graphics('images/Email-3.png')
 
 ```
+
+
+These could be warnings about possible drug busts around town. 
+
+```{r}
+knitr:: include_graphics('images/Email-3-1.png')
+```
+
+The last names might such possible involvement in drug trafficking. They might be APA.  
 
 
 ```{r}

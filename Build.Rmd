@@ -1890,7 +1890,7 @@ x_full <- x_full %>%
                  ) 
 ```
 
-2. Feed into a for-loop to generate the conversation plot_ly object for each employee
+2. Feed into a for-loop to generate the conversation plot_ly object for each employee to identify suspicious/interesting emails
 
 ```{r first, warning=F, message=F}
 
@@ -1939,33 +1939,107 @@ Example:
 gg
 ```
 
+3. Plot the graph network for that particular subject
 
-```{r, echo=F, eval=F}
+
+```{r, warning=F, message=F}
 m <- x_full %>%
   mutate(s = str_replace(Subject,"RE: ","")) #%>%
   #group_by(s) %>%
   #summarise(Count = n()) %>%
   #arrange(desc(Count))
 
-for (i in unique(m$s)){
-  #print(i)
-  temp_g <- m %>% 
-              filter(s == i) %>%
-              ggplot(aes(x= From, y=To)) + 
-              geom_point(aes(text = sprintf("Sub: %s<br>Date: %s<br>To: %s<br>To_Title: %s<br>To_Dep: %s<br>Time Sent: %s<br>", 
-                                      Subject2, 
-                                      Date.Date, 
-                                      To,
-                                      To_title, 
-                                      To_dep,
-                                      Date.Time), color=factor(Date.Date))) +
-              labs(title=i) +
-              theme(axis.ticks = element_blank())
-  g<- ggplotly(temp_g)
-  show(g)
-  
-  
-}
+temp_g <- m %>% 
+            filter(str_detect(s, "lunch"))
+
+temp_g %>% select(From, To, Date.Date, Date.Time, Subject) %>% DT::datatable(temp_g)
+
+temp_g_links <- temp_g %>% 
+                  select(From, To, Subject) %>% 
+                  rename(group = Subject)
+
+temp_g_nodes <- data.frame(id = unique(c(temp_g$From, temp_g$To)))
+#temp_g_nodes$title <- temp_g_nodes$id
+temp_g_nodes <- temp_g_nodes %>% 
+                  left_join(select(df.emp, FullName, CurrentEmploymentType), by = c('id' = 'FullName')) %>%
+                  rename(group = CurrentEmploymentType)
+
+temp_g_nodes$color.highlight.background <- "brown"
+
+
+temp_graph <- graph_from_data_frame(d = temp_g_links,
+                                    vertices = temp_g_nodes,
+                                    directed = T)
+
+lnodes <- data.frame(shape = rep('square',6),
+                     label = c("Executive",
+                               "Facilities",
+                               "Engineering",
+                               "Administration",
+                               "Security",
+                               "Information Technology"),
+                     color.background = c("#FB7E81",
+                                          "#7BE141",
+                                          "#FFFF00",
+                                          "#97C2FC",
+                                          "#AD85E4",
+                                          "#EB7DF4"),
+                     color.border = rep('black',6),
+                     font.align =  rep("center",6),
+                     font.size = rep(20,6)
+                     )
+
+data <- toVisNetworkData(temp_graph)
+
+visNetwork(data$nodes, data$edges) %>%
+  visEdges(arrows = "middle",width = 0.01,length = 5, scaling = list(min=0.1,max=3)) %>%
+  visIgraphLayout() %>%
+  visNodes(size=20) %>%
+  visLegend(zoom = T, addNodes = lnodes, useGroups = F)  %>%
+      visGroups(groupname = "Executive", 
+                # Red
+                color = list(border = "#FA0A10", 
+                             background = "#FB7E81", 
+                             highlight = list(border = "#FA0A10", background = "#FB7E81"),
+                             hover = list(background = "#FA0A10", border = "#FB7E81")
+                             )) %>%
+      visGroups(groupname = "Facilities", 
+                # Green
+                color = list(border = "#41A906", 
+                             background = "#7BE141", 
+                             highlight = list(border = "#41A906", background = "#7BE141"),
+                             hover = list(background = "#41A906", border = "#7BE141")
+                             )) %>%
+      visGroups(groupname = "Engineering", 
+                # Yellow
+                    color = list(border = "#FFA500", 
+                                 background = "#FFFF00", 
+                                 highlight = list(border = "#FFA500", background = "#FFFF00"),
+                                 hover = list(background = "#FFA500", border = "#FFFF00")
+                                 )) %>%
+      visGroups(groupname = "Administration", 
+                # Blue
+                    color = list(border = "#2B7CE9", 
+                                 background = "#97C2FC", 
+                                 highlight = list(border = "#2B7CE9", background = "#97C2FC"),
+                                 hover = list(background = "#2B7CE9", border = "#97C2FC")
+                                 )) %>%
+      visGroups(groupname = "Security", 
+                # Purple
+                    color = list(border = "#7C29F0", 
+                                 background = "#AD85E4", 
+                                 highlight = list(border = "#7C29F0", background = "#AD85E4"),
+                                 hover = list(background = "#7C29F0", border = "#AD85E4")
+                                 )) %>%
+      visGroups(groupname = "Information Technology", 
+                # Magenta
+                    color = list(border = "#E129F0", 
+                                 background = "#EB7DF4", 
+                                 highlight = list(border = "#E129F0", background = "#EB7DF4"),
+                                 hover = list(background = "#E129F0", border = "#EB7DF4")
+                                 )) %>%
+      visLegend(zoom = T, addNodes = lnodes, useGroups = F) %>%
+    visInteraction(multiselect = TRUE)
 
 ```
 
@@ -2233,275 +2307,6 @@ df.emp %>%
 ```
 
 
-```{r, echo=F, eval=F}
-df.emp %>% 
-    select(FullName, Approx_age, CurrentEmploymentType) %>% 
-    mutate(FullName2 = fct_reorder(FullName,CurrentEmploymentType)) %>%
-    #mutate(hjust = ifelse(FullName2 =="Sten Sanjorge Jr.", -0.1, 1.05)) %>%
-    ggplot(aes(x = Approx_age, y= FullName2)) +
-    geom_point(aes(color = CurrentEmploymentType), size=5)  +
-    geom_text(aes(label=FullName2), size=3, vjust=0.1, hjust = 1.05)+#, hjust =  hjust), size=3) +
-    scale_x_continuous(breaks = c(20,30,40,50,60))+
-    labs(y="",x="Time",title = "Approximate Ages of GasTech Employees in 2014", color="Department") +
-    theme(legend.text = element_text(size = 8),
-          panel.background = element_rect(fill="white"),
-          panel.grid.major.x = element_line(color="#c9c9c9", linetype = 3),
-          panel.border = element_rect(color="grey", fill=NA),
-          plot.title = element_text(size=14),
-          axis.text.y = element_blank(),
-          axis.ticks.x  = element_blank(),
-          axis.ticks.y  = element_blank()
-          )
-
-```
-
-
-```{r,warning=F, message=F,echo=F, eval=F}
-df.emp <- df.emp %>% 
-          mutate(army_year = year(MilitaryDischargeDate))
-          
-  
-  
-army_link <- df.emp %>%
-              select(FullName, MilitaryServiceBranch, CurrentEmploymentType ) %>%
-              rename(From = FullName,
-                     To =  MilitaryServiceBranch)
-              
-
-army_nodes <- data.frame(id = unique(c(army_link$From, army_link$To)))
-army_nodes <- army_nodes %>% 
-                left_join(select(df.emp, FullName, CurrentEmploymentType), by = c("id"="FullName")) %>%
-                rename(group =  CurrentEmploymentType) %>%
-                replace_na(list(group="None")) 
-                
-
-army_nodes$title <- army_nodes$id
-#citi_nodes$color <- ifelse(str_length(citi_nodes$id)==6,"blue","black")
-army_nodes$font.size <- 25
-army_nodes$font.weight <- 1000
-
-
-
-army_g <- graph_from_data_frame(d = army_link, 
-                                vertices = army_nodes, 
-                                directed = T)
-data_army <- toVisNetworkData(army_g)
-
-p2<-visNetwork(nodes = data_army$nodes, 
-           edges = data_army$edges) %>%
-  visNodes(size=15) %>%
-  visOptions(highlightNearest = TRUE, 
-             nodesIdSelection = T,
-             selectedBy = "group"
-             ) %>%
-  visIgraphLayout(layout = "layout_as_star") %>%
-  visLegend(T)
-
-
-```
-
-
-```{r, echo=F, eval=F}
-set.seed(309)
-p2
-
-```
-
-
-```{r, echo=FALSE, eval=FALSE}
-email_edges <- x_full %>% 
-                select(From, To, s) %>%
-                rename(title = s) 
-
-email_nodes <- data.frame(id = unique(c(x_full$From, x_full$To))) %>%
-               left_join(select(df.emp, FullName, CurrentEmploymentType), by=c("id"="FullName")) %>%
-               rename(group = CurrentEmploymentType)
-email_nodes$font.size = 25
-
-email_gg <- graph_from_data_frame(d = email_edges,
-                                  vertices = email_nodes,
-                                  directed = T)
-data <- toVisNetworkData(email_gg)
-
-visNetwork(nodes = data$nodes, 
-           edges = data$edges) %>% 
-        visIgraphLayout() %>%
-        visEdges(arrows = "middle", width = 0.01,length = 5, scaling = list(min=0.1,max=3)) %>%
-        visOptions(nodesIdSelection = T, highlightNearest = T) %>%
-      visGroups(groupname = "Executive", 
-                # Red
-                color = list(border = "#FA0A10", 
-                             background = "#FB7E81", 
-                             highlight = list(border = "#FA0A10", background = "#FB7E81"),
-                             hover = list(background = "#FA0A10", border = "#FB7E81")
-                             )) %>%
-      visGroups(groupname = "Facilities", 
-                # Green
-                color = list(border = "#41A906", 
-                             background = "#7BE141", 
-                             highlight = list(border = "#41A906", background = "#7BE141"),
-                             hover = list(background = "#41A906", border = "#7BE141")
-                             )) %>%
-      visGroups(groupname = "Engineering", 
-                # Yellow
-                    color = list(border = "#FFA500", 
-                                 background = "#FFFF00", 
-                                 highlight = list(border = "#FFA500", background = "#FFFF00"),
-                                 hover = list(background = "#FFA500", border = "#FFFF00")
-                                 )) %>%
-      visGroups(groupname = "Administration", 
-                # Blue
-                    color = list(border = "#2B7CE9", 
-                                 background = "#97C2FC", 
-                                 highlight = list(border = "#2B7CE9", background = "#97C2FC"),
-                                 hover = list(background = "#2B7CE9", border = "#97C2FC")
-                                 )) %>%
-      visGroups(groupname = "Security", 
-                # Purple
-                    color = list(border = "#7C29F0", 
-                                 background = "#AD85E4", 
-                                 highlight = list(border = "#7C29F0", background = "#AD85E4"),
-                                 hover = list(background = "#7C29F0", border = "#AD85E4")
-                                 )) %>%
-      visGroups(groupname = "Information Technology", 
-                # Magenta
-                    color = list(border = "#E129F0", 
-                                 background = "#EB7DF4", 
-                                 highlight = list(border = "#E129F0", background = "#EB7DF4"),
-                                 hover = list(background = "#E129F0", border = "#EB7DF4")
-                                 ))
-
-
-```
-
-
-```{r, eval=F, echo=FALSE}
-  
-for (i in unique(x$CurrentEmploymentType)){
-  
-  dtm_model_em <- x %>% 
-                  filter(CurrentEmploymentType==i) %>%
-                  cast_dtm(From, word, n)
-  
-  lda_topics_e <- LDA(dtm_model_em,
-                     k=2, 
-                     method="Gibbs",
-                     control = list(seed=333)) %>%
-                  tidy(matrix = "beta")
-  
-  word_probs_2 <- lda_topics_e %>% 
-                  group_by(topic) %>%
-                  top_n(15, beta) %>%
-                  ungroup() %>%
-                  mutate(term2 = fct_reorder(term, beta)) 
-  
-  #details<- df.emp %>% 
-  #            filter(FullName == i) %>% 
-  #            select(CurrentEmploymentType, CurrentEmploymentTitle)
-               
-  p <- ggwordcloud(word_probs_2$term2, 
-                   freq = word_probs_2$beta, 
-                   colors = word_probs_2$topic) +
-       labs(title = i)+
-       theme(plot.title = element_text(hjust = 0.5, size=14),
-             plot.subtitle = element_text(hjust = 0.5, size=12))
-  show(p)
-  
-}
-
-```
-
-
-```{r, eval=F, echo=FALSE}
-library(crosstalk)
-shared_Data <- SharedData$new(x)
-
-g<- plot_ly(shared_Data,
-            y=~To,
-            x=~word) %>% 
-    add_markers(marker = list(opacity=0.5, 
-                              size=15, 
-                              color = 'white', 
-                              line=list(color='back', width=1)
-                              )
-                ) %>%
-    layout(xaxis = list(visible=F), 
-           yaxis = list(fixedrange=TRUE))
-
-
-bscols(widths = c(2,10),
-       list(filter_select(id="date", label="Date", sharedData = shared_Data, group = ~Date.Date),
-       filter_select(id="Person", label="Person", sharedData = shared_Data, ~From),
-       filter_select(id="Dep", label="Dep", sharedData = shared_Data, ~CurrentEmploymentType)),
-       g)
-
-
-```
-
-
-```{r, eval=F, echo=FALSE}
-library(crosstalk)
-
-#x_full <- df.emails %>% 
-#          mutate(To = str_split(To,pattern=',')) %>% 
-#          unnest_longer(To) %>% 
-#          mutate(To = str_trim(To),
-#                 From = str_trim(From)) %>%
-#          filter(!(From==To)) %>%
-#         mutate(Subject2 = str_replace_all(Subject, "[[:punct:]]", " "))
- 
-
-shared_Data2 <- SharedData$new(x_full)
-
-g<- plot_ly(shared_Data2,
-            y=~To,
-            x=~Subject2, dynamicTicks=T) %>% 
-    add_markers(marker = list(opacity=0.5, 
-                              size=15, 
-                              color = 'white', 
-                              line=list(color='back', width=1)
-                              )
-                ) %>%
-    layout(xaxis = list(visible=F), 
-           yaxis = list(fixedrange=F))
-
-
-bscols(widths = c(2,10),
-       list(filter_select(id="date", label="Date", sharedData = shared_Data2, group = ~Date.Date),
-       filter_select(id="Person", label="Person", sharedData = shared_Data2, ~From),
-       filter_select(id="Dep", label="Dep", sharedData = shared_Data2, ~CurrentEmploymentType)),
-       g)
-
-
-```
-
-
-```{r, eval=F, echo=FALSE}
-library(crosstalk)
-
-
-shared_Data2 <- SharedData$new(x_full)
-
-g<- ggplot(shared_Data2,
-            aes(y=To,
-            x=Subject2)) + 
-    geom_point() +
-    labs(x="", y="")
-
-gg <- ggplotly(g, dynamicTicks = T) %>%
-      layout(xaxis = list(visible=F))
-
-
-bscols(widths = c(2,10),
-       list(filter_select(id="date", label="Date", sharedData = shared_Data2, group = ~Date.Date),
-            filter_select(id="Person", label="Person", sharedData = shared_Data2, ~From),
-            filter_select(id="Person", label="Person", sharedData = shared_Data2, ~as.character(Date.Time),
-            filter_select(id="Dep", label="Dep", sharedData = shared_Data2, ~CurrentEmploymentType)
-            )),
-       gg)
-
-
-```
 
 
 

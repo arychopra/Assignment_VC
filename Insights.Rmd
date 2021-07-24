@@ -373,10 +373,18 @@ knitr::include_graphics('images/5-3-7.png')
 
 ### APA & The POK
 
-Carmine Bodrogi was arrested in 2011 on the intent of possible distribution of MDMC, which is a drug trafficked by the APA. In 2014, Carmine Bodrogi is approximately 21 years old. She might be siblings with Loreto Bodrogi. 
+Carmine Bodrogi was arrested in 2011 on the intent of possible distribution of MDMC, which is a drug trafficked by the APA. In 2014, Carmine Bodrogi is approximately 21 years old. She might be siblings with Loreto Bodrogi.
 
 ```{r}
 knitr::include_graphics('images/5-Carmine.png')
+```
+
+ARISE, is a publication magazine by the APA (International Times 2013-10-21).
+
+There are possible suggestion of links between the POK and the APA
+
+```{r}
+knitr::include_graphics('images/Email-1.png')
 ```
 
 

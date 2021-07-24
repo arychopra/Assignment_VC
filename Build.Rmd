@@ -2164,7 +2164,7 @@ df.emp <- df.emp %>%
           
 ```
 
-2. Two charts will be created, one for Kronos and the other for Tethys. The code line marks `--1` and `--2` will be changed to create the new charts.
+2. Two charts will be created, one for Kronos and the other for Tethys. 
 
 ```{r army_gg,warning=F, message=F, include=T, eval=F}
 mil_data<-df.emp %>%
@@ -2192,6 +2192,33 @@ mil_data %>%
 
 ```
 
+
+```{r army_gg,warning=F, message=F, include=T, eval=F}
+mil_data<-df.emp %>%
+          filter(!is.na(MilitaryDischargeYear)) %>%
+          mutate(ArmyLoc =  ifelse(str_detect(MilitaryServiceBranch,"Kronos"),"Kronos","Tethys")) %>%
+          filter(ArmyLoc == "Tethys")
+
+mil_data %>%
+  ggplot(aes(y = FullName, x = MilitaryStartYear)) + 
+  geom_point(size=2, color="#81b879") +
+  geom_point(aes(MilitaryDischargeYear), color="#769ab5", size=2) +
+  geom_segment(aes(x=MilitaryStartYear, xend=MilitaryDischargeYear, y=FullName,yend=FullName), size=0.5, alpha=0.7) +
+  #scale_x_continuous(breaks = seq(min(mil_data$MilitaryStartYear), max(mil_data$MilitaryDischargeYear), by=2))+
+  scale_x_continuous(breaks = seq(1982, 2012,by=2), limits = c(1982, 2012))+
+  #scale_color_manual(values = c("#97C2FC","#7BE141","#AD85E4"))+
+  #facet_wrap(~ArmyLoc, scales = "free") +
+  labs(x = "Year",y ="", title="Time Served in the Military in Tethys")+
+  theme(panel.background = element_rect(fill ="white"),
+        panel.grid.major.y = element_line(colour = "grey",linetype = 3),
+        panel.grid.major.x = element_line(colour = "grey",linetype = 3),
+        panel.border = element_rect(color="grey", fill=NA),
+        axis.ticks.x  = element_blank(),
+        axis.ticks.y  = element_blank()) + 
+  ggsave('images/5-3-3.png',width = 30, units = "cm", height = 10)
+
+
+```
 
 ### Creating the Year Joined Chart
 

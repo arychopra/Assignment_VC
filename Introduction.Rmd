@@ -81,18 +81,135 @@ script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"
 ```
 
 ```{r, echo=FALSE}
-knitr::opts_chunk$set(tidy.opts=list(blank=FALSE, width.cutoff = 30))
+knitr::opts_chunk$set(tidy.opts=list(blank=FALSE, width.cutoff = 30), echo = F)
 ```
 
 
 
 ## 1 Introduction
 
+Fourteen employees of GasTech have gone missing. While some fear that they have been kidnapped by the radical environment terrorist group, Protectors of Kronos, some news sources believe that they have simply absconded with the money. 
 
-
-
+In this analysis, we have used network and text analysis to understand the complex relationship between various entities, possibly revealing the true events of what happened in Abila. 
 
 ## 2 Literature Review
+
+Mini challenge 1 deals with most text and network data, hence the literature review would be a critique of such analysis/visuals.
+
+**Analysis of News Articles**
+
+Reference: VAST Challenge 2014, Submission:  Tianjin University, China (Entry Name: TJU-Cai-MC1)
+
+
+```{r}
+knitr::include_graphics('images/LitRev-1.png')
+```
+
+To understand the primary and secondary and biases in the news sources (MC1 2021 Question 1 & 2), we will rely on CorporaExplorer. This is similar to the software that the team has used above. 
+
+Clarity: 
+
+* Due to the red box representing the important new articles, it remains unclear what is being highlighted to us as all of the squares are bordered by the red box. This could be made clearer, with possible snapshots of the articles with highlight keywords.
+
+* The news articles shown with the magnified sentences serve no purpose. It is redundant ink as the user is not only unable to read what the article is actually saying, but also that there are too many visual distractions on the page.
+
+
+Aesthetics: 
+
+* The colors used are bright warning colors, i.e. red, yellow, orange. This sets off a confusing visualisation as we're unsure as to which information is crucial. 
+* The writer has screenshot the entire background of the software, this is not required, as it creates redundant ink. 
+
+
+Reference: VAST Challenge 2014, Submission:  Peking University (Entry Name: PKU-WANG-MC1)
+
+```{r}
+knitr::include_graphics('images/LitRev-2.png')
+```
+
+Clarity:
+* The writer has uploaded an image with redundant pieces of information that is possibly quoting data out of context or simply unreadable. 
+
+Aesthetics:
+* There is too much white space as all the information we require is in the second half of the image, including the date information. 
+
+
+Another analysis of the submission is mapping the timelines.
+
+```{r}
+knitr::include_graphics('images/LitRev-3.png')
+```
+
+
+Clarity:
+* There is an "00:00" timestamp next to the dates of the news articles. THis might create some confusion as the actual timed updates are in the article itself
+* For one of the screenshots, "news292" the time is hidden.
+
+Aesthetics
+* The overlapping text boxes create a messy look
+* There is redundant information in the backgroun
+
+**Analysis of Relationship**
+
+
+Reference: VAST Challenge 2014, Submission:  University of Buenos Aires (Entry Name: UBA-Avila-MC1)
+
+```{r}
+knitr::include_graphics('images/LitRev-5.png')
+```
+
+Clarity:
+* The arrows leading out from Elian Karel makes it seem as though Mandor Vann and Silvia Marek are both leaders, however, that is not the case. 
+* There is no timeline mentioned in the diagram
+* The text box focuses on a lot on Elian Karel, while the diagram is mapping out the leadership dynamics of the POK. The text box essentially is quoting data out of context. 
+
+Aesthetics:
+* There is not much contrast between the white and orange,  and black and maroon. This is a poor choice of colors.
+
+
+```{r}
+knitr::include_graphics('images/LitRev-4.png')
+```
+
+Clarity:
+
+* The timeline is not clear to the reader
+* There is an empty circle with no name assigned to it
+* In addition to that, the size of the circles might be misleading. It might be misconstrued that the size of the circle is relative to their importance in POK.
+It might seem that Silvia Marek, POK's leader after Elian Karel's death, is less important than Lucio Jakab, who is not mentioned in any news articles. 
+
+Aesthetics
+*There is redundant ink i.e. the outermost circle. The use of circles tends to increase non-data ink substantially as it is a shape of bilateral symmetry. A network diagram would be better.
+
+
+```{r}
+knitr::include_graphics('images/LitRev-6.png')
+```
+
+Clarity:
+* The chart is undirected, it might suggest to the reader that the chart is highlighting relationships rather that email network.
+
+
+Aesthetics:
+* The color contrasts are poor
+
+Reference: VAST Challenge 2014, Submission:  Tianjin University, China (Entry Name: TJU-Cai-MC1)
+
+
+
+```{r}
+knitr::include_graphics('images/LitRev-8.png')
+```
+
+Clarity: 
+
+
+```{r}
+knitr::include_graphics('images/LitRev-7.png')
+```
+
+
+Clarity: 
+* It is unclear what the stars or direction of the emails are
 
 
 

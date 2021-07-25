@@ -110,11 +110,12 @@ knitr::include_graphics('images/5-1-2.png')
 Using TF-IDF, we can see:
 
 * Cluster 1: Across the news sources, the most relevant words are related to the people of Elodis.
-* Cluster 2: Across the news sources, the most relevant words are related to the designer drug situation in Abila.
+* Cluster 2: Across the news sources, the most relevant words are related to the protests in Abila.
 * Cluster 3: Across the news sources, the most relevant words are related to the arrest details/protest situations.
 * Cluster 4: Across the news sources, the most relevant words are related to the designer drug situation in Abila. 
 * Cluster 5: Across the news sources, the most relevant words are related to the GasTech and the industry. 
 
+New Online Today however classified in Cluster1 tends to have all topics. 
 
 ```{r}
 knitr::include_graphics('images/5-1-3.png')

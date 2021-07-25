@@ -434,7 +434,24 @@ knitr::include_graphics('images/Email-5.png')
 
 Edward Vann's network remains within Kanon Herreo, Inga Ferro, Hennie Osvaldo, Minke Mies and Felix Resumir for 7th & 9th January. On the 14th Loreto Bodrogi, then re-sends another email with the same heading to the rest of the network.
 
+This might suggest that Inga Ferro, Varja Lagos,
+
 This is suspicious as Felix Resumir is kept out of that email chain, including Edward Vann. This might clear Edward Vann as a suspected member of the POK. (Further proof: Interrogation of Edward Vann on the day of kidnapping.)
 
-This could also suggest that POK member use email subjects that have been used before for other conversations. 
+This could also suggest that POK member use email subjects that have been used before for other conversations i.e. they might be code words. 
+
+Also, there might be duplicate emails being sent with the same subject but different email content to bring suspicion away from the members. Hence, emails to Kanon Herrero, Hideki Cocinaro and possibly Varja Lagos from Loreto Bodrogi may be decoy emails. 
+
+Another such suspicious email is below:
+
+```{r}
+knitr::include_graphics('images/Email-6.png')
+```
+
+Linnea Bergen first sent the mail to Ruscella at 12 am on the 13th. Afte which, Rachel Pantanal was added. On the 14th, a day later, the email was sent to the other the security department. 
+
+This is likely not about a virus, and rather a code word as the members are those already suspected of being involved with the POK/APA. 
+
+This doubly confirms that Inga Ferro, Linnea Bergen and Rachel Pantanal are involved with the POK. 
+
 

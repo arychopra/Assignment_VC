@@ -933,7 +933,7 @@ visNetwork(data_loc$nodes, data_loc$edges) %>%
 
 1. Set up the re-order func that is able to sort the facet's in descending order
 
-![Link](https://github.com/dgrtwo/drlib/blob/master/R/reorder_within.R)
+[Link](https://github.com/dgrtwo/drlib/blob/master/R/reorder_within.R)
    
 ```{r reorder_func, message=F, warning=F}
 

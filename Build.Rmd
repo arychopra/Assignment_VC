@@ -1860,7 +1860,7 @@ m <- x_full %>%
   mutate(s = str_replace(Subject,"RE: ","")) 
 
 temp_g <- m %>% 
-            filter(str_detect(s, "Guy|guy"))
+            filter(str_detect(s, "lunch"))
 
 temp_g %>% 
   select(From, From_title, To, To_title, Date.Date, Date.Time, Subject) %>% 

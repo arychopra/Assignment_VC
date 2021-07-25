@@ -383,13 +383,15 @@ However, despite Rachel being a citizen of Tethys, she nevertheless forwarded an
 knitr::include_graphics('images/Email-2.png')
 ```
 
-Carmin Bodrogi
+<u> Carmin Bodrogi </u>
 
 Carmine Bodrogi was arrested in 2011 on the intent of possible distribution of MDMC, which is a drug trafficked by the APA. In 2014, Carmine Bodrogi is approximately 21 years old. She might be related to Loreto Bodrogi.
 
 ```{r}
 knitr::include_graphics('images/5-Carmine.png')
 ```
+
+<u> Emails that highlight/confirm POK/APA associations </u> 
 
 ARISE, is a publication magazine by the APA (International Times 2013-10-21).
 
@@ -456,5 +458,13 @@ Linnea Bergen first sent the mail to Ruscella at 12 am on the 13th. After which,
 This is likely not about a virus, and rather a code word as the members are those already suspected of being involved with the POK/APA. 
 
 This doubly confirms that Inga Ferro, Linnea Bergen and Rachel Pantanal are involved with the POK. 
+
+
+## Question 4
+
+If this challenge was done in 2014, with reference to 2014 questions, the analytic approach would be similar. In mapping POK relationships, the emails that highlight suspicious behavior related to kidnappings would be focused on, instead of only relationships. 
+
+The visuals however would be slightly different as the MC1 in 2014 focuses on the kidnappings, hence the news sources, Modern Rubicon, Centrum Sentinel and Tethys news would be key. 
+
 
 

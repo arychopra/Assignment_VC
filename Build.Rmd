@@ -1860,11 +1860,11 @@ m <- x_full %>%
   mutate(s = str_replace(Subject,"RE: ","")) 
 
 temp_g <- m %>% 
-            filter(str_detect(s, "Caution"))
+            filter(str_detect(s, "Vacation|vacation"))
 
 temp_g %>% 
   select(From, From_title, To, To_title, Date.Date, Date.Time, Subject) %>% 
-  DT::datatable(fillContainer = F, options = list(pageLength = 5), rownames = F)
+  DT::datatable(fillContainer = F, options = list(pageLength = 4), rownames = F)
 
 ```
 
@@ -1981,7 +1981,7 @@ df.emp <-df.emp %>%
 age_df <- df.emp %>% 
           select(FullName, Approx_age, CurrentEmploymentType) %>% 
           mutate(FullName2 = fct_reorder(FullName,CurrentEmploymentType)) %>%
-          mutate(hjust = ifelse(Approx_age >60, 1.05, -0.1)) %>%
+          mutate(hjust = ifelse(Approx_age >60, 1.1, -0.1)) %>%
           mutate(vjust =  ifelse(FullName2 == "Varja Lagos",0.5,0.1))
 ```
 
@@ -1990,7 +1990,8 @@ age_df <- df.emp %>%
 ```{r, eval=F, include=T}
 age_df %>% 
     ggplot(aes(x = Approx_age, y= FullName2)) +
-    geom_point(aes(color = CurrentEmploymentType), size=3)  +
+    geom_point(aes(fill = CurrentEmploymentType), size=3, shape=21, stroke=0.5, color='black')  +
+    scale_fill_manual(values=c("#97C2FC","#FFFF00", "#FB7E81", "#7BE141","#EB7DF4","#7C29F0"))+
     geom_text(aes(label=FullName2, hjust = hjust, vjust=vjust), size=3)+
     scale_x_continuous(breaks = c(20, 25,30,35,40,45,50,55,60))+
     labs(y="",x="Time",title = "Approximate Ages of GasTech Employees in 2014", color="Department") +
@@ -2224,7 +2225,6 @@ mil_data %>%
 
 ### Creating the Year Joined Chart
 
-
 ```{r join_gg, warning=F,message=F, eval=F}
 year_labels <- unique(substr(sort(year(df.emp$CurrentEmploymentStartDate)),3,4))
 year_labels[1] <- "1990"
@@ -2234,11 +2234,12 @@ df.emp %>%
     select(FullName, CurrentEmploymentStartDate, CurrentEmploymentType) %>% 
     mutate(FullName2 = fct_reorder(FullName,CurrentEmploymentType)) %>%
     mutate(Year  = year(CurrentEmploymentStartDate )) %>% 
-    mutate(hjust = ifelse(FullName2 =="Sten Sanjorge Jr.", -0.1, 1.05)) %>%
+    mutate(hjust = ifelse(FullName2 =="Sten Sanjorge Jr.", -0.1, 1.1)) %>%
     ggplot(aes(x = Year, y= FullName2)) +
-    geom_point(aes(color = CurrentEmploymentType), size=3)  +
+    geom_point(aes(fill = CurrentEmploymentType), size=3, shape=21, color='black', stroke=0.5) +
     geom_text(aes(label=FullName2, hjust =  hjust), size=3) +
     scale_x_continuous(breaks = sort(unique(year(df.emp$CurrentEmploymentStartDate))), labels = year_labels) +
+    scale_fill_manual(values=c("#97C2FC","#FFFF00", "#FB7E81", "#7BE141","#EB7DF4","#7C29F0"))+
     labs(y="",x="Year",title = "Year Employee of GasTech Joined", color="Department") +
     theme(legend.text = element_text(size = 5),
           panel.background = element_rect(fill="white"),
@@ -2248,8 +2249,8 @@ df.emp %>%
           axis.text.y = element_blank(),
           axis.ticks.x  = element_blank(),
           axis.ticks.y  = element_blank()
-          ) + 
-    ggsave('images/5-3-7.png',width = 30, units = "cm")
+          ) #+ 
+   # ggsave('images/5-3-7.png',width = 30, units = "cm")
 
 ```
 

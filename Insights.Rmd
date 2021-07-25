@@ -295,6 +295,8 @@ knitr::include_graphics('images/5-1-13A.png')
 
 ## Insights for Question 3
 
+### At First Glance
+
 The first and second generations of the POK are largely documented by both the 5-year and 10-year historical documents. However, beyond that, the POK members are not identified.
 
 Based on the last names of the first generation leaders, the possible extended network could be Edward Vann, Loreto Bodrogi, Minke Mies, Ruscella Mies Haber, Hennie Osvaldo, Henk Mies, and Carmine Bodrogi. 
@@ -304,6 +306,9 @@ Based on the last names of the first generation leaders, the possible extended n
 knitr::include_graphics('images/5-3-6.png')
 ```
 
+
+A confirmed member of the POK who is in GasTech is Isia Vann. He is not only a member, but has a strong motive for continuing POK activities within GasTech as he was the brother of Juliana Vann, the martyr image of POK.  Most likely, those who are in constant contact with Isia Vann on suspicious topics are likely connected to the POK as well. 
+
 The plot below shows that department network as GasTech
 
 ```{r, out.width=700}
@@ -311,7 +316,7 @@ knitr::include_graphics('images/5-Department_Network.png')
 ```
 
 
-Possible members of the POK coud be in the Facilies or Security department, with the exception of Ruscella Mies Haber, who is in the admin department and assistant to the engineering group manager, Lidelse Dedos.
+Possible members of the POK coud be in the Facilities or Security department, which are key areas, with the exception of Ruscella Mies Haber, who is in the admin department and assistant to the engineering group manager, Lidelse Dedos. This could be a crucial link as the administration department has access to most of what happens with the company. 
 
 
 ```{r, out.width=700}
@@ -319,24 +324,22 @@ knitr::include_graphics('images/5-PotentialPOK.png')
 ```
 
 
-Isia Vann, who is Juliana Vann's brother and a confirmed member of the POK is approximately the same age as the other suspected members of the POK, except for Ruscella Mies Haber. Her age and middle name suggest that she might have been married to Valentine Mies. Any person with close links to Isia Vann is likely a member of the POK. 
+Isia Vann is approximately the same age, 25-30, as the other suspected members of the POK, except for Ruscella Mies Haber. 
+
+Her age and middle name suggest that she might have been married to Valentine Mies. Any person with close links to Isia Vann is likely a member of the POK. 
 
 
 ```{r age, out.width=700}
-knitr::include_graphics('images/5-Age.png')
-```
+knitr::include_graphics('images/5-Age-highlighted.png')
+```   
 
 
-We can see that, by the text groupings, most of the employees are within their department except for Linnea Bergen. She might also be a part of the extended network of POK. 
-
-```{r, out.width=700}
-knitr::include_graphics('images/5-TextNetwork.png')
-```
-
+We can also see that, by the text groupings, most of the employees are within their department except for Linnea Bergen. She might also be a part of the extended network of POK. This poses a strange question as Linnea Bergen has little to do with Kronos as her citizenship is from Tethys and she does not seem to have much connections to Isia Vann.
 
 ```{r, out.width=700}
-knitr::include_graphics('images/5-TextNetworkPOK.png')
+knitr::include_graphics('images/5-TextNetworkPOK2.png')
 ```
+
 
 
 ```{r city_tethys, out.width=700, echo=F, eval=F}
@@ -348,12 +351,7 @@ knitr::include_graphics('images/5-3-4.png')
 knitr::include_graphics('images/5-3-5.png')
 ```
 
-We can see that there is an overlap between the time served in the army. 
 
-```{r army_kronos, out.width=700}
-knitr::include_graphics('images/5-3-2.png')
-
-```
 
 
 ```{r army_tethys, out.width=700}
@@ -365,11 +363,16 @@ Isia Vann joined GasTech as soon as he was out of the army. This is quite suspic
 We can see that in 2013, many of suspected members joined in 2013 in key areas of Security and Facilities.
 
 ```{r year_joined, out.width=700}
-knitr::include_graphics('images/5-3-7.png')
+knitr::include_graphics('images/5-YearJoined-highlighted.png')
 ```
 
+### Not a first Glance
 
-In addition to that, Isia Vann seems to be in a relationship with Rachel Pantanal, the authencity of the relationship from Isia's end could be doubted as she is in a crucial position, being the assistant to the CIO, Ada Campo-Corrente. However, despite Rachel being a citizen of Tethys, she nevertheless forwarded an email by the APA. 
+Apart from Linnea Bergen, there are other members of GasTech that might be linked to either POK or the APA that are not immediate suspects. Also identified from new sources, some might be members of the APA.
+
+<u> Isia Vann vs Rachel Pantanal </u>
+
+Isia Vann seems to be in a relationship with Rachel Pantanal, the authencity of the relationship from Isia's end could be doubted as she is in a crucial position, being the assistant to the CIO, Ada Campo-Corrente. However, despite Rachel being a citizen of Tethys, she nevertheless forwarded an email by the APA. 
 
 This might indicate a few reasons, she is involved in the APA, they're planning to split the ransom amount or she believes in Isia's cause. 
 
@@ -377,9 +380,9 @@ This might indicate a few reasons, she is involved in the APA, they're planning 
 knitr::include_graphics('images/Email-2.png')
 ```
 
+Carmin Bodrogi
 
-
-Carmine Bodrogi was arrested in 2011 on the intent of possible distribution of MDMC, which is a drug trafficked by the APA. In 2014, Carmine Bodrogi is approximately 21 years old. She might be siblings with Loreto Bodrogi.
+Carmine Bodrogi was arrested in 2011 on the intent of possible distribution of MDMC, which is a drug trafficked by the APA. In 2014, Carmine Bodrogi is approximately 21 years old. She might be related to Loreto Bodrogi.
 
 ```{r}
 knitr::include_graphics('images/5-Carmine.png')
@@ -387,13 +390,15 @@ knitr::include_graphics('images/5-Carmine.png')
 
 ARISE, is a publication magazine by the APA (International Times 2013-10-21).
 
-There are possible suggestion of links between the POK and the APA. This highly confirms that Hennie Osvaldo, Inga Ferro, Loreto Bodrogi, Minke Mies and Ruscella Mies Haber are the extended network of POK. 
+There are possible suggestion of links between the POK and the APA. Possibly indicating that this is how POK recruits new members under Silvia Marek's weak leadership.
+
+The following likely confirms that Hennie Osvaldo, Inga Ferro, Loreto Bodrogi, Minke Mies and Ruscella Mies Haber are the extended network of POK. 
 
 ```{r}
 knitr::include_graphics('images/Email-1.png')
 ```
 
-
+A strange email "Caution Downtown" was sent on the 7th of January. throughout members of the facilities team. 
 
 ```{r}
 knitr::include_graphics('images/Email-3.png')
@@ -401,13 +406,19 @@ knitr::include_graphics('images/Email-3.png')
 ```
 
 
-These could be warnings about possible drug busts around town. 
+These could be warnings about possible drug busts around town, as Varro Awelon, who shares the same last name as Cynthe Awelon, is about 5 years younger. They might be possibly related. 
+
 
 ```{r}
 knitr:: include_graphics('images/Email-3-1.png')
 ```
 
-The last names might such possible involvement in drug trafficking. They might be APA.  
+In addition to that, we can also see that many of the facilies department has spent time together in the Army. This dates back their possibly knowing each other. 
+
+```{r army_kronos, out.width=700}
+knitr::include_graphics('images/5-3-2.png')
+
+```
 
 
 ```{r}
@@ -421,7 +432,9 @@ knitr::include_graphics('images/Email-5.png')
 
 ```
 
-Possibly Isia Vann was not in charge of the perimeter control for that day, hence it was not sent to him. But Loreto Bodrogi covers that. This raises suspicion and increases the likelihood that Loreto Bodrogi is indeed a member of the POK. 
+Edward Vann's network remains within Kanon Herreo, Inga Ferro, Hennie Osvaldo, Minke Mies and Felix Resumir for 7th & 9th January. On the 14th Loreto Bodrogi, then re-sends another email with the same heading to the rest of the network.
 
+This is suspicious as Felix Resumir is kept out of that email chain, including Edward Vann. This might clear Edward Vann as a suspected member of the POK. (Further proof: Interrogation of Edward Vann on the day of kidnapping.)
 
+This could also suggest that POK member use email subjects that have been used before for other conversations. 
 

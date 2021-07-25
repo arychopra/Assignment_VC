@@ -2515,7 +2515,6 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <h3>Contents</h3>
 <ul>
 <li><a href="#insights-for-question-1">Insights for Question 1</a><ul>
-<li><a href="#characteristics-of-the-news-sources">Characteristics of the News Sources</a></li>
 <li><a href="#primary-source-the-world">Primary Source: The World</a></li>
 <li><a href="#primary-source-homeland-illumination-kronos-star">Primary Source: Homeland Illumination &amp; Kronos Star</a></li>
 <li><a href="#primary-source-abila-post">Primary Source: Abila Post</a></li>
@@ -2609,24 +2608,26 @@ script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"
 </div>
 <p><strong>Click on the Images to see an enlarged version</strong></p>
 <h2 id="insights-for-question-1">Insights for Question 1</h2>
-<p>Characterising News Sources <br></p>
 <p>The news sources “Tethys News”, “Centrum Sentinel” and “Modern Rubicon” have been excluded from this as they largely only reported in 2014(kidnappings) and might skew the data.</p>
 <p>Similar news sources are colored as shown below:</p>
 <div class="layout-chunk" data-layout="l-body">
 <p><img src="images/5-1-1.png" width="418" /></p>
 </div>
-<h3 id="characteristics-of-the-news-sources">Characteristics of the News Sources</h3>
-<p>Average Length of Words</p>
+<p>News Online Today as the smallest average length of words, while cluster 4 have the highest lengths.</p>
 <div class="layout-chunk" data-layout="l-body">
 <p><img src="images/5-1-2.png" width="974" /></p>
 </div>
-<p>TF-IDF</p>
+<p>Using TF-IDF, we can see:</p>
+<ul>
+<li>Cluster 1: Across the news sources, the most relevant words are related to the people of Elodis.</li>
+<li>Cluster 2: Across the news sources, the most relevant words are related to the designer drug situation in Abila.</li>
+<li>Cluster 3: Across the news sources, the most relevant words are related to the arrest details/protest situations.</li>
+<li>Cluster 4: Across the news sources, the most relevant words are related to the designer drug situation in Abila.</li>
+<li>Cluster 5: Across the news sources, the most relevant words are related to the GasTech and the industry.</li>
+</ul>
 <div class="layout-chunk" data-layout="l-body">
 <p><img src="images/5-1-3.png" width="605" /></p>
 </div>
-<p>Using TF-IDF, we can see:</p>
-<p>Cluster 1: Across the news sources, the most relevant words are related to the people of Elodis. Cluster 2: Across the news sources, the most relevant words are related to the designer drug situation in Abila. Cluster 3: Across the news sources, the most relevant words are related to the arrest details/protest situations. Cluster 4: Across the news sources, the most relevant words are related to the designer drug situation in Abila. Cluster 5: Across the news sources, the most relevant words are related to the GasTech and the industry.</p>
-<p>What are the relationships between the primary and derivative sources?</p>
 <p>The chart flows below are extracted events that have occurred surrounding GasTech (Hank Fluss’s death), APA (Drug dealings) and POK (arrests).</p>
 <h3 id="primary-source-the-world">Primary Source: The World</h3>
 <div class="layout-chunk" data-layout="l-body">
@@ -2647,12 +2648,17 @@ script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"
 </div>
 <p>The first documentation of the arrests was noted on the 5th of April 2005 by Homeland Illumination with a specific number 15. The second document of the event was done by International News with more specific capturing of events but give a vague number of “more than a dozen”.</p>
 <p>Once that is identified, we can see that within a community, the new sources derive from the primary source. In this case, the primary source is Kronos Star for Community 2 and Homeland Illumination for Community 1.</p>
-<p>While Kronos Star and International News was published on the same day, Kronos Star is the primary. (PROVED).</p>
+<p>While Kronos Star and International News was published on the same day, Kronos Star is the primary</p>
+<p>Proof: Arrests at Tiskele Bend in August 2001</p>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="images/5-1-5-1.png" width="834" /></p>
+</div>
 <p>Community 1: News Online Today is short re-write of the article written by Kronos Star, while International News is a longer write-up. The statement by Gastech Spokesman, Rufus Dyrmasi is not included.</p>
-<p>Worldwide, The Guide and The Truth are translated/double translated derivations of article by Kronos Star. This is evident from the tranlations of the Tiskele bend highlighted on purple.</p>
+<p>Worldwide, The Guide and The Truth are translated/double translated derivations of article by Kronos Star. This is evident from the translations of the Tiskele bend highlighted on purple.</p>
 <p>Community 2: All News Today is derivation of Homeland Illumination, a re-write.</p>
 <p>The Orb and the Wrap and translations of Homeland Illuminations versions. This is evident from the “Tiskele bend” being converted into “curve of Tiskele” and “bending Tiskele”. They might be different languages. The Daily Pegasus is also a derived source of Homeland Illumination due to use of the term “pre-dawn” that is not in both The Orb and The Wrap.</p>
-<p>For many such articles, community 1 and 2 are linked.</p>
+<p>New Oneline Today also reprints from both sources. News Online Today is a secondary source for many of the new sources.</p>
+<p>For many such articles, community 1 and 2 are linked. However, they differ in terms of biases (see next section)</p>
 <h3 id="primary-source-abila-post">Primary Source: Abila Post</h3>
 <div class="layout-chunk" data-layout="l-body">
 <p><img src="images/5-KronosStar.png" width="2200" /></p>
@@ -2677,7 +2683,7 @@ script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"
 <p>Cluster 1, whose primary source is Homeland Illumination, are supporters of the POK.</p>
 <p>The common words, shown in the wordcloud below, tell us that there is a sense of sympathy and support for the citizens of Elodis.</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="images/5-1-6-1.png" width="348" /></p>
+<p><img src="images/5-1-6-1.png" width="400" /></p>
 </div>
 <p>This chart also shows articles that evidently point to new sources in support of POK.</p>
 <div class="layout-chunk" data-layout="l-body">
@@ -2687,7 +2693,7 @@ script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"
 <p>Cluster 2, whose primary source is Kronos Star, are against the POK.</p>
 <p>The most common word is Kapelou, which refers to both President Kapelou and the Minister of Health. President Kapelou seemed to be against the POK, declaring them as a public threat. Cluster 2 also is more patriotic, often using words such as “our government” and believe that the POK is against the government of Kronos.</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="images/5-1-6-2.png" width="349" /></p>
+<p><img src="images/5-1-6-2.png" width="400" /></p>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <p><img src="images/5-1-11A.png" width="822" /></p>
@@ -2695,7 +2701,7 @@ script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"
 <h3 id="cluster-3">Cluster 3</h3>
 <p>Cluster 3, whose primary source The Abila Post, also leans towards being against the POK however, they’re more balanced.</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="images/5-1-6-3.png" width="348" /></p>
+<p><img src="images/5-1-6-3.png" width="400" /></p>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <p><img src="images/5-1-12A.png" width="816" /></p>
@@ -2703,15 +2709,15 @@ script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"
 <h3 id="cluster-4">Cluster 4</h3>
 <p>Cluster 4, whose primary source is International Times, focuses on drug situations in Abila. There are no evident biases.</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="images/5-1-6-4.png" width="340" /></p>
+<p><img src="images/5-1-6-4.png" width="400" /></p>
 </div>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="images/5-1-14A.png" width="464" /></p>
+<p><img src="images/5-1-14A.png" width="400" /></p>
 </div>
 <h3 id="cluster-5">Cluster 5</h3>
 <p>Cluster 4, whose primary source is The World, focuses on largely GasTech.</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="images/5-1-6-5.png" width="348" /></p>
+<p><img src="images/5-1-6-5.png" width="400" /></p>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <p><img src="images/5-1-13A.png" width="446" /></p>
@@ -2744,11 +2750,12 @@ script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"
 <div class="layout-chunk" data-layout="l-body">
 
 </div>
+<p>The chart below shows that all of the facilities departmentand possible POK associates hold Kronos citizenship.</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="images/5-3-5.png" width="700" /></p>
+<p><img src="images/5-citizenship.png" width="700" /></p>
 </div>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="images/5-3-3.png" width="700" /></p>
+
 </div>
 <p>Isia Vann joined GasTech as soon as he was out of the army. This is quite suspicious as he is a confirmed member of the POK.</p>
 <p>We can see that in 2013, many of suspected members joined in 2013 in key areas of Security and Facilities.</p>
@@ -2758,8 +2765,8 @@ script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"
 <h3 id="not-a-first-glance">Not a first Glance</h3>
 <p>Apart from Linnea Bergen, there are other members of GasTech that might be linked to either POK or the APA that are not immediate suspects. Also identified from new sources, some might be members of the APA.</p>
 <p><u> Isia Vann vs Rachel Pantanal </u></p>
-<p>Isia Vann seems to be in a relationship with Rachel Pantanal, the authencity of the relationship from Isia’s end could be doubted as she is in a crucial position, being the assistant to the CIO, Ada Campo-Corrente. However, despite Rachel being a citizen of Tethys, she nevertheless forwarded an email by the APA.</p>
-<p>This might indicate a few reasons, she is involved in the APA, they’re planning to split the ransom amount or she believes in Isia’s cause.</p>
+<p>Isia Vann seems to be in a relationship with Rachel Pantanal, the authencity of the relationship from Isia’s end could be doubted as Rachel is in a crucial position within GasTech, being the assistant to the CIO, Ada Campo-Corrente.</p>
+<p>However, despite Rachel being a citizen of Tethys, she nevertheless forwarded an email by the APA.</p>
 <div class="layout-chunk" data-layout="l-body">
 <p><img src="images/Email-2.png" width="700" /></p>
 </div>
@@ -2784,7 +2791,7 @@ script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"
 </div>
 <p>In addition to that, we can also see that many of the facilies department has spent time together in the Army. This dates back their possibly knowing each other.</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="images/5-3-2.png" width="700" /></p>
+<p><img src="images/5-3-2-colored.png" width="700" /></p>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <p><img src="images/Email-4.png" width="1299" /></p>
@@ -2793,8 +2800,17 @@ script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"
 <p><img src="images/Email-5.png" width="1416" /></p>
 </div>
 <p>Edward Vann’s network remains within Kanon Herreo, Inga Ferro, Hennie Osvaldo, Minke Mies and Felix Resumir for 7th &amp; 9th January. On the 14th Loreto Bodrogi, then re-sends another email with the same heading to the rest of the network.</p>
+<p>This might suggest that Inga Ferro, Varja Lagos,</p>
 <p>This is suspicious as Felix Resumir is kept out of that email chain, including Edward Vann. This might clear Edward Vann as a suspected member of the POK. (Further proof: Interrogation of Edward Vann on the day of kidnapping.)</p>
-<p>This could also suggest that POK member use email subjects that have been used before for other conversations.</p>
+<p>This could also suggest that POK member use email subjects that have been used before for other conversations i.e. they might be code words.</p>
+<p>Also, there might be duplicate emails being sent with the same subject but different email content to bring suspicion away from the members. Hence, emails to Kanon Herrero, Hideki Cocinaro and possibly Varja Lagos from Loreto Bodrogi may be decoy emails.</p>
+<p>Another such suspicious email is below:</p>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="images/Email-6.png" width="978" /></p>
+</div>
+<p>Linnea Bergen first sent the mail to Ruscella at 12 am on the 13th. After which, Rachel Pantanal was added. On the 14th, a day later, the email was sent to the others in the security department.</p>
+<p>This is likely not about a virus, and rather a code word as the members are those already suspected of being involved with the POK/APA.</p>
+<p>This doubly confirms that Inga Ferro, Linnea Bergen and Rachel Pantanal are involved with the POK.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->

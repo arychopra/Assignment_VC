@@ -89,8 +89,6 @@ knitr::opts_chunk$set(tidy.opts=list(blank=FALSE, width.cutoff = 30), fig.retina
 
 ## Insights for Question 1
 
-Characterising News Sources <br> 
-
 
 The news sources  "Tethys News", "Centrum Sentinel" and "Modern Rubicon" have been excluded from this as they largely only reported in 2014(kidnappings) and might skew the data. 
 
@@ -100,32 +98,28 @@ Similar news sources are colored as shown below:
 knitr::include_graphics('images/5-1-1.png')
 ```
 
-### Characteristics of the News Sources
 
-Average Length of Words
+
+News Online Today as the smallest average length of words, while cluster 4 have the highest lengths. 
 
 ```{r}
 knitr::include_graphics('images/5-1-2.png')
 ```
 
-TF-IDF 
+
+Using TF-IDF, we can see:
+
+* Cluster 1: Across the news sources, the most relevant words are related to the people of Elodis.
+* Cluster 2: Across the news sources, the most relevant words are related to the designer drug situation in Abila.
+* Cluster 3: Across the news sources, the most relevant words are related to the arrest details/protest situations.
+* Cluster 4: Across the news sources, the most relevant words are related to the designer drug situation in Abila. 
+* Cluster 5: Across the news sources, the most relevant words are related to the GasTech and the industry. 
+
 
 ```{r}
 knitr::include_graphics('images/5-1-3.png')
 ```
 
-
-Using TF-IDF, we can see:
-
-Cluster 1: Across the news sources, the most relevant words are related to the people of Elodis.
-Cluster 2: Across the news sources, the most relevant words are related to the designer drug situation in Abila.
-Cluster 3: Across the news sources, the most relevant words are related to the arrest details/protest situations.
-Cluster 4: Across the news sources, the most relevant words are related to the designer drug situation in Abila. 
-Cluster 5: Across the news sources, the most relevant words are related to the GasTech and the industry. 
-
-
-
-What are the relationships between the primary and derivative sources? 
 
 The chart flows below are extracted events that have occurred surrounding GasTech (Hank Fluss's death), APA (Drug dealings) and POK (arrests). 
 
@@ -163,12 +157,18 @@ The first documentation of the arrests was noted on the 5th of April 2005 by Hom
 
 Once that is identified, we can see that within a community, the new sources derive from the primary source. In this case, the primary source is Kronos Star for Community 2 and Homeland Illumination for Community 1. 
 
-While Kronos Star and International News was published on the same day, Kronos Star is the primary. (PROVED).
+While Kronos Star and International News was published on the same day, Kronos Star is the primary 
+
+Proof: Arrests at Tiskele Bend in August 2001
+
+```{r}
+knitr::include_graphics('images/5-1-5-1.png')
+```
 
 Community 1: 
 News Online Today is short re-write of the article written by Kronos Star, while International News is a longer write-up. The statement by Gastech Spokesman, Rufus Dyrmasi is not included. 
 
-Worldwide, The Guide and The Truth are translated/double translated derivations of article by Kronos Star. This is evident from the tranlations of the Tiskele bend highlighted on purple. 
+Worldwide, The Guide and The Truth are translated/double translated derivations of article by Kronos Star. This is evident from the translations of the Tiskele bend highlighted on purple. 
 
 
 Community 2: 
@@ -176,8 +176,9 @@ All News Today is derivation of Homeland Illumination, a re-write.
 
 The Orb and the Wrap and translations of Homeland Illuminations versions. This is evident from the "Tiskele bend" being converted into "curve of Tiskele" and "bending Tiskele". They might be different languages. The Daily Pegasus is also a derived source of Homeland Illumination due to use of the term "pre-dawn" that is not in both The Orb and The Wrap. 
 
+New Oneline Today also reprints from both sources. News Online Today is a secondary source for many of the new sources. 
 
-For many such articles, community 1 and 2 are linked. 
+For many such articles, community 1 and 2 are linked. However, they differ in terms of biases (see next section)
 
 ### Primary Source: Abila Post 
 
@@ -224,7 +225,7 @@ Cluster 1, whose primary source is Homeland Illumination, are supporters of the 
 
 The common words, shown in the wordcloud below, tell us that there is a sense of sympathy and support for the citizens of Elodis.
 
-```{r}
+```{r, out.width=400}
 knitr::include_graphics('images/5-1-6-1.png')
 ```
 
@@ -243,7 +244,7 @@ Cluster 2, whose primary source is Kronos Star, are against the POK.
 
 The most common word is Kapelou, which refers to both President Kapelou and the Minister of Health. President Kapelou seemed to be against the POK, declaring them as a public threat. Cluster 2 also is more patriotic, often using words such as "our government" and believe that the POK is against the government of Kronos. 
 
-```{r}
+```{r, out.width=400}
 knitr::include_graphics('images/5-1-6-2.png')
 ```
 
@@ -257,7 +258,7 @@ knitr::include_graphics('images/5-1-11A.png')
 
 Cluster 3, whose primary source The Abila Post, also leans towards being against the POK however, they're more balanced.
 
-```{r}
+```{r, out.width=400}
 knitr::include_graphics('images/5-1-6-3.png')
 ```
 
@@ -270,12 +271,12 @@ knitr::include_graphics('images/5-1-12A.png')
 
 Cluster 4, whose primary source is International Times, focuses on drug situations in Abila. There are no evident biases.
 
-```{r}
+```{r, out.width=400}
 knitr::include_graphics('images/5-1-6-4.png')
 ```
 
 
-```{r}
+```{r, out.width=400}
 knitr::include_graphics('images/5-1-14A.png')
 ```
 
@@ -283,7 +284,7 @@ knitr::include_graphics('images/5-1-14A.png')
 
 Cluster 4, whose primary source is The World, focuses on largely GasTech. 
 
-```{r}
+```{r, out.width=400}
 knitr::include_graphics('images/5-1-6-5.png')
 ```
 
@@ -346,15 +347,16 @@ knitr::include_graphics('images/5-TextNetworkPOK2.png')
 knitr::include_graphics('images/5-3-4.png')
 ```
 
+The chart below shows that all of the facilities departmentand possible POK associates hold Kronos citizenship. 
 
 ```{r city_kronos, out.width=700}
-knitr::include_graphics('images/5-3-5.png')
+knitr::include_graphics('images/5-citizenship.png')
 ```
 
 
 
 
-```{r army_tethys, out.width=700}
+```{r army_tethys, out.width=700, eval=F}
 knitr::include_graphics('images/5-3-3.png')
 ```
 
@@ -372,9 +374,10 @@ Apart from Linnea Bergen, there are other members of GasTech that might be linke
 
 <u> Isia Vann vs Rachel Pantanal </u>
 
-Isia Vann seems to be in a relationship with Rachel Pantanal, the authencity of the relationship from Isia's end could be doubted as she is in a crucial position, being the assistant to the CIO, Ada Campo-Corrente. However, despite Rachel being a citizen of Tethys, she nevertheless forwarded an email by the APA. 
+Isia Vann seems to be in a relationship with Rachel Pantanal, the authencity of the relationship from Isia's end could be doubted as Rachel is in a crucial position within GasTech, being the assistant to the CIO, Ada Campo-Corrente.
 
-This might indicate a few reasons, she is involved in the APA, they're planning to split the ransom amount or she believes in Isia's cause. 
+However, despite Rachel being a citizen of Tethys, she nevertheless forwarded an email by the APA. 
+
 
 ```{r isia-rachel, out.width=700}
 knitr::include_graphics('images/Email-2.png')
@@ -416,7 +419,7 @@ knitr:: include_graphics('images/Email-3-1.png')
 In addition to that, we can also see that many of the facilies department has spent time together in the Army. This dates back their possibly knowing each other. 
 
 ```{r army_kronos, out.width=700}
-knitr::include_graphics('images/5-3-2.png')
+knitr::include_graphics('images/5-3-2-colored.png')
 
 ```
 
@@ -448,7 +451,7 @@ Another such suspicious email is below:
 knitr::include_graphics('images/Email-6.png')
 ```
 
-Linnea Bergen first sent the mail to Ruscella at 12 am on the 13th. Afte which, Rachel Pantanal was added. On the 14th, a day later, the email was sent to the other the security department. 
+Linnea Bergen first sent the mail to Ruscella at 12 am on the 13th. After which, Rachel Pantanal was added. On the 14th, a day later, the email was sent to the others in the security department. 
 
 This is likely not about a virus, and rather a code word as the members are those already suspected of being involved with the POK/APA. 
 

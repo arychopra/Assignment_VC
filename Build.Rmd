@@ -1841,7 +1841,7 @@ for (i in sort(unique(c(x_full$From, x_full$To)))){
 
     gg <- ggplotly(g, tooltip = c("text")) 
 
-    show(gg)
+    #show(gg)
      
 }
 ```
@@ -1860,7 +1860,7 @@ m <- x_full %>%
   mutate(s = str_replace(Subject,"RE: ","")) 
 
 temp_g <- m %>% 
-            filter(str_detect(s, "Vacation|vacation"))
+            filter(str_detect(s, "Guy|guy"))
 
 temp_g %>% 
   select(From, From_title, To, To_title, Date.Date, Date.Time, Subject) %>% 
@@ -2191,7 +2191,6 @@ mil_data %>%
         axis.ticks.x  = element_blank(),
         axis.ticks.y  = element_blank()) + 
   ggsave('images/5-3-2.png',width = 30, units = "cm")
-
 
 ```
 

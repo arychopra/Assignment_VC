@@ -181,7 +181,8 @@ library(widyr)
 
 
 Corpora Explorer -  To Analyze the Texts by Source
-![GitHub Link](https://kgjerde.github.io/corporaexplorer/)
+
+[GitHub Link](https://kgjerde.github.io/corporaexplorer/)
 
 The documents were built into two corpus, one was built according to the source and the other was by the date. 
 
@@ -254,7 +255,7 @@ knitr::include_graphics('images/5-Corpus2.png')
 
 For building the text network, the visTextNet function was used. 
 
-![Link](https://github.com/cbail/textnets)
+[Link](https://github.com/cbail/textnets)
 
 The function does the following:
 
